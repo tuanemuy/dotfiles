@@ -1,0 +1,147 @@
+body {
+	width: 100%;
+}
+
+body * {
+	font-family: "Tazugane" !important;
+	font-size: 12px;
+	line-height: 1.75;
+}
+
+h2,
+h3,
+h4,
+h5,
+h6 {
+	margin-top: 2.5rem !important;
+	font-weight: 600 !important;
+	line-height: 1.35;
+}
+
+p,
+ul,
+ol,
+table,
+img,
+code,
+blockquote,
+dl,
+iframe {
+	margin-top: 1.5rem !important;
+}
+
+h1 {
+	margin-top: 0.5rem;
+	margin-bottom: 3rem !important;
+	font-size: 1.75rem;
+	font-weight: 600;
+	text-align: center;
+}
+
+h2 {
+	padding-bottom: 0.25rem !important;
+	border-bottom: 1px solid #dadada;
+	font-size: 1.35rem;
+}
+
+h3 {
+	font-size: 1.2rem;
+}
+
+h4 {
+	font-size: 1.1rem;
+}
+
+h5 {
+	font-size: 1rem;
+}
+
+hr {
+	margin: 4rem 0 !important;
+}
+
+table {
+	min-width: 100% !important;
+}
+
+th,
+td {
+	white-space: nowrap !important;
+}
+
+th {
+	padding: 0.25rem 0;
+}
+
+td {
+	padding: 0.5rem 0;
+	border-top: 1px solid #eaeaea;
+}
+
+td:last-child {
+	white-space: normal !important;
+}
+
+td:first-child {
+	vertical-align: middle !important;
+}
+
+td ul,
+td ol,
+li ul,
+li ol {
+	margin-top: 0 !important;
+}
+
+li {
+	padding: 0.15rem 0 !important;
+}
+
+li p {
+	margin-top: 0 !important;
+}
+
+ul,
+ol {
+	padding-left: 1.25rem !important;
+}
+
+ul {
+	list-style-type: disc !important;
+}
+
+ol {
+	list-style-type: decimal !important;
+}
+
+code {
+	padding: 0.2rem 0.4rem;
+	background-color: #f0f0f0 !important;
+	border-radius: 3px;
+	font-family: "HackGenNerd" !important;
+}
+
+.hidden {
+	display: none !important;
+}
+
+.zoom50 {
+	zoom: 0.5;
+}
+
+.zoom75 {
+	zoom: 0.75;
+}
+
+.zoom150 {
+	zoom: 1.5;
+}
+
+hr {
+	opacity: 0;
+	break-after: page;
+}
+
+.mermaid svg {
+	max-width: 780px;
+}

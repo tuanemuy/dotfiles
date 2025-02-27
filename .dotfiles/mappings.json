@@ -1,0 +1,7 @@
+{
+  "home-manager": "~/.config/home-manager",
+  "starship.toml": "~/.config/starship.toml",
+  "git": "~/.config/git",
+  "scripts": "~/.scripts",
+  "css": "~/.css"
+}

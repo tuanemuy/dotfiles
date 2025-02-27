@@ -1,0 +1,31 @@
+{
+  "svelte": {
+    "snippets": {
+      "init": "<script lang=\"ts\">\n</script>\n\n<style type=\"text/scss\">\n</style>"
+    }
+  },
+  "typescriptreact": {
+    "snippets": {
+      "init": "import styled from 'styled-components';\n\ninterface Props {\n}\n\nconst X = ({}: Props) => {\n  return (\n    <Component>\n    </Component>\n  );\n};\n\nconst Component = styled.div`\n`\n\nexport default X;",
+      "init2": "import styled from 'styled-components';\n\ntype Props = {\n};\n\nexport const X = ({}: Props) => {\n  return (\n    <Component>\n    </Component>\n  );\n};\n\nconst Component = styled.div`\n`;",
+      "panda": "import { styled } from '@/styled-system/jsx';\n\ntype Props = {\n};\n\nexport function X|({}: Props) {\n  return (\n    <styled.div>\n    </styled.div>\n  );\n}",
+      "styleddiv": "<styled.div>\n|\n</styled.div>",
+      "styledsection": "<styled.section>\n|\n</styled.section>",
+      "styledul": "<styled.ul>\n<li>\n|\n</li>\n</styled.ul>",
+      "styledp": "<styled.p>|</styled.p>",
+      "styledh1": "<styled.h1>|</styled.h1>",
+      "styledh2": "<styled.h2>|</styled.h2>",
+      "styledh3": "<styled.h3>|</styled.h3>",
+      "styledh4": "<styled.h4>|</styled.h4>",
+      "styledh5": "<styled.h5>|</styled.h5>",
+      "styledimg": "<styled.img src=\"\" alt=\"\" />",
+      "styledtable": "<styled.table>\n<tbody>\n<tr>\n<td>|</td>\n</tr>\n</tbody>\n</styled.tbody>\n</styled.table>"
+    }
+  },
+  "markdown": {
+    "snippets": {
+      "daily": "#Daily\n\n## Journal",
+      "schedule": "%作業              % 01% 03% 05% 07% 09% 11% 13% 15% 17% 19% 21% 23% 25% 27% 29% 31%\n%:--               %:-:%:-:%:-:%:-:%:-:%:-:%:-:%:-:%:-:%:-:%:-:%:-:%:-:%:-:%:-:%:-:%\n%                  %   %   %   %   %   %   %   %   %   %   %   %   %   %   %   %   %\n"
+    }
+  }
+}
