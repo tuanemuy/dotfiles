@@ -2,10 +2,8 @@
 
 ## Requirements
 
-- Nix
-  - [Installation](https://zero-to-nix.com/start/install/)
-- Home Manager using Nix
-  - [Installation](https://nix-community.github.io/home-manager/index.xhtml#ch-installation)
+- Nix ([Installation](https://zero-to-nix.com/start/install/))
+- Home Manager using Nix ([Installation](https://nix-community.github.io/home-manager/index.xhtml#ch-installation))
 
 ## Usage
 
