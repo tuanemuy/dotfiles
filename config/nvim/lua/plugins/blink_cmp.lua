@@ -7,9 +7,6 @@ return {
 	version = "*",
 	opts = {
 		completion = {
-			accept = {
-				dot_repeat = false,
-			},
 			list = {
 				selection = {
 					preselect = function(ctx)
@@ -31,7 +28,7 @@ return {
 			preset = "none",
 			["<C-space>"] = { "show", "show_documentation", "hide_documentation" },
 			["<C-e>"] = { "hide", "fallback" },
-			["<CR>"] = { "accept", "fallback" },
+			["<C-y>"] = { "accept", "fallback" },
 			["<Up>"] = { "select_prev", "fallback" },
 			["<Down>"] = { "select_next", "fallback" },
 			["<C-p>"] = { "select_prev", "fallback" },
