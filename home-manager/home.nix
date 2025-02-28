@@ -39,9 +39,9 @@ in
   ];
 
   home.file = {
-    ".config/nvim".source = mkOutOfStoreSymlink "${homeDirectory}/github.com/tuanemuy/dotfiles/nvim";
+    ".config/nvim".source = mkOutOfStoreSymlink "${homeDirectory}/github.com/tuanemuy/dotfiles/config/nvim";
     ".config/starship.toml".source =
-      mkOutOfStoreSymlink "${homeDirectory}/github.com/tuanemuy/dotfiles/starship/starship.toml";
+      mkOutOfStoreSymlink "${homeDirectory}/github.com/tuanemuy/dotfiles/config/starship.toml";
   };
 
   home.sessionVariables = {

@@ -7,7 +7,7 @@
   shellAliases = {
     ls = "eza --icons auto";
     ll = "eza -hlmU --icons --git";
-    "md-to-pdf" = "npx md-to-pdf --config-file ~/.scripts/md-to-pdf/config.js";
+    "md-to-pdf" = "npx md-to-pdf --config-file ~/.tools/md-to-pdf/config.js";
   };
   plugins = [
     {
@@ -25,7 +25,7 @@
     bindkey '^y' autosuggest-accept
     test -e "$HOME"/.iterm2_shell_integration.zsh && source "$HOME"/.iterm2_shell_integration.zsh
     function note() {
-      id="$(node ~/.scripts/unique-id/uuidv7.js)"
+      id="$(node ~/.tools/unique-id/uuidv7.js)"
       title=$1
       if [ -z "$title" ]; then
           title="Note"
