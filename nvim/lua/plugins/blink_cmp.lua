@@ -1,9 +1,15 @@
 return {
 	"saghen/blink.cmp",
-	dependencies = { "rafamadriz/friendly-snippets" },
+	dependencies = {
+		{ "rafamadriz/friendly-snippets" },
+		{ "olimorris/codecompanion.nvim" },
+	},
 	version = "*",
 	opts = {
 		completion = {
+			accept = {
+				dot_repeat = false,
+			},
 			list = {
 				selection = {
 					preselect = function(ctx)
@@ -35,5 +41,10 @@ return {
 			["<C-k>"] = { "show_signature", "hide_signature", "fallback" },
 		},
 		signature = { enabled = true },
+		sources = {
+			per_filetype = {
+				codecompanion = { "codecompanion" },
+			},
+		},
 	},
 }

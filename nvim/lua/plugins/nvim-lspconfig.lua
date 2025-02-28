@@ -6,9 +6,12 @@ return {
 	},
 	opts = {
 		servers = {
-			cssls = {},
-			html = {},
-			jsonls = {},
+			biome = {},
+			html = {
+				init_options = {
+					provideFormatter = false,
+				},
+			},
 			lua_ls = {
 				settings = {
 					Lua = {
@@ -24,7 +27,6 @@ return {
 			nil_ls = {},
 			pylsp = {},
 			rust_analyzer = {},
-			tailwindcss = {},
 			vtsls = {
 				on_attach = function(client)
 					client.server_capabilities.documentFormattingProvider = false

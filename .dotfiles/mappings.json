@@ -1,5 +1,4 @@
 {
   "home-manager": "~/.config/home-manager",
   "scripts": "~/.scripts",
-  "css": "~/.css"
 }

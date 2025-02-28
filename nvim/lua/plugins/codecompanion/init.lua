@@ -34,10 +34,22 @@ return {
 				language = "Japanese",
 			},
 			display = {
+				action_palette = {
+					provider = "telescope",
+				},
 				chat = {
 					window = {
 						position = "right",
 						width = 0.25,
+					},
+					slash_commands = {
+						["file"] = {
+							callback = "strategies.chat.slash_commands.file",
+							opts = {
+								provider = "telescope",
+								contains_code = true,
+							},
+						},
 					},
 				},
 			},
@@ -46,7 +58,7 @@ return {
 					return require("codecompanion.adapters").extend("copilot", {
 						schema = {
 							model = {
-								default = "claude-3.7-sonnet",
+								default = "claude-3.5-sonnet",
 							},
 						},
 					})
@@ -59,5 +71,4 @@ return {
 		-- Expand 'cc' into 'CodeCompanion' in the command line
 		vim.cmd([[cab cc CodeCompanion]])
 	end,
-	dependencies = {},
 }

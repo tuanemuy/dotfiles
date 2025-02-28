@@ -22,6 +22,7 @@ $python\
 [](fg:color_blue bg:color_bg3)\
 $docker_context\
 $conda\
+$nix_shell\
 [](fg:color_bg3 bg:color_bg1)\
 $time\
 [ ](fg:color_bg1)\
@@ -66,6 +67,7 @@ CentOS = ""
 Debian = "󰣚"
 Redhat = "󱄛"
 RedHatEnterprise = "󱄛"
+NixOS = "󱄅"
 
 [username]
 show_always = true
@@ -149,6 +151,15 @@ format = '[[ $symbol( $context) ](fg:#83a598 bg:color_bg3)]($style)'
 [conda]
 style = "bg:color_bg3"
 format = '[[ $symbol( $environment) ](fg:#83a598 bg:color_bg3)]($style)'
+
+[nix_shell]
+disabled = false
+symbol = ""
+impure_msg = '[impure](bold fg:blue bg:color_bg3)'
+pure_msg = '[pure](bold fg:blue bg:color_bg3)'
+unknown_msg = '[unknown](bold fg:yellow bg:color_bg3)'
+style = "bg:color_bg3"
+format = '[[ $symbol $state ](bold fg:blue bg:color_bg3)]($style)'
 
 [time]
 disabled = false
