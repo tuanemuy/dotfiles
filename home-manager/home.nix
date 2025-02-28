@@ -41,7 +41,7 @@ in
   home.file = {
     ".config/nvim".source = mkOutOfStoreSymlink "${homeDirectory}/github.com/tuanemuy/dotfiles/nvim";
     ".config/starship.toml".source =
-      mkOutOfStoreSymlink "${homeDirectory}/github.com/tuanemuy/dotfiles/starship.toml";
+      mkOutOfStoreSymlink "${homeDirectory}/github.com/tuanemuy/dotfiles/starship/starship.toml";
   };
 
   home.sessionVariables = {

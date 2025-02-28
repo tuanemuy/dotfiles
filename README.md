@@ -8,6 +8,7 @@
 ## Usage
 
 ```sh
+cd ~/github.com/tuanemuy
 git clone git@github.com:tuanemuy/dotfiles.git
 ./setup.sh
 ```
