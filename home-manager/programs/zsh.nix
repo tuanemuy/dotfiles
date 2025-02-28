@@ -20,27 +20,17 @@
       };
     }
   ];
-  # https://github.com/starship/starship/issues/3418
-  initExtraFirst = ''
-    __safe_zle_keymap_select() {
-        zle .reset-prompt
-        zle -R
-    }
-    if [[ "''${widgets[zle-keymap-select]#user:}" == "starship_zle-keymap-select" || \
-          "''${widgets[zle-keymap-select]#user:}" == "starship_zle-keymap-select-wrapped" ]]; then
-        zle -N zle-keymap-select __safe_zle_keymap_select
-    fi
-  '';
+  initExtraFirst = import ../workarounds/starship.nix;
   initExtra = ''
     bindkey '^y' autosuggest-accept
     test -e "$HOME"/.iterm2_shell_integration.zsh && source "$HOME"/.iterm2_shell_integration.zsh
     function note() {
-        id="$(node ~/.scripts/unique-id/uuidv7.js)"
-        title=$1
-        if [ -z "$title" ]; then
-            title="Note"
-        fi
-        nvim "$id"_"$title".md
+      id="$(node ~/.scripts/unique-id/uuidv7.js)"
+      title=$1
+      if [ -z "$title" ]; then
+          title="Note"
+      fi
+      nvim "$id"_"$title".md
     }
   '';
   profileExtra = ''
