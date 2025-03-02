@@ -6,6 +6,7 @@
 let
   username = "hikaru";
   homeDirectory = "/Users/${username}";
+  gitDirectory = "${homeDirectory}/github.com/tuanemuy";
   mkOutOfStoreSymlink = config.lib.file.mkOutOfStoreSymlink;
 in
 {
@@ -39,23 +40,36 @@ in
   ];
 
   home.file = {
-    ".config/nvim".source = mkOutOfStoreSymlink "${homeDirectory}/github.com/tuanemuy/dotfiles/config/nvim";
+    ".config/nvim".source = mkOutOfStoreSymlink "${gitDirectory}/dotfiles/config/nvim";
     ".config/starship.toml".source =
-      mkOutOfStoreSymlink "${homeDirectory}/github.com/tuanemuy/dotfiles/config/starship.toml";
+      mkOutOfStoreSymlink "${gitDirectory}/dotfiles/config/starship.toml";
+    ".wezterm.lua".source = mkOutOfStoreSymlink "${gitDirectory}/dotfiles/config/wezterm.lua";
+    ".config/ghostty/config".source =
+      mkOutOfStoreSymlink "${gitDirectory}/dotfiles/config/ghostty.config";
   };
 
   home.sessionVariables = {
+    GIT_DIRECTORY = gitDirectory;
   };
 
-  programs = pkgs.lib.genAttrs [
-    "home-manager"
-    "direnv"
-    "fzf"
-    "git"
-    "neovim"
-    "tmux"
-    "starship"
-    "vim"
-    "zsh"
-  ] (program: import ./programs/${program}.nix { inherit pkgs; });
+  programs =
+    pkgs.lib.genAttrs
+      [
+        "home-manager"
+        "direnv"
+        "fzf"
+        "git"
+        "neovim"
+        "tmux"
+        "starship"
+        "vim"
+        "zsh"
+      ]
+      (
+        program:
+        import ./programs/${program}.nix {
+          inherit pkgs;
+          inherit gitDirectory;
+        }
+      );
 }

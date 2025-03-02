@@ -1,4 +1,4 @@
-{ pkgs }:
+{ pkgs, ... }:
 {
   enable = true;
   extraPackages = with pkgs; [
@@ -9,5 +9,7 @@
     nixfmt-rfc-style
     vscode-langservers-extracted
     yaml-language-server
+    lua-language-server
+    stylua
   ];
 }

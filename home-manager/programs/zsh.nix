@@ -1,13 +1,15 @@
-{ pkgs }:
+{ pkgs, gitDirectory }:
 {
   enable = true;
   enableCompletion = true;
   autosuggestion.enable = true;
   defaultKeymap = "viins";
   shellAliases = {
-    ls = "eza --icons auto";
-    ll = "eza -hlmU --icons --git";
-    "md-to-pdf" = "npx md-to-pdf --config-file ~/.tools/md-to-pdf/config.js";
+    ls = "eza";
+    ll = "eza -lhmU --git";
+    swth = "export CURRENT_THEME=$($GIT_DIRECTORY/dotfiles/tools/switch-theme/run.sh)";
+    generateId = "node $GIT_DIRECTORY/dotfiles/tools/unique-id/uuidv7.js";
+    "md-to-pdf" = "npx md-to-pdf --config-file $GIT_DIRECTORY/dotfiles/tools/md-to-pdf/config.js";
   };
   plugins = [
     {
@@ -20,12 +22,21 @@
       };
     }
   ];
+  sessionVariables = {
+    GIT_DIRECTORY = gitDirectory;
+  };
+
   initExtraFirst = import ../workarounds/starship.nix;
   initExtra = ''
+    export GIT_DIRECTORY=${gitDirectory}
+    export PATH="$PATH:/Applications/WezTerm.app/Contents/MacOS"
+    export PATH="$PATH:/Applications/Ghostty.app/Contents/MacOS"
     bindkey '^y' autosuggest-accept
     test -e "$HOME"/.iterm2_shell_integration.zsh && source "$HOME"/.iterm2_shell_integration.zsh
+    test -e "$HOME"/.wezterm_shell_integration.zsh && source "$HOME"/.wezterm_shell_integration.zsh
+    test -e /Applications/Ghostty.app/Contents/Resources/ghostty/shell-integration/zsh/ghostty-integration && source /Applications/Ghostty.app/Contents/Resources/ghostty/shell-integration/zsh/ghostty-integration
     function note() {
-      id="$(node ~/.tools/unique-id/uuidv7.js)"
+      id=$(generateId)
       title=$1
       if [ -z "$title" ]; then
           title="Note"

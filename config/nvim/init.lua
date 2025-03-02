@@ -1,4 +1,4 @@
-vim.opt.background = "dark"
+vim.opt.background = os.getenv("CURRENT_THEME") == "light" and "light" or "dark"
 vim.opt.number = true
 vim.opt.hlsearch = true
 vim.opt.ruler = true
@@ -30,13 +30,12 @@ vim.opt.listchars =
 	{ tab = "⁚⁚", trail = "-", eol = "↲", extends = "»", precedes = "«", nbsp = "⋅", space = "⋅" }
 vim.g.mapleader = " "
 
--- lazy.nvim
 require("config.lazy")
+-- lazy.nvim
 
 -- Terminal mode
 vim.keymap.set("t", "<Esc>", "<C-\\><C-n>")
 
--- Color
 vim.opt.termguicolors = true
 vim.cmd("syntax enable")
 vim.cmd("filetype plugin indent on")
