@@ -5,9 +5,9 @@
   autosuggestion.enable = true;
   defaultKeymap = "viins";
   shellAliases = {
-    ls = "eza";
-    ll = "eza -lhmU --git";
-    lt = "eza --tree -L";
+    ls = "eza --icons";
+    ll = "eza -lhmU --icons --git";
+    lt = "eza --icons --tree -L";
     tmn = "tmux new -s";
     tma = "tmux a -t";
     chda = "chth dark";
