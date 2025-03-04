@@ -7,9 +7,11 @@
   shellAliases = {
     ls = "eza";
     ll = "eza -lhmU --git";
-    swth = "export CURRENT_THEME=$($GIT_DIRECTORY/dotfiles/tools/switch-theme/run.sh)";
-    generateId = "node $GIT_DIRECTORY/dotfiles/tools/unique-id/uuidv7.js";
-    "md-to-pdf" = "npx md-to-pdf --config-file $GIT_DIRECTORY/dotfiles/tools/md-to-pdf/config.js";
+    lt = "eza --tree -L";
+    tmn = "tmux new -s";
+    tma = "tmux a -t";
+    chda = "chth dark";
+    chli = "chth light";
   };
   plugins = [
     {
@@ -36,12 +38,22 @@
     test -e "$HOME"/.wezterm_shell_integration.zsh && source "$HOME"/.wezterm_shell_integration.zsh
     test -e /Applications/Ghostty.app/Contents/Resources/ghostty/shell-integration/zsh/ghostty-integration && source /Applications/Ghostty.app/Contents/Resources/ghostty/shell-integration/zsh/ghostty-integration
     function note() {
-      id=$(generateId)
+      id=$(date +%Y%m%d%H%M)
       title=$1
       if [ -z "$title" ]; then
           title="Note"
       fi
       nvim "$id"_"$title".md
+    }
+    function chth() {
+      result=$($GIT_DIRECTORY/dotfiles/tools/change-theme/run.sh $1)
+      if [ "$result" = "light" ]; then
+          echo "Switched to light theme"
+          export CURRENT_THEME="light"
+      else
+          echo "Switched to dark theme"
+          export CURRENT_THEME="dark"
+      fi
     }
   '';
   profileExtra = ''

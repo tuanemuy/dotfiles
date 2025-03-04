@@ -33,6 +33,7 @@ in
   home.packages = with pkgs; [
     eza
     fd
+    imagemagick
     mosh
     ripgrep
     deno
@@ -49,7 +50,6 @@ in
   };
 
   home.sessionVariables = {
-    GIT_DIRECTORY = gitDirectory;
   };
 
   programs =
@@ -59,6 +59,7 @@ in
         "direnv"
         "fzf"
         "git"
+        "lazygit"
         "neovim"
         "tmux"
         "starship"

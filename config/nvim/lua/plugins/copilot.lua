@@ -10,6 +10,9 @@ return {
 					accept = "<C-j>",
 				},
 			},
+			filetypes = {
+				markdown = false,
+			},
 		})
 	end,
 }

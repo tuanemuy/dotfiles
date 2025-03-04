@@ -19,8 +19,8 @@ return {
 				component_separators = { left = "・", right = "・" },
 				section_separators = {},
 				disabled_filetypes = {
-					statusline = { "fern" },
-					winbar = { "fern" },
+					statusline = {},
+					winbar = { "fern", "snacks_picker_list" },
 				},
 				ignore_focus = {},
 				always_divide_middle = false,

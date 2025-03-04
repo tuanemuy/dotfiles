@@ -1,8 +1,8 @@
 #!/bin/bash
 
-theme="light"
-if [ "$CURRENT_THEME" = "light" ]; then
-    theme="dark"
+theme="dark"
+if [ "$1" = "light" ]; then
+    theme="light"
 fi
 
 weztermConfig="$GIT_DIRECTORY/dotfiles/config/wezterm.lua"

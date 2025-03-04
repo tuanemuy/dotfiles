@@ -1,5 +1,6 @@
 vim.opt.background = os.getenv("CURRENT_THEME") == "light" and "light" or "dark"
 vim.opt.number = true
+vim.opt.relativenumber = true
 vim.opt.hlsearch = true
 vim.opt.ruler = true
 vim.opt.title = true
@@ -30,8 +31,8 @@ vim.opt.listchars =
 	{ tab = "⁚⁚", trail = "-", eol = "↲", extends = "»", precedes = "«", nbsp = "⋅", space = "⋅" }
 vim.g.mapleader = " "
 
-require("config.lazy")
 -- lazy.nvim
+require("config.lazy")
 
 -- Terminal mode
 vim.keymap.set("t", "<Esc>", "<C-\\><C-n>")

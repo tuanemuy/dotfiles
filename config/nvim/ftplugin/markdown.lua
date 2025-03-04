@@ -1,2 +1,2 @@
-vim.wo.wrap = true
-vim.wo.linebreak = false
+vim.opt.wrap = true
+vim.opt.linebreak = false

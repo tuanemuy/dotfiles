@@ -1,5 +1,6 @@
 return {
 	"olimorris/codecompanion.nvim",
+	enabled = false,
 	dependencies = {
 		{ "nvim-lua/plenary.nvim" },
 		{ "nvim-treesitter/nvim-treesitter" },
@@ -7,18 +8,7 @@ return {
 			"MeanderingProgrammer/render-markdown.nvim",
 			ft = { "codecompanion" },
 		},
-		{
-			"j-hui/fidget.nvim",
-			config = function()
-				require("fidget").setup({
-					notification = {
-						window = {
-							winblend = 0,
-						},
-					},
-				})
-			end,
-		},
+		{ "j-hui/fidget.nvim" },
 	},
 	init = function()
 		require("plugins.codecompanion.fidget-spinner"):init()
