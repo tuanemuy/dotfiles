@@ -8,10 +8,10 @@
     ls = "eza --icons";
     ll = "eza -lhmU --icons --git";
     lt = "eza --icons --tree -L";
-    tmn = "tmux new -s";
-    tma = "tmux a -t";
-    chda = "chth dark";
-    chli = "chth light";
+    tn = "tmux new -s";
+    ta = "tmux a -t";
+    dark = "chth dark";
+    light = "chth light";
   };
   plugins = [
     {
@@ -28,13 +28,15 @@
     GIT_DIRECTORY = gitDirectory;
   };
 
-  initExtraFirst = import ../workarounds/starship.nix;
+  initExtraFirst = ''
+    ${import ../workarounds/starship.nix}
+  '';
   initExtra = ''
+    export CURRENT_THEME="light"
     export GIT_DIRECTORY=${gitDirectory}
     export PATH="$PATH:/Applications/WezTerm.app/Contents/MacOS"
     export PATH="$PATH:/Applications/Ghostty.app/Contents/MacOS"
     bindkey '^y' autosuggest-accept
-    test -e "$HOME"/.iterm2_shell_integration.zsh && source "$HOME"/.iterm2_shell_integration.zsh
     test -e "$HOME"/.wezterm_shell_integration.zsh && source "$HOME"/.wezterm_shell_integration.zsh
     test -e /Applications/Ghostty.app/Contents/Resources/ghostty/shell-integration/zsh/ghostty-integration && source /Applications/Ghostty.app/Contents/Resources/ghostty/shell-integration/zsh/ghostty-integration
     function note() {

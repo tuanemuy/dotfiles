@@ -1,6 +1,7 @@
 return {
 	"mattn/emmet-vim",
 	dependencies = { "mattn/webapi-vim" },
+	ft = { "html", "css", "scss", "javascript", "typescript", "javascriptreact", "typescriptreact", "php" },
 	init = function()
 		vim.g.user_emmet_leader_key = "<C-z>"
 	end,

@@ -12,3 +12,9 @@ cd ~/github.com/tuanemuy
 git clone git@github.com:tuanemuy/dotfiles.git
 ./setup.sh
 ```
+
+### Accept SSH connections via EternalTerminal
+
+```sh
+./home-manager/workarounds/et.sh
+```

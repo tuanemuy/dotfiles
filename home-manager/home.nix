@@ -31,6 +31,8 @@ in
   home.stateVersion = "24.11";
 
   home.packages = with pkgs; [
+    docker
+    eternal-terminal
     eza
     fd
     imagemagick
@@ -73,4 +75,36 @@ in
           inherit gitDirectory;
         }
       );
+
+  systemd.user.services.et =
+    if pkgs.stdenv.isDarwin then
+      null
+    else
+      {
+        Unit = {
+          Description = "Eternal Terminal server";
+          After = [ "network.target" ];
+        };
+        Service = {
+          ExecStart = "${pkgs.eternal-terminal}/bin/etserver";
+          Restart = "always";
+        };
+        Install = {
+          WantedBy = [ "default.target" ];
+        };
+      };
+
+  launchd.agents.et =
+    if pkgs.stdenv.isDarwin then
+      {
+        enable = true;
+        config = {
+          Label = "com.nix.etserver";
+          ProgramArguments = [ "${pkgs.eternal-terminal}/bin/etserver" ];
+          KeepAlive = true;
+          RunAtLoad = true;
+        };
+      }
+    else
+      null;
 }
