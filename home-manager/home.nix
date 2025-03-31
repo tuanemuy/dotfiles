@@ -31,12 +31,10 @@ in
   home.stateVersion = "24.11";
 
   home.packages = with pkgs; [
-    docker
     eternal-terminal
     eza
     fd
     imagemagick
-    mosh
     ripgrep
     deno
     nodejs_22
