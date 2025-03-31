@@ -1,8 +1,7 @@
 return {
 	"neovim/nvim-lspconfig",
 	dependencies = {
-		{ "saghen/blink.cmp" },
-		{ "yioneko/nvim-vtsls" },
+		"saghen/blink.cmp",
 	},
 	opts = {
 		servers = {
@@ -30,6 +29,16 @@ return {
 			vtsls = {
 				on_attach = function(client)
 					client.server_capabilities.documentFormattingProvider = false
+					if not require("lspconfig").util.root_pattern("package.json")(vim.fn.getcwd()) then
+						client.stop(true)
+					end
+				end,
+			},
+			denols = {
+				on_attach = function(client)
+					if require("lspconfig").util.root_pattern("package.json")(vim.fn.getcwd()) then
+						client.stop(true)
+					end
 				end,
 			},
 			yamlls = {
@@ -46,7 +55,6 @@ return {
 	},
 	config = function(_, opts)
 		local lspconfig = require("lspconfig")
-		require("lspconfig.configs").vtsls = require("vtsls").lspconfig
 		for server, config in pairs(opts.servers) do
 			config.capabilities = require("blink.cmp").get_lsp_capabilities(config.capabilities)
 			lspconfig[server].setup(config)

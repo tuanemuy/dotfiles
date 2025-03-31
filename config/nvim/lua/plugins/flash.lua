@@ -4,11 +4,11 @@ return {
 	---@type Flash.Config
 	opts = {
 		jump = {
-			autojump = true,
+			autojump = false,
 		},
 		modes = {
 			char = {
-				autohide = true,
+				autohide = false,
 				jump_labels = true,
 				keys = { "f", "F" },
 			},
@@ -16,7 +16,7 @@ return {
 	},
   -- stylua: ignore
   keys = {
-    { ";", mode = { "n", "x", "o" }, function() require("flash").jump() end,       desc = "Flash" },
+    { "<C-f>", mode = { "n", "x", "o" }, function() require("flash").jump() end,       desc = "Flash" },
     { "S", mode = { "n", "x", "o" }, function() require("flash").treesitter() end, desc = "Flash Treesitter" },
   },
 }

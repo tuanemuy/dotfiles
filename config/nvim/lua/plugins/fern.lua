@@ -11,10 +11,11 @@ return {
 		{ "lambdalisue/glyph-palette.vim" },
 	},
 	config = function()
-		vim.keymap.set("", ":fern<CR>", ":Fern . -drawer -toggle -reveal=%<CR>")
-		vim.g["fern#drawer_width"] = 24
+		vim.keymap.set("n", "<leader>fe", ":Fern . -drawer -toggle -reveal=%<CR>")
+		vim.g["fern#drawer_width"] = 27
 		vim.g["fern#default_hidden"] = 1
 		vim.g["fern#keepjump_on_edit"] = 1
+		vim.g["fern#window_selector_use_popup"] = 1
 
 		local function init_fern()
 			-- Use 'select' instead of 'edit' for default 'open' action
