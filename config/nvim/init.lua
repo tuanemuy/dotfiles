@@ -44,10 +44,9 @@ vim.cmd("filetype plugin indent on")
 -- Filetype
 vim.api.nvim_create_augroup("Filetype", { clear = true })
 vim.api.nvim_create_autocmd({ "BufNewFile", "BufRead" }, {
-	pattern = "*.tsx",
-	command = "set filetype=typescriptreact",
+	pattern = "*.mdc",
+	command = "set ft=markdown",
 	group = "Filetype",
-	desc = "Set filetype to typescriptreact for *.tsx files",
 })
 vim.api.nvim_create_autocmd({ "BufNewFile", "BufRead" }, {
 	pattern = "*.blade.php",
