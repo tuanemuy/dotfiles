@@ -227,7 +227,7 @@ format = ' / [$symbol( $version $buf_version)](fg:color_orange)'
 
 [docker_context]
 symbol = ""
-format = ' / [$symbol( $context) ](fg:color_blue)'
+format = ' / [$symbol( $context)](fg:color_blue)'
 
 [nix_shell]
 disabled = false
