@@ -5,6 +5,11 @@ return {
 		messages = {
 			view = "mini",
 		},
+		views = {
+			notify = {
+				replace = true,
+			},
+		},
 	},
 	dependencies = {
 		"MunifTanjim/nui.nvim",
