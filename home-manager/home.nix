@@ -5,7 +5,7 @@
 }:
 let
   username = "hikaru";
-  homeDirectory = "/Users/${username}";
+  homeDirectory = "/home/${username}";
   gitDirectory = "${homeDirectory}/github.com/tuanemuy";
   mkOutOfStoreSymlink = config.lib.file.mkOutOfStoreSymlink;
 in
