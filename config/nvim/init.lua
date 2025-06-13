@@ -28,7 +28,8 @@ vim.opt.updatetime = 500
 vim.opt.signcolumn = "yes"
 vim.opt.list = true
 vim.opt.listchars =
-	{ tab = "⁚⁚", trail = "-", eol = "↲", extends = "»", precedes = "«", nbsp = "⋅", space = "⋅" }
+	{ tab = "▸\\", trail = "-", eol = "↲", extends = "»", precedes = "«", nbsp = "⋅", space = "⋅" }
+vim.opt.exrc = true
 vim.g.mapleader = " "
 
 -- lazy.nvim
@@ -56,5 +57,15 @@ vim.api.nvim_create_autocmd({ "BufNewFile", "BufRead" }, {
 vim.api.nvim_create_autocmd({ "BufNewFile", "BufRead" }, {
 	pattern = "*.twig",
 	command = "set ft=htmldjango",
+	group = "Filetype",
+})
+vim.api.nvim_create_autocmd({ "BufNewFile", "BufRead" }, {
+	pattern = "*.csvd",
+	command = "set ft=csv",
+	group = "Filetype",
+})
+vim.api.nvim_create_autocmd({ "BufNewFile", "BufRead" }, {
+	pattern = "*.tsvd",
+	command = "set ft=tsv",
 	group = "Filetype",
 })

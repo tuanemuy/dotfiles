@@ -3,62 +3,77 @@ return {
 	dependencies = {
 		"saghen/blink.cmp",
 	},
-	opts = {
-		servers = {
-			biome = {},
-			html = {
-				init_options = {
-					provideFormatter = false,
-				},
+	config = function()
+		vim.lsp.config(
+			"*",
+			(function()
+				local opts = {}
+				opts.capabilities = require("blink.cmp").get_lsp_capabilities()
+				return opts
+			end)()
+		)
+
+		vim.lsp.config("html", {
+			init_options = {
+				provideFormatter = false,
 			},
-			lua_ls = {
-				settings = {
-					Lua = {
-						runtime = {
-							version = "LuaJIT",
-						},
-						format = {
-							enable = false,
-						},
+		})
+
+		vim.lsp.config("lua_ls", {
+			settings = {
+				Lua = {
+					runtime = {
+						version = "LuaJIT",
+					},
+					format = {
+						enable = false,
 					},
 				},
 			},
-			nil_ls = {},
-			pylsp = {},
-			rust_analyzer = {},
-			vtsls = {
-				on_attach = function(client)
-					client.server_capabilities.documentFormattingProvider = false
-					if not require("lspconfig").util.root_pattern("package.json")(vim.fn.getcwd()) then
-						client.stop(true)
-					end
-				end,
-			},
-			denols = {
-				on_attach = function(client)
-					if require("lspconfig").util.root_pattern("package.json")(vim.fn.getcwd()) then
-						client.stop(true)
-					end
-				end,
-			},
-			yamlls = {
-				capabilities = {
+		})
+
+		vim.lsp.config("yamlls", {
+			(function()
+				local opts = {
 					textDocument = {
 						foldingRange = {
 							dynamicRegistration = false,
 							lineFoldingOnly = true,
 						},
 					},
-				},
+				}
+				opts.capabilities = require("blink.cmp").get_lsp_capabilities()
+				return opts
+			end)(),
+		})
+
+		vim.lsp.config("vtsls", {
+			root_markers = {
+				"package.json",
 			},
-		},
-	},
-	config = function(_, opts)
-		local lspconfig = require("lspconfig")
-		for server, config in pairs(opts.servers) do
-			config.capabilities = require("blink.cmp").get_lsp_capabilities(config.capabilities)
-			lspconfig[server].setup(config)
-		end
+			workspace_required = true,
+		})
+
+		vim.lsp.config("denols", {
+			root_markers = {
+				"deno.json",
+				"deno.jsonc",
+				"deps.ts",
+			},
+			workspace_required = true,
+		})
+
+		vim.lsp.enable({
+			"biome",
+			"html",
+			"lua_ls",
+			"nil_ls",
+			"pylsp",
+			"rust_analyzer",
+			"vtsls",
+			"denols",
+			"yamlls",
+		})
 
 		vim.api.nvim_create_autocmd("LspAttach", {
 			callback = function(_)

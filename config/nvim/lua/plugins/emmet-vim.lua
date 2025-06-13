@@ -15,6 +15,11 @@ return {
 		vim.g.user_emmet_settings = vim.fn["webapi#json#decode"](
 			table.concat(vim.fn.readfile(vim.fn.expand("~/.config/nvim/snippets/emmet.json")), "\n")
 		)
-		vim.cmd([[imap <expr> <tab> emmet#expandAbbrIntelligent("\<tab>")]])
+		vim.api.nvim_create_augroup("Emmet", { clear = true })
+		vim.api.nvim_create_autocmd({ "BufNewFile", "BufEnter" }, {
+			pattern = { "*.html", "*.css", "*.scss", "*.js", "*.ts", "*.jsx", "*.tsx", "*.php" },
+			command = "imap <buffer> <expr> <tab> emmet#expandAbbrIntelligent('<tab>')",
+			group = "Emmet",
+		})
 	end,
 }
