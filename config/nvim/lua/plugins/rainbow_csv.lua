@@ -1,3 +1,4 @@
 return {
-	"mechatroner/rainbow_csv",
+	"cameron-wags/rainbow_csv.nvim",
+	enabled = false,
 }

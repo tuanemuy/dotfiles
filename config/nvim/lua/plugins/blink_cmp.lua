@@ -56,6 +56,7 @@ return {
 				-- codecompanion = { "codecompanion" },
 			},
 			providers = {
+				--[[
 				avante_commands = {
 					name = "avante_commands",
 					module = "blink.compat.source",
@@ -74,6 +75,7 @@ return {
 					score_offset = 1000, -- show at a higher priority than lsp
 					opts = {},
 				},
+				]]
 			},
 		},
 	},

@@ -31,13 +31,16 @@ in
   home.stateVersion = "24.11";
 
   home.packages = with pkgs; [
+    claude-code
     eternal-terminal
     eza
     fd
     imagemagick
+    pm2
     ripgrep
+    watchman
     deno
-    nodejs_22
+    nodejs_24
   ];
 
   home.file = {
@@ -47,6 +50,11 @@ in
     ".wezterm.lua".source = mkOutOfStoreSymlink "${gitDirectory}/dotfiles/config/wezterm.lua";
     ".config/ghostty/config".source =
       mkOutOfStoreSymlink "${gitDirectory}/dotfiles/config/ghostty.config";
+    ".config/.markdownlint-cli2.jsonc".source =
+      mkOutOfStoreSymlink "${gitDirectory}/dotfiles/config/markdownlint-cli2.jsonc";
+    "biome.json".source = mkOutOfStoreSymlink "${gitDirectory}/dotfiles/config/biome.json";
+    ".claude/settings.json".source =
+      mkOutOfStoreSymlink "${gitDirectory}/dotfiles/config/claude/settings.json";
   };
 
   home.sessionVariables = {
