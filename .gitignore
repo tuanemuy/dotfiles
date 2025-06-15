@@ -26,5 +26,5 @@ Network Trash Folder
 Temporary Items
 .apdisk
 
-claude/
-!claude/settings.json
+config/claude/*
+!config/claude/settings.json
