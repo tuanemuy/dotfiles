@@ -35,6 +35,7 @@ in
     eternal-terminal
     eza
     fd
+    gh
     imagemagick
     pm2
     ripgrep
