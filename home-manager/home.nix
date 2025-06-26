@@ -32,6 +32,7 @@ in
 
   home.packages = with pkgs; [
     claude-code
+    deno
     eternal-terminal
     eza
     fd
@@ -40,7 +41,6 @@ in
     pm2
     ripgrep
     watchman
-    deno
     nodejs_24
   ];
 
