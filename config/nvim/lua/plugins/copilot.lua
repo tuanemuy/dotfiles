@@ -12,6 +12,9 @@ return {
 			},
 			filetypes = {
 				markdown = true,
+				csv = false,
+				tsv = false,
+				php = true,
 			},
 		})
 	end,

@@ -1,11 +1,13 @@
 { pkgs, ... }:
 {
   enable = true;
-  userName = "tuanemuy";
-  userEmail = "22880537+tuanemuy@users.noreply.github.com";
-  extraConfig = {
+  settings = {
+    user = {
+      name = "tuanemuy";
+      email = "22880537+tuanemuy@users.noreply.github.com";
+    };
     core = {
-      editor = "vim";
+      editor = "nvim";
       ignorecase = false;
       quotepath = false;
     };

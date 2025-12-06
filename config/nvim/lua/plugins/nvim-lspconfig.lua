@@ -84,7 +84,9 @@ return {
 					"<cmd>lua vim.diagnostic.open_float(nil, {focus=false})<CR>",
 					{ silent = true }
 				)
-				vim.keymap.set("n", "K", "<cmd>lua vim.lsp.buf.hover()<CR>", { silent = true })
+				vim.keymap.set("n", "<leader>w", "<cmd>lua vim.lsp.buf.hover()<CR>", { silent = true })
+				vim.keymap.set("n", "<leader>a", "<cmd>lua vim.lsp.buf.code_action()<CR>", { silent = true })
+				vim.keymap.set("n", "<leader>n", "<cmd>lua vim.lsp.buf.rename()<CR>", { silent = true })
 			end,
 		})
 	end,

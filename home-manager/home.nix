@@ -31,7 +31,7 @@ in
   home.stateVersion = "24.11";
 
   home.packages = with pkgs; [
-    claude-code
+    deno
     eternal-terminal
     eza
     fd
@@ -39,8 +39,8 @@ in
     imagemagick
     pm2
     ripgrep
+    tree-sitter
     watchman
-    deno
     nodejs_24
   ];
 

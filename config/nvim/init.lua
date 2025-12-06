@@ -1,6 +1,6 @@
 vim.opt.background = os.getenv("CURRENT_THEME") == "light" and "light" or "dark"
 vim.opt.number = true
-vim.opt.relativenumber = true
+-- vim.opt.relativenumber = true
 vim.opt.hlsearch = true
 vim.opt.ruler = true
 vim.opt.title = true
@@ -38,6 +38,9 @@ require("config.lazy")
 -- Terminal mode
 vim.keymap.set("t", "<Esc>", "<C-\\><C-n>")
 
+vim.keymap.set("n", "J", "10gj")
+vim.keymap.set("n", "K", "10gk")
+
 vim.opt.termguicolors = true
 vim.cmd("syntax enable")
 vim.cmd("filetype plugin indent on")
@@ -68,4 +71,9 @@ vim.api.nvim_create_autocmd({ "BufNewFile", "BufRead" }, {
 	pattern = "*.tsvd",
 	command = "set ft=tsv",
 	group = "Filetype",
+})
+
+vim.api.nvim_create_autocmd({ "WinEnter", "FocusGained", "BufEnter" }, {
+	pattern = "*",
+	command = "checktime",
 })
