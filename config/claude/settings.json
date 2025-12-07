@@ -312,6 +312,5 @@
     "command": "npx -y ccusage statusline",
     "padding": 0
   },
-  "alwaysThinkingEnabled": true,
-  "model": "opus"
+  "alwaysThinkingEnabled": true
 }

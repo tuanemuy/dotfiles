@@ -15,6 +15,7 @@ return {
 				csv = false,
 				tsv = false,
 				php = true,
+				gitcommit = true,
 			},
 		})
 	end,

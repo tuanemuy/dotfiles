@@ -77,3 +77,34 @@ vim.api.nvim_create_autocmd({ "WinEnter", "FocusGained", "BufEnter" }, {
 	pattern = "*",
 	command = "checktime",
 })
+
+-- ステージングされた変更のdiffを取得し、コメントアウトしてコミットメッセージに挿入する
+local function append_diff()
+	-- Gitリポジトリのルートディレクトリを取得
+	local git_root = vim.fn.system("git rev-parse --show-toplevel")
+	-- 末尾の改行を削除
+	git_root = string.gsub(git_root, "\n$", "")
+
+	if git_root == "" then
+		return
+	end
+
+	-- ステージングされた変更のdiffを取得 (git -C <path> diff --cached)
+	local diff_command = "git -C " .. vim.fn.shellescape(git_root) .. " diff --cached"
+	local diff = vim.fn.system(diff_command)
+
+	-- diffの各行にコメント文字 '#' を追加
+	local commented_diff = {}
+	for _, line in ipairs(vim.split(diff, "\n", {})) do
+		table.insert(commented_diff, "# " .. line)
+	end
+
+	-- コミットメッセージの末尾にdiffを追記
+	vim.api.nvim_buf_set_lines(0, vim.fn.line("$"), vim.fn.line("$"), false, commented_diff)
+end
+
+vim.api.nvim_create_autocmd("BufReadPost", {
+	pattern = "COMMIT_EDITMSG",
+	callback = append_diff,
+	desc = "Append staged diff to commit message",
+})

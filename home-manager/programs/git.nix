@@ -21,9 +21,6 @@
     ".AppleDouble"
     ".LSOverride"
 
-    # Icon must end with two \r
-    "Icon"
-
     # Thumbnails
     "._*"
 
@@ -42,8 +39,5 @@
     "Network Trash Folder"
     "Temporary Items"
     ".apdisk"
-
-    # Editor
-    ".cursor"
   ];
 }

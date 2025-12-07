@@ -35,6 +35,7 @@ in
     eternal-terminal
     eza
     fd
+    gcc
     gh
     imagemagick
     pm2

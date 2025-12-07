@@ -35,7 +35,7 @@
     (pkgs.lib.mkAfter ''
       export CURRENT_THEME="light"
       export GIT_DIRECTORY=${gitDirectory}
-      export PATH=$PATH:$(npm prefix --location=global)/bin
+      export PATH=$PATH:$(npm prefix --location=global)/bin:$HOME/.local/bin
       bindkey '^y' autosuggest-accept
       function note() {
         id=$(date +%Y%m%d%H%M)
