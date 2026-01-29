@@ -3,6 +3,7 @@
   enable = true;
   extraPackages = with pkgs; [
     biome
+    copilot-language-server
     prettierd
     markdownlint-cli2
     nil

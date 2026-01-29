@@ -45,6 +45,10 @@ in
     nodejs_24
   ];
 
+  imports = [
+    ./llm-agents.nix
+  ];
+
   home.file = {
     ".config/nvim".source = mkOutOfStoreSymlink "${gitDirectory}/dotfiles/config/nvim";
     ".config/starship.toml".source =

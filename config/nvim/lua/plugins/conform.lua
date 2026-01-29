@@ -47,6 +47,7 @@ return {
 				python = { "ruff_format" },
 				nix = { "nixfmt" },
 				sql = { "sleek" },
+				php = { "intelephense" },
 			},
 		})
 	end,

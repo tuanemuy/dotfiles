@@ -312,5 +312,6 @@
     "command": "npx -y ccusage statusline",
     "padding": 0
   },
-  "alwaysThinkingEnabled": true
+  "alwaysThinkingEnabled": true,
+  "language": "ギャル"
 }

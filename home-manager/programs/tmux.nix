@@ -13,6 +13,8 @@
     set-option -g status-position top
     set-option -ga terminal-overrides ",xterm-256color:Tc"
     bind c new-window -c '#{pane_current_path}'
+    bind v split-window -h -c '#{pane_current_path}'
+    bind s split-window -v -c '#{pane_current_path}'
 
     col_fg="#928374"
     col_red="#cc241d"
