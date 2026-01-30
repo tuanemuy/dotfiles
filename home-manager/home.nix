@@ -31,7 +31,7 @@ in
   home.stateVersion = "24.11";
 
   home.packages = with pkgs; [
-    claude-code
+    cocoapods
     deno
     eternal-terminal
     eza
@@ -53,9 +53,11 @@ in
       mkOutOfStoreSymlink "${gitDirectory}/dotfiles/config/ghostty.config";
     ".config/.markdownlint-cli2.jsonc".source =
       mkOutOfStoreSymlink "${gitDirectory}/dotfiles/config/markdownlint-cli2.jsonc";
-    "biome.json".source = mkOutOfStoreSymlink "${gitDirectory}/dotfiles/config/biome.json";
+    "biome.json".source = mkOutOfStoreSymlink "${gitDirectory}/dotfiles/biome.json";
     ".claude/settings.json".source =
       mkOutOfStoreSymlink "${gitDirectory}/dotfiles/config/claude/settings.json";
+    ".aerospace.toml".source =
+      mkOutOfStoreSymlink "${gitDirectory}/dotfiles/config/aerospace.toml";
   };
 
   home.sessionVariables = {

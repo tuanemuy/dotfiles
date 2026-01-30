@@ -27,37 +27,39 @@
   sessionVariables = {
     GIT_DIRECTORY = gitDirectory;
   };
-
-  initExtraFirst = ''
-    ${import ../workarounds/starship.nix}
-  '';
-  initExtra = ''
-    export CURRENT_THEME="light"
-    export GIT_DIRECTORY=${gitDirectory}
-    export PATH="$PATH:/Applications/WezTerm.app/Contents/MacOS"
-    export PATH="$PATH:/Applications/Ghostty.app/Contents/MacOS"
-    bindkey '^y' autosuggest-accept
-    test -e "$HOME"/.wezterm_shell_integration.zsh && source "$HOME"/.wezterm_shell_integration.zsh
-    test -e /Applications/Ghostty.app/Contents/Resources/ghostty/shell-integration/zsh/ghostty-integration && source /Applications/Ghostty.app/Contents/Resources/ghostty/shell-integration/zsh/ghostty-integration
-    function note() {
-      id=$(date +%Y%m%d%H%M)
-      title=$1
-      if [ -z "$title" ]; then
-          title="Note"
-      fi
-      nvim "$id"_"$title".md
-    }
-    function chth() {
-      result=$($GIT_DIRECTORY/dotfiles/tools/change-theme/run.sh $1)
-      if [ "$result" = "light" ]; then
-          echo "Switched to light theme"
-          export CURRENT_THEME="light"
-      else
-          echo "Switched to dark theme"
-          export CURRENT_THEME="dark"
-      fi
-    }
-  '';
+  initContent = pkgs.lib.mkMerge [
+    (pkgs.lib.mkBefore ''
+      ${import ../workarounds/starship.nix}
+    '')
+    (pkgs.lib.mkAfter ''
+      export CURRENT_THEME="light"
+      export GIT_DIRECTORY=${gitDirectory}
+      export PATH=$PATH:$(npm prefix --location=global)/bin
+      export PATH="$PATH:/Applications/WezTerm.app/Contents/MacOS"
+      export PATH="$PATH:/Applications/Ghostty.app/Contents/MacOS"
+      bindkey '^y' autosuggest-accept
+      test -e "$HOME"/.wezterm_shell_integration.zsh && source "$HOME"/.wezterm_shell_integration.zsh
+      test -e /Applications/Ghostty.app/Contents/Resources/ghostty/shell-integration/zsh/ghostty-integration && source /Applications/Ghostty.app/Contents/Resources/ghostty/shell-integration/zsh/ghostty-integration
+      function note() {
+        id=$(date +%Y%m%d%H%M)
+        title=$1
+        if [ -z "$title" ]; then
+            title="Note"
+        fi
+        nvim "$id"_"$title".md
+      }
+      function chth() {
+        result=$($GIT_DIRECTORY/dotfiles/tools/change-theme/run.sh $1)
+        if [ "$result" = "light" ]; then
+            echo "Switched to light theme"
+            export CURRENT_THEME="light"
+        else
+            echo "Switched to dark theme"
+            export CURRENT_THEME="dark"
+        fi
+      }
+    '')
+  ];
   profileExtra = ''
     source ~/.orbstack/shell/init.zsh 2>/dev/null || :
   '';
