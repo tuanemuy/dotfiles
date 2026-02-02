@@ -15,7 +15,8 @@ return {
 				winbar = "%{v:lua.require('oil').get_current_dir()}",
 				show_hidden = true,
 				sort = {
-					{ "ctime", "desc" },
+					-- { "ctimwname", "desc" },
+					{ "name", "asc" },
 				},
 			},
 			delete_to_trash = true,

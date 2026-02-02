@@ -1,6 +1,7 @@
-{ pkgs, ... }:
+{ inputs, pkgs, ... }:
 {
   enable = true;
+  package = inputs.neovim-overlay.packages.${pkgs.system}.default;
   extraPackages = with pkgs; [
     biome
     prettierd

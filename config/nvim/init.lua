@@ -1,6 +1,6 @@
 vim.opt.background = os.getenv("CURRENT_THEME") == "light" and "light" or "dark"
 vim.opt.number = true
-vim.opt.relativenumber = true
+-- vim.opt.relativenumber = true
 vim.opt.hlsearch = true
 vim.opt.ruler = true
 vim.opt.title = true
@@ -101,6 +101,15 @@ local function append_diff()
 
 	-- コミットメッセージの末尾にdiffを追記
 	vim.api.nvim_buf_set_lines(0, vim.fn.line("$"), vim.fn.line("$"), false, commented_diff)
+
+	-- コミットメッセージの先頭にコミットメッセージの説明を挿入
+	vim.api.nvim_buf_set_lines(
+		0,
+		0,
+		0,
+		false,
+		{ "# ${prefix}: に続けて日本語でコミットメッセージを記述してください。" }
+	)
 end
 
 vim.api.nvim_create_autocmd("BufReadPost", {

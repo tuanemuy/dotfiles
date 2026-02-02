@@ -1,18 +1,26 @@
-{ pkgs, gitDirectory }:
+{ pkgs, gitDirectory, ... }:
 {
   enable = true;
   enableCompletion = true;
   autosuggestion.enable = true;
   defaultKeymap = "viins";
-  shellAliases = {
-    ls = "eza --icons";
-    ll = "eza -lhmU --icons --git";
-    lt = "eza --icons --tree -L";
-    tn = "tmux new -s";
-    ta = "tmux a -t";
-    dark = "chth dark";
-    light = "chth light";
-  };
+  shellAliases =
+    let
+      flakeDir = "~/.config/home-manager";
+    in
+    {
+      flswitch = "nix run ${flakeDir}#switch";
+      flupdate = "nix run ${flakeDir}#update";
+      flup = "nix run ${flakeDir}#up";
+      flclean = "nix run ${flakeDir}#clean";
+      ls = "eza --icons";
+      ll = "eza -lhmU --icons --git";
+      lt = "eza --icons --tree -L";
+      tn = "tmux new -s";
+      ta = "tmux a -t";
+      dark = "chth dark";
+      light = "chth light";
+    };
   plugins = [
     {
       name = "fast-syntax-highlighting";

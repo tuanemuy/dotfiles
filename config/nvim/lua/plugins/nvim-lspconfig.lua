@@ -2,6 +2,7 @@ return {
 	"neovim/nvim-lspconfig",
 	dependencies = {
 		"saghen/blink.cmp",
+		"copilotlsp-nvim/copilot-lsp",
 	},
 	config = function()
 		vim.lsp.config(
@@ -65,13 +66,14 @@ return {
 
 		vim.lsp.enable({
 			"biome",
+			"copilot_ls",
+			"denols",
 			"html",
 			"lua_ls",
 			"nil_ls",
 			"pylsp",
 			"rust_analyzer",
 			"vtsls",
-			"denols",
 			"yamlls",
 		})
 

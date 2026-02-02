@@ -1,4 +1,4 @@
-{ self, ... }:
+{ self, pkgs, inputs, username, ... }:
 {
   nix = {
     optimise.automatic = true;
@@ -8,10 +8,15 @@
     };
   };
 
-  services.nix-daemon.enable = true;
+  nixpkgs = {
+    # The platform the configuration will be used on.
+    hostPlatform = "aarch64-darwin";
+    overlays = [ inputs.neovim-overlay.overlays.default ];
+  };
 
-  # The platform the configuration will be used on.
-  nixpkgs.hostPlatform = "aarch64-darwin";
+  users.users.${username} = {
+    shell = pkgs.zsh;
+  };
 
   # Enable Touch ID for sudo (including tmux support via pam-reattach)
   security.pam.services.sudo_local.touchIdAuth = true;
@@ -23,6 +28,8 @@
     # Used for backwards compatibility, please read the changelog before changing.
     # $ darwin-rebuild changelog
     stateVersion = 6;
+
+    primaryUser = username;
 
     defaults = {
       dock = {

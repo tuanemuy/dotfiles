@@ -20,7 +20,12 @@ return {
 				markdownlint_cli2 = {
 					command = "markdownlint-cli2",
 					stdin = false,
-					args = { "--config", os.getenv("HOME") .. "/.config/.markdownlint-cli2.jsonc", "--fix", "$FILENAME" },
+					args = {
+						"--config",
+						os.getenv("HOME") .. "/.config/.markdownlint-cli2.jsonc",
+						"--fix",
+						"$FILENAME",
+					},
 					exit_codes = { 0, 1 },
 				},
 			},
@@ -41,6 +46,8 @@ return {
 				rust = { "rustfmt", lsp_format = "fallback" },
 				python = { "ruff_format" },
 				nix = { "nixfmt" },
+				sql = { "sleek" },
+				php = { "intelephense" },
 			},
 		})
 	end,

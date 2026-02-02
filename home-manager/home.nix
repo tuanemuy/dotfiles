@@ -1,12 +1,11 @@
 {
+  inputs,
   config,
   pkgs,
+  gitDirectory,
   ...
 }:
 let
-  username = "hikaru";
-  homeDirectory = "/Users/${username}";
-  gitDirectory = "${homeDirectory}/github.com/tuanemuy";
   mkOutOfStoreSymlink = config.lib.file.mkOutOfStoreSymlink;
 in
 {
@@ -14,18 +13,6 @@ in
     config = {
       allowUnfree = true;
     };
-    overlays = [
-      (import (
-        builtins.fetchTarball {
-          url = "https://github.com/nix-community/neovim-nightly-overlay/archive/master.tar.gz";
-        }
-      ))
-    ];
-  };
-
-  home = {
-    inherit username;
-    inherit homeDirectory;
   };
 
   home.stateVersion = "24.11";
@@ -44,6 +31,10 @@ in
     nodejs_24
   ];
 
+  imports = [
+    ./llm-agents.nix
+  ];
+
   home.file = {
     ".config/nvim".source = mkOutOfStoreSymlink "${gitDirectory}/dotfiles/config/nvim";
     ".config/starship.toml".source =
@@ -56,8 +47,7 @@ in
     "biome.json".source = mkOutOfStoreSymlink "${gitDirectory}/dotfiles/biome.json";
     ".claude/settings.json".source =
       mkOutOfStoreSymlink "${gitDirectory}/dotfiles/config/claude/settings.json";
-    ".aerospace.toml".source =
-      mkOutOfStoreSymlink "${gitDirectory}/dotfiles/config/aerospace.toml";
+    ".aerospace.toml".source = mkOutOfStoreSymlink "${gitDirectory}/dotfiles/config/aerospace.toml";
   };
 
   home.sessionVariables = {
@@ -80,6 +70,7 @@ in
       (
         program:
         import ./programs/${program}.nix {
+          inherit inputs;
           inherit pkgs;
           inherit gitDirectory;
         }
