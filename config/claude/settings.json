@@ -294,24 +294,12 @@
       "Write(/etc/sudoers)"
     ]
   },
-  "hooks": {
-    "Stop": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "curl -X POST https://api.line.me/v2/bot/message/push -H 'Content-Type: application/json' -H 'Authorization: Bearer rCO3AcqyKxGHqSMi7fK8E4pyoIQBDyD3Yz5YafBV1fAOVd5Qyok/acERjb2d5RlO1r11OzaVpMYbrMY7v6T1eYb2lyAEIpsWaXTnQMwJq36nEiVdWuFvkptG8LCv0wNuxW36AzUObXJ0EXAnXMMfxQdB04t89/1O/w1cDnyilFU=' -d '{\"to\":\"Ub864d6543002dd6ef6e36b33e89a585b\",\"messages\":[{\"type\":\"text\",\"text\":\"🤖 タスクが完了しました\"}]}'"
-          }
-        ]
-      }
-    ]
-  },
+  "hooks": {},
   "statusLine": {
     "type": "command",
     "command": "npx -y ccusage statusline",
     "padding": 0
   },
-  "alwaysThinkingEnabled": true,
-  "language": "ギャル"
+  "language": "ギャル",
+  "alwaysThinkingEnabled": true
 }

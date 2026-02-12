@@ -9,7 +9,7 @@
   terminal = "screen-256color";
   extraConfig = ''
     set -g xterm-keys on
-    set -g clipboard on
+    set -g set-clipboard on
     set-option -g status-interval 3
     set-option -g status-position top
     set-option -ga terminal-overrides ",xterm-256color:Tc"

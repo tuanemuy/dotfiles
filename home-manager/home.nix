@@ -20,6 +20,14 @@ in
           url = "https://github.com/nix-community/neovim-nightly-overlay/archive/master.tar.gz";
         }
       ))
+      (final: prev: {
+        folly = prev.folly.overrideAttrs (old: {
+          doCheck = false;
+          cmakeFlags = (old.cmakeFlags or [ ]) ++ [
+            "-DBUILD_TESTS=OFF"
+          ];
+        });
+      })
     ];
   };
 
