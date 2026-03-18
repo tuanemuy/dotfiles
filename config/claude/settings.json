@@ -169,6 +169,7 @@
       "Bash(export:*)",
       "Bash(history)",
       "Bash(alias:*)",
+      "Bash(curl:*)",
       "Read(**)",
       "Edit(~/github.com/**)",
       "Edit(~/agent/**)",
@@ -245,7 +246,6 @@
       "Bash(sudo chown:*)",
       "Bash(sudo -i:*)",
       "Bash(sudo su:*)",
-      "Bash(curl:*)",
       "Bash(wget:*)",
       "Bash(rm -rf .git)",
       "Bash(git push --force-with-lease origin main)",
@@ -292,14 +292,20 @@
       "Write(/etc/passwd)",
       "Write(/etc/shadow)",
       "Write(/etc/sudoers)"
-    ]
+    ],
+    "defaultMode": "default"
   },
   "hooks": {},
   "statusLine": {
     "type": "command",
-    "command": "npx -y ccusage statusline",
+    "command": "npx -y ccstatusline@latest",
     "padding": 0
   },
+  "enabledPlugins": {
+    "example-skills@anthropic-agent-skills": true
+  },
   "language": "ギャル",
-  "alwaysThinkingEnabled": true
+  "alwaysThinkingEnabled": true,
+  "skipDangerousModePermissionPrompt": true,
+  "effortLevel": "high"
 }

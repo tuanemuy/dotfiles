@@ -27,6 +27,13 @@ in
             "-DBUILD_TESTS=OFF"
           ];
         });
+        fizz = prev.fizz.overrideAttrs (old: {
+          doCheck = false;
+          cmakeFlags = (old.cmakeFlags or [ ]) ++ [
+            "-DBUILD_TESTS=OFF"
+          ];
+        });
+
       })
     ];
   };
@@ -46,11 +53,11 @@ in
     gcc
     gh
     imagemagick
+    nodejs_24
     pm2
     ripgrep
     tree-sitter
     watchman
-    nodejs_24
   ];
 
   imports = [
@@ -69,6 +76,8 @@ in
     "biome.json".source = mkOutOfStoreSymlink "${gitDirectory}/dotfiles/config/biome.json";
     ".claude/settings.json".source =
       mkOutOfStoreSymlink "${gitDirectory}/dotfiles/config/claude/settings.json";
+    ".claude/skills".source =
+      mkOutOfStoreSymlink "${gitDirectory}/dotfiles/config/claude/skills";
   };
 
   home.sessionVariables = {
@@ -78,6 +87,8 @@ in
     pkgs.lib.genAttrs
       [
         "home-manager"
+        "bat"
+        "bottom"
         "direnv"
         "fzf"
         "git"
@@ -87,6 +98,7 @@ in
         "starship"
         "vim"
         "zsh"
+        "zoxide"
       ]
       (
         program:

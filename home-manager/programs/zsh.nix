@@ -8,20 +8,17 @@
     ls = "eza --icons";
     ll = "eza -lhmU --icons --git";
     lt = "eza --icons --tree -L";
-    tn = "tmux new -s";
-    ta = "tmux a -t";
     dark = "chth dark";
     light = "chth light";
   };
   plugins = [
     {
+      name = "zsh-abbr";
+      src = "${pkgs.zsh-abbr}/share/zsh/zsh-abbr";
+    }
+    {
       name = "fast-syntax-highlighting";
-      src = pkgs.fetchFromGitHub {
-        owner = "zdharma-continuum";
-        repo = "fast-syntax-highlighting";
-        rev = "v1.55";
-        sha256 = "0h7f27gz586xxw7cc0wyiv3bx0x3qih2wwh05ad85bh2h834ar8d";
-      };
+      src = "${pkgs.zsh-fast-syntax-highlighting}/share/zsh/plugins/fast-syntax-highlighting";
     }
   ];
   sessionVariables = {
@@ -37,6 +34,8 @@
       export GIT_DIRECTORY=${gitDirectory}
       export PATH=$PATH:$(npm prefix --location=global)/bin:$HOME/.local/bin
       bindkey '^y' autosuggest-accept
+      abbr -S -q tn="tmux new -s"
+      abbr -S -q ta="tmux a -t"
       function note() {
         id=$(date +%Y%m%d%H%M)
         title=$1
@@ -50,9 +49,11 @@
         if [ "$result" = "light" ]; then
             echo "Switched to light theme"
             export CURRENT_THEME="light"
+            export BAT_THEME="gruvbox-light"
         else
             echo "Switched to dark theme"
             export CURRENT_THEME="dark"
+            export BAT_THEME="gruvbox-dark"
         fi
       }
     '')
