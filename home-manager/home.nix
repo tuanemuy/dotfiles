@@ -1,12 +1,11 @@
 {
+  inputs,
   config,
   pkgs,
+  gitDirectory,
   ...
 }:
 let
-  username = "hikaru";
-  homeDirectory = "/Users/${username}";
-  gitDirectory = "${homeDirectory}/github.com/tuanemuy";
   mkOutOfStoreSymlink = config.lib.file.mkOutOfStoreSymlink;
 in
 {
@@ -14,24 +13,13 @@ in
     config = {
       allowUnfree = true;
     };
-    overlays = [
-      (import (
-        builtins.fetchTarball {
-          url = "https://github.com/nix-community/neovim-nightly-overlay/archive/master.tar.gz";
-        }
-      ))
-    ];
-  };
-
-  home = {
-    inherit username;
-    inherit homeDirectory;
   };
 
   home.stateVersion = "24.11";
 
   home.packages = with pkgs; [
-    claude-code
+    awscli2
+    cocoapods
     deno
     eternal-terminal
     eza
@@ -44,6 +32,10 @@ in
     nodejs_24
   ];
 
+  imports = [
+    ./llm-agents.nix
+  ];
+
   home.file = {
     ".config/nvim".source = mkOutOfStoreSymlink "${gitDirectory}/dotfiles/config/nvim";
     ".config/starship.toml".source =
@@ -53,9 +45,10 @@ in
       mkOutOfStoreSymlink "${gitDirectory}/dotfiles/config/ghostty.config";
     ".config/.markdownlint-cli2.jsonc".source =
       mkOutOfStoreSymlink "${gitDirectory}/dotfiles/config/markdownlint-cli2.jsonc";
-    "biome.json".source = mkOutOfStoreSymlink "${gitDirectory}/dotfiles/config/biome.json";
+    "biome.json".source = mkOutOfStoreSymlink "${gitDirectory}/dotfiles/biome.json";
     ".claude/settings.json".source =
       mkOutOfStoreSymlink "${gitDirectory}/dotfiles/config/claude/settings.json";
+    ".aerospace.toml".source = mkOutOfStoreSymlink "${gitDirectory}/dotfiles/config/aerospace.toml";
   };
 
   home.sessionVariables = {
@@ -65,6 +58,8 @@ in
     pkgs.lib.genAttrs
       [
         "home-manager"
+        "bat"
+        "bottom"
         "direnv"
         "fzf"
         "git"
@@ -74,10 +69,12 @@ in
         "starship"
         "vim"
         "zsh"
+        "zoxide"
       ]
       (
         program:
         import ./programs/${program}.nix {
+          inherit inputs;
           inherit pkgs;
           inherit gitDirectory;
         }

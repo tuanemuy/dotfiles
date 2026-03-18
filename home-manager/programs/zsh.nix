@@ -1,4 +1,4 @@
-{ pkgs, gitDirectory }:
+{ pkgs, gitDirectory, ... }:
 {
   enable = true;
   enableCompletion = true;
@@ -32,10 +32,12 @@
     ${import ../workarounds/starship.nix}
   '';
   initExtra = ''
-    export CURRENT_THEME="light"
+    export CURRENT_THEME="dark"
+    export BAT_THEME="gruvbox-dark"
     export GIT_DIRECTORY=${gitDirectory}
     export PATH="$PATH:/Applications/WezTerm.app/Contents/MacOS"
     export PATH="$PATH:/Applications/Ghostty.app/Contents/MacOS"
+    export PATH="$PATH:$HOME/.npm/global/bin"
     bindkey '^y' autosuggest-accept
     test -e "$HOME"/.wezterm_shell_integration.zsh && source "$HOME"/.wezterm_shell_integration.zsh
     test -e /Applications/Ghostty.app/Contents/Resources/ghostty/shell-integration/zsh/ghostty-integration && source /Applications/Ghostty.app/Contents/Resources/ghostty/shell-integration/zsh/ghostty-integration
@@ -52,9 +54,11 @@
       if [ "$result" = "light" ]; then
           echo "Switched to light theme"
           export CURRENT_THEME="light"
+          export BAT_THEME="gruvbox-light"
       else
           echo "Switched to dark theme"
           export CURRENT_THEME="dark"
+          export BAT_THEME="gruvbox-dark"
       fi
     }
   '';

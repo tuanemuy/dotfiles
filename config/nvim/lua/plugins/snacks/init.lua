@@ -37,7 +37,9 @@ return {
 		scope = { enabled = true },
 		scratch = { enabled = true },
 		scroll = { enabled = true },
-		styles = {},
+		styles = { enabled = true },
+		words = { enabled = true },
+		notifier = { enabled = true },
 	},
   -- stylua: ignore
   keys = {
@@ -46,10 +48,13 @@ return {
     { "<leader>/", function() Snacks.picker.grep() end, desc = "Grep" },
 		{
 			"<leader>fk",
+			--[[
 			function()
 				require("snacks.picker.config.sources").grep_kensaku = require("plugins/snacks/sources/grep_kensaku")
 				Snacks.picker.grep_kensaku()
 			end,
+			]]
+			function() Snacks.picker.grep() end, desc = "Grep",
 			desc = "Grep with kensaku.vim",
 		},
     { "<leader>:", function() Snacks.picker.command_history() end, desc = "Command History" },

@@ -1,6 +1,5 @@
-vim.opt.background = os.getenv("CURRENT_THEME") == "light" and "light" or "dark"
+vim.opt.background = os.getenv("CURRENT_THEME") == "dark" and "dark" or "light"
 vim.opt.number = true
-vim.opt.relativenumber = true
 vim.opt.hlsearch = true
 vim.opt.ruler = true
 vim.opt.title = true
@@ -38,6 +37,9 @@ require("config.lazy")
 -- Terminal mode
 vim.keymap.set("t", "<Esc>", "<C-\\><C-n>")
 
+vim.keymap.set("n", "J", "10gj")
+vim.keymap.set("n", "K", "10gk")
+
 vim.opt.termguicolors = true
 vim.cmd("syntax enable")
 vim.cmd("filetype plugin indent on")
@@ -68,4 +70,43 @@ vim.api.nvim_create_autocmd({ "BufNewFile", "BufRead" }, {
 	pattern = "*.tsvd",
 	command = "set ft=tsv",
 	group = "Filetype",
+})
+
+-- 外部からファイルを変更されたら反映する
+vim.api.nvim_create_autocmd({ "WinEnter", "FocusGained", "BufEnter" }, {
+	pattern = "*",
+	command = "checktime",
+})
+
+-- ステージングされた変更のdiffを取得し、コメントアウトしてコミットメッセージに挿入する
+local function append_diff_to_commit_message()
+	-- Gitリポジトリのルートディレクトリを取得
+	local git_root = vim.fn.system("git rev-parse --show-toplevel")
+	git_root = string.gsub(git_root, "\n$", "")
+
+	if git_root == "" then
+		return
+	end
+
+	-- ステージングされた変更のdiffを取得
+	local diff_command = "git -C " .. vim.fn.shellescape(git_root) .. " diff --cached"
+	local diff = vim.fn.system(diff_command)
+
+	-- diffをコメントアウト形式に変換
+	local commented_diff = {}
+	for _, line in ipairs(vim.split(diff, "\n", {})) do
+		table.insert(commented_diff, "# " .. line)
+	end
+
+	-- コミットメッセージの末尾にdiffを挿入
+	vim.api.nvim_buf_set_lines(0, vim.fn.line("$"), vim.fn.line("$"), false, commented_diff)
+
+	-- コミットメッセージの先頭にコミットメッセージの説明を挿入
+	vim.api.nvim_buf_set_lines(0, 0, 0, false, { "# ${prefix}: に続けて日本語でコミットメッセージを書いてください", "" })
+end
+
+vim.api.nvim_create_autocmd("BufReadPost", {
+	pattern = "COMMIT_EDITMSG",
+	callback = append_diff_to_commit_message,
+	desc = "Append staged diff to commit message",
 })
