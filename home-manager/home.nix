@@ -71,6 +71,7 @@ in
         program:
         import ./programs/${program}.nix {
           inherit inputs;
+          inherit config;
           inherit pkgs;
           inherit gitDirectory;
         }

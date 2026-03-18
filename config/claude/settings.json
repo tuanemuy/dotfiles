@@ -221,7 +221,8 @@
       "NotebookEdit(~/agent/**)",
       "TodoRead(**)",
       "TodoWrite(**)",
-      "Task(**)"
+      "Task(**)",
+      "mcp__pencil"
     ],
     "deny": [
       "Bash(rm -rf /)",
@@ -299,5 +300,6 @@
     "command": "npx -y ccusage statusline",
     "padding": 0
   },
-  "alwaysThinkingEnabled": true
+  "alwaysThinkingEnabled": true,
+  "skipDangerousModePermissionPrompt": true
 }

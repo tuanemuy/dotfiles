@@ -30,6 +30,8 @@
     let
       username = "hikaru";
       hostname = "h-mba-rudy";
+      homeDirectory = "/home/${username}";
+      darwinHomeDirectory = "/Users/${username}";
     in
     {
       homeConfigurations.${username} = home-manager.lib.homeManagerConfiguration {
@@ -39,7 +41,7 @@
         # the path to your home.nix.
         extraSpecialArgs = {
           inherit inputs;
-          gitDirectory = "/home/${username}/github.com/tuanemuy";
+          gitDirectory = "${homeDirectory}/github.com/tuanemuy";
         };
         modules = [
           ./home.nix
@@ -48,7 +50,7 @@
             {
               home = {
                 inherit username;
-                homeDirectory = lib.mkForce "/home/${username}";
+                homeDirectory = lib.mkForce homeDirectory;
               };
             }
           )
@@ -74,7 +76,7 @@
             home-manager.useUserPackages = true;
             home-manager.extraSpecialArgs = {
               inherit inputs;
-              gitDirectory = "/Users/${username}/github.com/tuanemuy";
+              gitDirectory = "${darwinHomeDirectory}/github.com/tuanemuy";
             };
             home-manager.users.${username} =
               { lib, inputs, ... }:
@@ -82,7 +84,7 @@
                 imports = [ ./home.nix ];
                 home = {
                   inherit username;
-                  homeDirectory = lib.mkForce "/Users/${username}";
+                  homeDirectory = lib.mkForce darwinHomeDirectory;
                 };
               };
 
@@ -103,20 +105,25 @@
             system:
             let
               isDarwin = (builtins.match ".*-darwin" system) != null;
+              flakePath =
+                if isDarwin then
+                  "${darwinHomeDirectory}/.config/home-manager"
+                else
+                  "${homeDirectory}/.config/home-manager";
               switch =
                 if isDarwin then
                   ''
                     echo " Detected macOS: Running darwin-rebuild..."
-                    sudo darwin-rebuild switch --flake .#${hostname}
+                    sudo darwin-rebuild switch --flake ${flakePath}#${hostname}
                   ''
                 else
                   ''
                     echo "🐧 Detected Linux: Running home-manager..."
-                    home-manager switch --flake .#${username}
+                    home-manager switch --flake ${flakePath}#${username}
                   '';
               update = ''
                 echo "🔄 Updating flake.lock..."
-                nix flake update
+                nix flake update --flake ${flakePath}
                 echo "✅ Flake lock file updated."
               '';
             in

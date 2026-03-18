@@ -1,4 +1,9 @@
-{ pkgs, gitDirectory, ... }:
+{
+  config,
+  pkgs,
+  gitDirectory,
+  ...
+}:
 {
   enable = true;
   enableCompletion = true;
@@ -6,7 +11,7 @@
   defaultKeymap = "viins";
   shellAliases =
     let
-      flakeDir = "~/.config/home-manager";
+      flakeDir = "${config.home.homeDirectory}/.config/home-manager";
     in
     {
       flswitch = "nix run ${flakeDir}#switch";
