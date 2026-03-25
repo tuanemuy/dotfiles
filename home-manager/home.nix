@@ -9,12 +9,6 @@ let
   mkOutOfStoreSymlink = config.lib.file.mkOutOfStoreSymlink;
 in
 {
-  nixpkgs = {
-    config = {
-      allowUnfree = true;
-    };
-  };
-
   home.stateVersion = "24.11";
 
   home.packages = with pkgs; [

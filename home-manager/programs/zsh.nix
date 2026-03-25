@@ -14,10 +14,10 @@
       flakeDir = "${config.home.homeDirectory}/.config/home-manager";
     in
     {
-      flswitch = "nix run ${flakeDir}#switch";
-      flupdate = "nix run ${flakeDir}#update";
-      flup = "nix run ${flakeDir}#up";
-      flclean = "nix run ${flakeDir}#clean";
+      nix-switch = "nix run ${flakeDir}#switch && exec zsh";
+      nix-update = "nix run ${flakeDir}#update";
+      nix-up = "nix run ${flakeDir}#up && exec zsh";
+      nix-clean = "nix run ${flakeDir}#clean";
       ls = "eza --icons";
       ll = "eza -lhmU --icons --git";
       lt = "eza --icons --tree -L";

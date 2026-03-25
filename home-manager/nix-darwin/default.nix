@@ -5,12 +5,14 @@
 
     settings = {
       experimental-features = "nix-command flakes";
+      download-buffer-size = 524288000;
     };
   };
 
   nixpkgs = {
     # The platform the configuration will be used on.
     hostPlatform = "aarch64-darwin";
+    config.allowUnfree = true;
     overlays = [ inputs.neovim-overlay.overlays.default ];
   };
 
