@@ -29,7 +29,7 @@
     }:
     let
       username = "hikaru";
-      hostname = "h-mba-rudy";
+      hostname = "h-mbp-regain";
       homeDirectory = "/home/${username}";
       darwinHomeDirectory = "/Users/${username}";
     in
