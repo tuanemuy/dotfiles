@@ -3,6 +3,7 @@ return {
 	cmd = "Octo",
 	opts = {
 		picker = "snacks",
+		-- bare Octo command opens picker of commands
 		enable_builtin = true,
 	},
 	keys = {
@@ -15,6 +16,16 @@ return {
 			"<leader>op",
 			"<CMD>Octo pr list<CR>",
 			desc = "List GitHub PullRequests",
+		},
+		{
+			"<leader>od",
+			"<CMD>Octo discussion list<CR>",
+			desc = "List GitHub Discussions",
+		},
+		{
+			"<leader>on",
+			"<CMD>Octo notification list<CR>",
+			desc = "List GitHub Notifications",
 		},
 		{
 			"<leader>os",

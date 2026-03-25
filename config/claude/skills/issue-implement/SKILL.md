@@ -46,6 +46,9 @@ Phase 4: スコープ外Issueの起票
 
 `references/implementation-guide.md` を読み、その手順に従って実装する。
 
+実装中に下した非自明な設計判断は `.issue/{Issue番号}/adr.md` に追記する。
+実装完了後、残存課題があれば `.issue/{Issue番号}/progress.md` に詳細を記録する。
+
 ---
 
 ## Phase 3: レビュー・修正
@@ -80,6 +83,7 @@ Issue #{Issue番号} の実装が完了しました！
 - 計画ファイル: .issue/{Issue番号}/plan.md
 - 設計判断: .issue/{Issue番号}/adr.md（{あり/なし}）
 - 動作確認計画: .issue/{Issue番号}/testing.md
+- 残存課題: .issue/{Issue番号}/progress.md（{あり/なし}）
 
 ## 実装
 - ブランチ: issue/{Issue番号}/{短い説明}
@@ -103,4 +107,6 @@ Issue #{Issue番号} の実装が完了しました！
 
 - Issueの要件を満たすことに集中する — スコープ外の改善を含めない
 - plan.md の指示に忠実に実装する
+- 実装中の非自明な設計判断は adr.md に記録する
+- 完了できなかった項目や既知の制限は progress.md に明記する — 暗黙的に省略しない
 - エージェントが失敗・タイムアウトした場合は、成功した結果だけで柔軟に進める

@@ -52,6 +52,8 @@ in
     pkgs.lib.genAttrs
       [
         "home-manager"
+        "bat"
+        "bottom"
         "direnv"
         "fzf"
         "git"
@@ -61,6 +63,7 @@ in
         "starship"
         "vim"
         "zsh"
+        "zoxide"
       ]
       (
         program:

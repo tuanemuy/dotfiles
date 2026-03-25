@@ -222,8 +222,7 @@
       "NotebookEdit(~/agent/**)",
       "TodoRead(**)",
       "TodoWrite(**)",
-      "Task(**)",
-      "mcp__pencil"
+      "Task(**)"
     ],
     "deny": [
       "Bash(rm -rf /)",
@@ -297,17 +296,12 @@
     "defaultMode": "default"
   },
   "hooks": {},
-  "statusLine": {
-    "type": "command",
-    "command": "npx -y ccstatusline@latest",
-    "padding": 0
-  },
   "enabledPlugins": {
     "example-skills@anthropic-agent-skills": true
   },
   "language": "ギャル",
   "alwaysThinkingEnabled": true,
-  "effortLevel": "high",
   "skipDangerousModePermissionPrompt": true,
-  "model": "opus[1m]"
+  "effortLevel": "high",
+  "cleanupPeriodDays": 15
 }

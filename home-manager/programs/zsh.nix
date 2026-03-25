@@ -21,20 +21,17 @@
       ls = "eza --icons";
       ll = "eza -lhmU --icons --git";
       lt = "eza --icons --tree -L";
-      tn = "tmux new -s";
-      ta = "tmux a -t";
       dark = "chth dark";
       light = "chth light";
     };
   plugins = [
     {
+      name = "zsh-abbr";
+      src = "${pkgs.zsh-abbr}/share/zsh/zsh-abbr";
+    }
+    {
       name = "fast-syntax-highlighting";
-      src = pkgs.fetchFromGitHub {
-        owner = "zdharma-continuum";
-        repo = "fast-syntax-highlighting";
-        rev = "v1.55";
-        sha256 = "0h7f27gz586xxw7cc0wyiv3bx0x3qih2wwh05ad85bh2h834ar8d";
-      };
+      src = "${pkgs.zsh-fast-syntax-highlighting}/share/zsh/plugins/fast-syntax-highlighting";
     }
   ];
   sessionVariables = {
@@ -47,10 +44,12 @@
     (pkgs.lib.mkAfter ''
       export CURRENT_THEME="light"
       export GIT_DIRECTORY=${gitDirectory}
-      export PATH=$PATH:$(npm prefix --location=global)/bin
+      export PATH=$PATH:$(npm prefix --location=global)/bin:$HOME/.local/bin
       export PATH="$PATH:/Applications/WezTerm.app/Contents/MacOS"
       export PATH="$PATH:/Applications/Ghostty.app/Contents/MacOS"
       bindkey '^y' autosuggest-accept
+      abbr -S -q tn="tmux new -s"
+      abbr -S -q ta="tmux a -t"
       test -e "$HOME"/.wezterm_shell_integration.zsh && source "$HOME"/.wezterm_shell_integration.zsh
       test -e /Applications/Ghostty.app/Contents/Resources/ghostty/shell-integration/zsh/ghostty-integration && source /Applications/Ghostty.app/Contents/Resources/ghostty/shell-integration/zsh/ghostty-integration
       function note() {
@@ -66,9 +65,11 @@
         if [ "$result" = "light" ]; then
             echo "Switched to light theme"
             export CURRENT_THEME="light"
+            export BAT_THEME="gruvbox-light"
         else
             echo "Switched to dark theme"
             export CURRENT_THEME="dark"
+            export BAT_THEME="gruvbox-dark"
         fi
       }
     '')
