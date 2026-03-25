@@ -296,16 +296,12 @@
     "defaultMode": "default"
   },
   "hooks": {},
-  "statusLine": {
-    "type": "command",
-    "command": "npx -y ccstatusline@latest",
-    "padding": 0
-  },
   "enabledPlugins": {
     "example-skills@anthropic-agent-skills": true
   },
   "language": "ギャル",
   "alwaysThinkingEnabled": true,
   "skipDangerousModePermissionPrompt": true,
-  "effortLevel": "high"
+  "effortLevel": "high",
+  "cleanupPeriodDays": 15
 }

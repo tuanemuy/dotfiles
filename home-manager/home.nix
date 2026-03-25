@@ -46,6 +46,7 @@ in
   home.stateVersion = "24.11";
 
   home.packages = with pkgs; [
+    chromium
     deno
     eternal-terminal
     eza
