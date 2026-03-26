@@ -50,6 +50,7 @@
       bindkey '^y' autosuggest-accept
       abbr -S -q tn="tmux new -s"
       abbr -S -q ta="tmux a -t"
+      abbr -S -q authrestart="sudo fdesetup authrestart"
       test -e "$HOME"/.wezterm_shell_integration.zsh && source "$HOME"/.wezterm_shell_integration.zsh
       test -e /Applications/Ghostty.app/Contents/Resources/ghostty/shell-integration/zsh/ghostty-integration && source /Applications/Ghostty.app/Contents/Resources/ghostty/shell-integration/zsh/ghostty-integration
       function note() {
