@@ -10,6 +10,8 @@
     lt = "eza --icons --tree -L";
     dark = "chth dark";
     light = "chth light";
+  } // pkgs.lib.optionalAttrs pkgs.stdenv.isDarwin {
+    tailscale = "/Applications/Tailscale.app/Contents/MacOS/Tailscale";
   };
   plugins = [
     {
