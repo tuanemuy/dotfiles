@@ -28,7 +28,6 @@ in
     imagemagick
     pm2
     ripgrep
-    watchman
     nodejs_24
   ];
 
