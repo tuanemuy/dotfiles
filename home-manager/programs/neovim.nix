@@ -3,6 +3,7 @@
   enable = true;
   package = inputs.neovim-overlay.packages.${pkgs.stdenv.hostPlatform.system}.default;
   extraPackages = with pkgs; [
+    tree-sitter
     biome
     prettierd
     markdownlint-cli2

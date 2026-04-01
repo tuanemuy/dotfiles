@@ -1,5 +1,6 @@
 return {
 	"pwntester/octo.nvim",
+	commit = "7967322",
 	cmd = "Octo",
 	opts = {
 		picker = "snacks",

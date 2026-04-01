@@ -23,6 +23,9 @@
       lt = "eza --icons --tree -L";
       dark = "chth dark";
       light = "chth light";
+    }
+    // pkgs.lib.optionalAttrs pkgs.stdenv.isDarwin {
+      tailscale = "/Applications/Tailscale.app/Contents/MacOS/Tailscale";
     };
   plugins = [
     {
@@ -42,12 +45,22 @@
       ${import ../workarounds/starship.nix}
     '')
     (pkgs.lib.mkAfter ''
+      export LANG=ja_JP.UTF-8
       export CURRENT_THEME="light"
       export GIT_DIRECTORY=${gitDirectory}
       export PATH=$PATH:$(npm prefix --location=global)/bin:$HOME/.local/bin
       export PATH="$PATH:/Applications/WezTerm.app/Contents/MacOS"
       export PATH="$PATH:/Applications/Ghostty.app/Contents/MacOS"
       bindkey '^y' autosuggest-accept
+      function fzf-or-complete() {
+        if [[ "$LBUFFER" =~ '\*\*$' ]]; then
+          zle fzf-completion
+        else
+          zle expand-or-complete
+        fi
+      }
+      zle -N fzf-or-complete
+      bindkey '^I' fzf-or-complete
       abbr -S -q tn="tmux new -s"
       abbr -S -q ta="tmux a -t"
       abbr -S -q authrestart="sudo fdesetup authrestart"
@@ -62,16 +75,9 @@
         nvim "$id"_"$title".md
       }
       function chth() {
-        result=$($GIT_DIRECTORY/dotfiles/tools/change-theme/run.sh $1)
-        if [ "$result" = "light" ]; then
-            echo "Switched to light theme"
-            export CURRENT_THEME="light"
-            export BAT_THEME="gruvbox-light"
-        else
-            echo "Switched to dark theme"
-            export CURRENT_THEME="dark"
-            export BAT_THEME="gruvbox-dark"
-        fi
+        export CURRENT_THEME=$($GIT_DIRECTORY/dotfiles/tools/change-theme/run.sh $1)
+        export BAT_THEME="gruvbox-${CURRENT_THEME}"
+        echo "Switched to $CURRENT_THEME theme"
       }
     '')
   ];

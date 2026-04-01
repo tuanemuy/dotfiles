@@ -17,10 +17,10 @@
     bind v split-window -h -c '#{pane_current_path}'
     bind s split-window -v -c '#{pane_current_path}'
 
-    col_fg="#928374"
-    col_red="#cc241d"
-    col_yellow="#d79921"
-    col_blue="#458588"
+    col_fg="#5e5252"
+    col_red="#be100e"
+    col_yellow="#d08b30"
+    col_blue="#426a79"
 
     set-option -gq status-style "bg=default fg=''${col_fg}"
     set-option -gq window-status-style "bg=default fg=''${col_fg}"

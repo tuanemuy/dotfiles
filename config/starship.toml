@@ -46,19 +46,31 @@ $direnv\
 $line_break\
 $character"""
 
-palette = 'gruvbox_dark'
+palette = 'belafonte_light'
 
-[palettes.gruvbox_dark]
-color_fg0 = '#fbf1c7'
-color_bg1 = '#3c3836'
-color_bg3 = '#665c54'
-color_blue = '#83a598'
-color_aqua = '#689d6a'
-color_green = '#98971a'
-color_orange = '#d65d0e'
-color_purple = '#b16286'
-color_red = '#cc241d'
-color_yellow = '#d79921'
+[palettes.belafonte_dark]
+color_fg0 = '#d5ccba'
+color_bg1 = '#45373c'
+color_bg3 = '#5e5252'
+color_blue = '#426a79'
+color_aqua = '#858162'
+color_green = '#858162'
+color_orange = '#97522c'
+color_purple = '#426a79'
+color_red = '#be100e'
+color_yellow = '#eaa549'
+
+[palettes.belafonte_light]
+color_fg0 = '#20111b'
+color_bg1 = '#968c83'
+color_bg3 = '#968c83'
+color_blue = '#426a79'
+color_aqua = '#858162'
+color_green = '#858162'
+color_orange = '#97522c'
+color_purple = '#426a79'
+color_red = '#be100e'
+color_yellow = '#d08b30'
 
 [cmd_duration]
 format = "[ $duration ]()"

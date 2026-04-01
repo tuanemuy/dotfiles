@@ -7,15 +7,22 @@ fi
 
 weztermConfig="$GIT_DIRECTORY/dotfiles/config/wezterm.lua"
 ghosttyConfig="$GIT_DIRECTORY/dotfiles/config/ghostty.config"
+starshipConfig="$GIT_DIRECTORY/dotfiles/config/starship.toml"
 
 if [ "$theme" = "light" ]; then
   sed -i.bak 's/color_scheme[^\S]*=.*/color_scheme = "Gruvbox light, medium (base16)"/g' $weztermConfig && rm "$weztermConfig.bak"
   sed -i.bak 's/theme[^\S]*=.*/theme = Gruvbox Light/g' $ghosttyConfig && rm "$ghosttyConfig.bak"
+  sed -i.bak "s/palette = 'belafonte_dark'/palette = 'belafonte_light'/g" $starshipConfig && rm "$starshipConfig.bak"
 fi
 
 if [ "$theme" = "dark" ]; then
   sed -i.bak 's/color_scheme[^\S]*=.*/color_scheme = "Gruvbox dark, medium (base16)"/g' $weztermConfig && rm "$weztermConfig.bak"
   sed -i.bak 's/theme[^\S]*=.*/theme = Gruvbox Dark/g' $ghosttyConfig && rm "$ghosttyConfig.bak"
+  sed -i.bak "s/palette = 'belafonte_light'/palette = 'belafonte_dark'/g" $starshipConfig && rm "$starshipConfig.bak"
+fi
+
+if [ -n "$TMUX" ]; then
+  tmux source-file "$GIT_DIRECTORY/dotfiles/config/tmux/belafonte_${theme}.conf"
 fi
 
 echo $theme
