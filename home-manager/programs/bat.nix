@@ -2,6 +2,16 @@
 {
   enable = true;
   config = {
-    theme = "gruvbox-light";
+    theme = "belafonte-light";
+  };
+  themes = {
+    belafonte-dark = {
+      src = ../../config/bat/themes;
+      file = "belafonte-dark.tmTheme";
+    };
+    belafonte-light = {
+      src = ../../config/bat/themes;
+      file = "belafonte-light.tmTheme";
+    };
   };
 }

@@ -48,30 +48,6 @@ $character"""
 
 palette = 'belafonte_light'
 
-[palettes.belafonte_dark]
-color_fg0 = '#d5ccba'
-color_bg1 = '#45373c'
-color_bg3 = '#5e5252'
-color_blue = '#426a79'
-color_aqua = '#858162'
-color_green = '#858162'
-color_orange = '#97522c'
-color_purple = '#426a79'
-color_red = '#be100e'
-color_yellow = '#eaa549'
-
-[palettes.belafonte_light]
-color_fg0 = '#20111b'
-color_bg1 = '#968c83'
-color_bg3 = '#968c83'
-color_blue = '#426a79'
-color_aqua = '#858162'
-color_green = '#858162'
-color_orange = '#97522c'
-color_purple = '#426a79'
-color_red = '#be100e'
-color_yellow = '#d08b30'
-
 [cmd_duration]
 format = "[ $duration ]()"
 
@@ -275,3 +251,29 @@ vimcmd_symbol = '[󱊷](bold fg:color_green)'
 vimcmd_replace_one_symbol = '[](bold fg:color_purple)'
 vimcmd_replace_symbol = '[](bold fg:color_purple)'
 vimcmd_visual_symbol = '[](bold fg:color_yellow)'
+
+# --- THEME PALETTES ---
+
+[palettes.belafonte_dark]
+color_fg0 = '#d5ccba'
+color_bg1 = '#45373c'
+color_bg3 = '#5e5252'
+color_blue = '#426a79'
+color_aqua = '#858162'
+color_green = '#858162'
+color_orange = '#97522c'
+color_purple = '#426a79'
+color_red = '#be100e'
+color_yellow = '#eaa549'
+
+[palettes.belafonte_light]
+color_fg0 = '#20111b'
+color_bg1 = '#968c83'
+color_bg3 = '#968c83'
+color_blue = '#3a6980'
+color_aqua = '#6a6338'
+color_green = '#6a6338'
+color_orange = '#9e4d22'
+color_purple = '#3a6980'
+color_red = '#a4302a'
+color_yellow = '#ab6a10'

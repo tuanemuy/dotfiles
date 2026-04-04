@@ -23,6 +23,7 @@
       lt = "eza --icons --tree -L";
       dark = "chth dark";
       light = "chth light";
+      autoth = "chth auto";
     }
     // pkgs.lib.optionalAttrs pkgs.stdenv.isDarwin {
       tailscale = "/Applications/Tailscale.app/Contents/MacOS/Tailscale";
@@ -76,9 +77,13 @@
       }
       function chth() {
         export CURRENT_THEME=$($GIT_DIRECTORY/dotfiles/tools/change-theme/run.sh $1)
-        export BAT_THEME="gruvbox-${CURRENT_THEME}"
-        echo "Switched to $CURRENT_THEME theme"
+        export BAT_THEME="gruvbox-''${CURRENT_THEME}"
+        if [ "$2" != "--silent" ]; then
+          echo "Switched to $CURRENT_THEME theme"
+        fi
       }
+      # Auto-detect theme from macOS appearance on startup
+      chth auto --silent
     '')
   ];
   profileExtra = ''

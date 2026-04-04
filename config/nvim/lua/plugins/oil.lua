@@ -2,8 +2,8 @@ return {
 	"stevearc/oil.nvim",
 	---@module 'oil'
 	---@type oil.SetupOpts
-	opts = {},
-	-- Optional dependencies
+	keys = { { "-", "<CMD>Oil<CR>", desc = "Open parent directory" } },
+	cmd = "Oil",
 	dependencies = {
 		{ "echasnovski/mini.icons", opts = {} },
 		"nvim-tree/nvim-web-devicons",
@@ -12,17 +12,14 @@ return {
 	config = function()
 		require("oil").setup({
 			view_options = {
-				winbar = "%{v:lua.require('oil').get_current_dir()}",
 				show_hidden = true,
 				sort = {
-					-- { "ctimwname", "desc" },
 					{ "name", "asc" },
 				},
 			},
 			delete_to_trash = true,
 			skip_confirm_for_simple_edits = true,
 		})
-		vim.keymap.set("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory" })
 	end,
 	init = function()
 		vim.api.nvim_create_autocmd("User", {

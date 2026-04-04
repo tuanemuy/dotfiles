@@ -44,7 +44,7 @@ return {
 	keys = {
 		-- Top Pickers & Explorer
 		{
-			"<leader>fi",
+			"<leader>ff",
 			function()
 				Snacks.picker.files()
 			end,
@@ -57,16 +57,20 @@ return {
 			end,
 			desc = "Grep",
 		},
-		--[[
 		{
-			"<leader>fk",
+			"<leader>fg",
 			function()
-				require("snacks.picker.config.sources").grep_kensaku = require("plugins/snacks/sources/grep_kensaku")
-				Snacks.picker.grep_kensaku()
+				Snacks.picker.pick("grep_kensaku", require("plugins.snacks.sources.grep_kensaku"))
 			end,
-			desc = "Grep with kensaku.vim",
+			desc = "Grep with kensaku",
 		},
-		]]
+		{
+			"<leader>fh",
+			function()
+				Snacks.picker.help()
+			end,
+			desc = "Help Tags",
+		},
 		{
 			"<leader>:",
 			function()

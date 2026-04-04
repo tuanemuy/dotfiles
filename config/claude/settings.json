@@ -1,4 +1,5 @@
 {
+  "cleanupPeriodDays": 15,
   "permissions": {
     "allow": [
       "Bash(npm:*)",
@@ -297,11 +298,18 @@
   },
   "hooks": {},
   "enabledPlugins": {
-    "example-skills@anthropic-agent-skills": true
+    "document-skills@anthropic-agent-skills": true
+  },
+  "extraKnownMarketplaces": {
+    "anthropic-agent-skills": {
+      "source": {
+        "source": "github",
+        "repo": "anthropics/skills"
+      }
+    }
   },
   "language": "ギャル",
   "alwaysThinkingEnabled": true,
-  "skipDangerousModePermissionPrompt": true,
   "effortLevel": "high",
-  "cleanupPeriodDays": 15
+  "skipDangerousModePermissionPrompt": true
 }

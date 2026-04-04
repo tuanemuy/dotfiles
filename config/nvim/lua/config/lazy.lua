@@ -21,7 +21,7 @@ require("lazy").setup({
 	spec = {
 		{ import = "plugins" },
 	},
-	install = { colorscheme = { "gruvbox-material" } },
+	install = { colorscheme = { "belafonte" } },
 	custom_keys = {},
 	checker = {
 		enabled = true,
