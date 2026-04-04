@@ -23,9 +23,9 @@ Phase 1: 計画（issue-plannerに委譲）
   → .issue/{Issue番号}/plan.md, testing.md, (adr.md) を作成
 
 Phase 2: 実装
-  ブランチ作成 → plan.md に沿って実装 → コミット → PR作成
+  ブランチ作成 → plan.md に沿って実装 → 要件・実装・testing.md から総合的にE2Eテスト作成 → コミット → PR作成
 
-Phase 3: レビュー・修正（pr-reviewに委譲）
+Phase 3: レビュー・修正
   → 指摘修正 → 再レビュー（2回連続クリーンで完了、最大10ラウンド）
 
 Phase 4: スコープ外Issueの起票
@@ -53,7 +53,9 @@ Phase 4: スコープ外Issueの起票
 
 ## Phase 3: レビュー・修正
 
-Phase 2 で作成した PR に対して、`../pr-review/SKILL.md` を読み、その手順に従ってレビュー・修正を行う。
+`references/review-guide.md` を読み、その手順に従ってレビュー・修正を行う。
+
+レビューの成果物は `.issue/{Issue番号}/review/` に保存し、ADR は `.issue/{Issue番号}/adr.md` に追記する。
 
 ---
 
@@ -90,12 +92,17 @@ Issue #{Issue番号} の実装が完了しました！
 - PR: #{PR番号}
 - コミット数: {数}
 
+## E2Eテスト
+- テストファイル: {作成したテストファイルのパス、またはスキップ}
+- カバレッジ: testing.md の {数}/{数} 項目を自動化
+- 結果: 全PASS / {詳細}
+
 ## レビュー
 - レビューラウンド: {数}回
 - 初回ブロッカー: {数}件
 - 修正済み: {数}件
 - 最終ステータス: APPROVED
-- レビューファイル: .pr/{PR番号}/review/review-001.md 〜 review-{NNN}.md
+- レビューファイル: .issue/{Issue番号}/review/review-001.md 〜 review-{NNN}.md
 
 ## スコープ外Issue
 - {起票したIssue一覧、またはなし}

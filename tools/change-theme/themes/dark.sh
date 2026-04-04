@@ -2,8 +2,8 @@ PALETTE_NAME="belafonte_dark"
 BACKGROUND="dark"
 
 # Terminal emulators
-WEZTERM_COLOR_SCHEME="Gruvbox dark, medium (base16)"
-GHOSTTY_THEME="Gruvbox Dark"
+WEZTERM_COLOR_SCHEME="Belafonte Night"
+GHOSTTY_THEME="Belafonte Night"
 
 # Palette colors (starship, tmux, etc.)
 COLOR_FG0="#d5ccba"
