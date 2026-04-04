@@ -46,7 +46,7 @@ $direnv\
 $line_break\
 $character"""
 
-palette = 'belafonte_light'
+palette = 'belafonte_dark'
 
 [cmd_duration]
 format = "[ $duration ]()"

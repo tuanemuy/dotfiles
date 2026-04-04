@@ -3,10 +3,10 @@
 
   inputs = {
     # Specify the source of Home Manager and Nixpkgs.
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    nixpkgs-darwin.url = "github:nixos/nixpkgs/nixpkgs-unstable";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-25.11";
+    nixpkgs-darwin.url = "github:nixos/nixpkgs/nixpkgs-25.11-darwin";
     home-manager = {
-      url = "github:nix-community/home-manager";
+      url = "github:nix-community/home-manager/release-25.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nix-darwin = {
@@ -34,6 +34,22 @@
       hostname = "h-mbp-regain";
       homeDirectory = "/home/${username}";
       darwinHomeDirectory = "/Users/${username}";
+      stableVersion = "25.11";
+      stableCheckScript = ''
+        CURRENT="${stableVersion}"
+        YEAR=''${CURRENT%.*}
+        MONTH=''${CURRENT#*.}
+        if [ "$MONTH" = "05" ]; then
+          NEXT="''${YEAR}.11"
+        else
+          NEXT="$((YEAR + 1)).05"
+        fi
+        if git ls-remote --heads https://github.com/NixOS/nixpkgs "nixos-''${NEXT}" 2>/dev/null | grep -q "nixos-''${NEXT}"; then
+          echo ""
+          echo "⚠️  nixos-''${NEXT} is now available! Consider updating stableVersion in flake.nix"
+          echo ""
+        fi
+      '';
     in
     {
       homeConfigurations.${username} = home-manager.lib.homeManagerConfiguration {
@@ -117,11 +133,13 @@
                   ''
                     echo " Detected macOS: Running darwin-rebuild..."
                     sudo darwin-rebuild switch --flake ${flakePath}#${hostname}
+                    ${stableCheckScript}
                   ''
                 else
                   ''
                     echo "🐧 Detected Linux: Running home-manager..."
                     home-manager switch --flake ${flakePath}#${username}
+                    ${stableCheckScript}
                   '';
               update = ''
                 echo "🔄 Updating flake.lock..."
