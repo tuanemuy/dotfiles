@@ -31,6 +31,7 @@
   "lualine.nvim": { "branch": "master", "commit": "74114f0df664f14d7c228945693ba68a3b70a794" },
   "mini.icons": { "branch": "main", "commit": "7fdae2443a0e2910015ca39ad74b50524ee682d3" },
   "nerdfont.vim": { "branch": "master", "commit": "cc50782ee9580fc70b659cf1ebd55229d94b37ab" },
+  "nightfox.nvim": { "branch": "main", "commit": "ba47d4b4c5ec308718641ba7402c143836f35aa9" },
   "noice.nvim": { "branch": "main", "commit": "7bfd942445fb63089b59f97ca487d605e715f155" },
   "nui.nvim": { "branch": "main", "commit": "de740991c12411b663994b2860f1a4fd0937c130" },
   "nvim-lspconfig": { "branch": "master", "commit": "9ccd58a7949091c0cc2777d4e92a45a209c808c1" },
