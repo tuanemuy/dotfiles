@@ -2,7 +2,6 @@
   "CamelCaseMotion": { "branch": "master", "commit": "e69b0024f8f63db10c5d0df26d4920760755d454" },
   "LuaSnip": { "branch": "master", "commit": "5a1e39223db9a0498024a77b8441169d260c8c25" },
   "avante.nvim": { "branch": "main", "commit": "4f717e06998a93f32fd8c9ddebef203f56ae62b4" },
-  "belafonte.nvim": { "branch": "main", "commit": "3131a4869ce34095f9f912a76211edaccc2e292e" },
   "blink.cmp": { "branch": "main", "commit": "451168851e8e2466bc97ee3e026c3dcb9141ce07" },
   "blink.compat": { "branch": "main", "commit": "1454f14a8d855a578ceeba77c62538fa1459a67c" },
   "codecompanion.nvim": { "branch": "main", "commit": "77623e79b6d39f05dcd3021d07ab1d37ebe1a50b" },

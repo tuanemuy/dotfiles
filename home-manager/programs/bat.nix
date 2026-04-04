@@ -2,16 +2,16 @@
 {
   enable = true;
   config = {
-    theme = "belafonte-light";
+    theme = "dayfox";
   };
   themes = {
-    belafonte-dark = {
+    dayfox = {
       src = ../../config/bat/themes;
-      file = "belafonte-dark.tmTheme";
+      file = "dayfox.tmTheme";
     };
-    belafonte-light = {
+    terafox = {
       src = ../../config/bat/themes;
-      file = "belafonte-light.tmTheme";
+      file = "terafox.tmTheme";
     };
   };
 }

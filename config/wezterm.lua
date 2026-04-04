@@ -2,7 +2,7 @@ local wezterm = require("wezterm")
 local config = wezterm.config_builder()
 
 -- Color
-config.color_scheme = "Belafonte Night"
+config.color_scheme = "terafox"
 
 -- Window
 config.window_decorations = "RESIZE"

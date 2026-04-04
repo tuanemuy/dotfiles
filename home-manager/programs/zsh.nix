@@ -77,7 +77,7 @@
       }
       function chth() {
         export CURRENT_THEME=$($GIT_DIRECTORY/dotfiles/tools/change-theme/run.sh $1)
-        export BAT_THEME="gruvbox-''${CURRENT_THEME}"
+        if [ "$CURRENT_THEME" = "light" ]; then export BAT_THEME="dayfox"; else export BAT_THEME="terafox"; fi
         if [ "$2" != "--silent" ]; then
           echo "Switched to $CURRENT_THEME theme"
         fi
