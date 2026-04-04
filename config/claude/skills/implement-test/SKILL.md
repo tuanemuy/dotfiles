@@ -40,7 +40,7 @@ CLAUDE.md と README.md を読み、以下を確認する:
 
 ## Phase 2: 実装
 
-`references/impl-guide.md` を読み、その手順に従ってテストを実装する。
+`references/impl-guide.md` を読み、その手順に従ってテストを実装する。テストケース定義（spec/testcases/）をベースにしつつ、実装コードの分析と `../_shared/references/e2e-test-methodology.md` のE2Eテスト方法論に基づいて、仕様を網羅的にカバーする。
 
 ドメインごとにサブエージェントを起動する。
 
@@ -49,8 +49,9 @@ CLAUDE.md と README.md を読み、以下を確認する:
 1. 報告を確認する
 2. typecheck + lint を実行する
 3. **テストを実行する**（CLAUDE.md のテストコマンドに従う）
-4. テストが失敗したらサブエージェントを再起動して修正させる（最大3回）
-5. `spec/progress.md` を更新する
+4. 自動化を見送った項目がある場合、妥当性を確認する
+5. テストが失敗したらサブエージェントを再起動して修正させる（最大3回）
+6. `spec/progress.md` を更新する
 
 ## Phase 3: レビューサイクル
 

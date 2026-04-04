@@ -68,7 +68,7 @@ git checkout -b issue/{Issue番号}/{短い説明}
 
 ## Step 3: E2Eテストの作成
 
-plan.md の要件・実装コード・testing.md の3つを総合的に分析し、仕様を網羅するE2Eテストを作成する。testing.md は手動確認向けに書かれているため、そのまま自動化するのではなく、実装後の視点で改めてテストすべき観点を設計する。
+`../../_shared/references/e2e-test-methodology.md` の方法論に基づき、plan.md の要件・実装コード・testing.md の3つを総合的に分析し、仕様を網羅するE2Eテストを作成する。testing.md は手動確認向けに書かれているため、そのまま自動化するのではなく、実装後の視点で改めてテストすべき観点を設計する。
 
 サブエージェント（Agent tool, subagent_type="general-purpose"）を起動し、E2Eテストを実装させる。
 
