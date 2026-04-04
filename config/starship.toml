@@ -46,7 +46,7 @@ $direnv\
 $line_break\
 $character"""
 
-palette = 'belafonte_dark'
+palette = 'terafox'
 
 [cmd_duration]
 format = "[ $duration ]()"
@@ -254,26 +254,26 @@ vimcmd_visual_symbol = '[](bold fg:color_yellow)'
 
 # --- THEME PALETTES ---
 
-[palettes.belafonte_dark]
-color_fg0 = '#d5ccba'
-color_bg1 = '#45373c'
-color_bg3 = '#5e5252'
-color_blue = '#426a79'
-color_aqua = '#858162'
-color_green = '#858162'
-color_orange = '#97522c'
-color_purple = '#426a79'
-color_red = '#be100e'
-color_yellow = '#eaa549'
+[palettes.terafox]
+color_fg0 = '#e6eaea'
+color_bg1 = '#254147'
+color_bg3 = '#587b7b'
+color_blue = '#5a93aa'
+color_aqua = '#a1cdd8'
+color_green = '#7aa4a1'
+color_orange = '#ff8349'
+color_purple = '#ad5c7c'
+color_red = '#e85c51'
+color_yellow = '#fda47f'
 
-[palettes.belafonte_light]
-color_fg0 = '#20111b'
-color_bg1 = '#968c83'
-color_bg3 = '#968c83'
-color_blue = '#3a6980'
-color_aqua = '#6a6338'
-color_green = '#6a6338'
-color_orange = '#9e4d22'
-color_purple = '#3a6980'
-color_red = '#a4302a'
-color_yellow = '#ab6a10'
+[palettes.dayfox]
+color_fg0 = '#3d2b5a'
+color_bg1 = '#d3c7bb'
+color_bg3 = '#aab0ad'
+color_blue = '#2848a9'
+color_aqua = '#287980'
+color_green = '#396847'
+color_orange = '#955f61'
+color_purple = '#6e33ce'
+color_red = '#a5222f'
+color_yellow = '#ac5402'

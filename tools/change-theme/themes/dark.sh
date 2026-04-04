@@ -1,21 +1,21 @@
-PALETTE_NAME="belafonte_dark"
+PALETTE_NAME="terafox"
 BACKGROUND="dark"
 
 # Terminal emulators
-WEZTERM_COLOR_SCHEME="Belafonte Night"
-GHOSTTY_THEME="Belafonte Night"
+WEZTERM_COLOR_SCHEME="terafox"
+GHOSTTY_THEME="terafox"
 
 # Palette colors (starship, tmux, etc.)
-COLOR_FG0="#d5ccba"
-COLOR_BG1="#45373c"
-COLOR_BG3="#5e5252"
-COLOR_BLUE="#426a79"
-COLOR_AQUA="#858162"
-COLOR_GREEN="#858162"
-COLOR_ORANGE="#97522c"
-COLOR_PURPLE="#426a79"
-COLOR_RED="#be100e"
-COLOR_YELLOW="#eaa549"
+COLOR_FG0="#e6eaea"
+COLOR_BG1="#254147"
+COLOR_BG3="#587b7b"
+COLOR_BLUE="#5a93aa"
+COLOR_AQUA="#a1cdd8"
+COLOR_GREEN="#7aa4a1"
+COLOR_ORANGE="#ff8349"
+COLOR_PURPLE="#ad5c7c"
+COLOR_RED="#e85c51"
+COLOR_YELLOW="#fda47f"
 
 # Tmux
-TMUX_FG="#968c83"
+TMUX_FG="#587b7b"

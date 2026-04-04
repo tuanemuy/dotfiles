@@ -21,7 +21,7 @@ require("lazy").setup({
 	spec = {
 		{ import = "plugins" },
 	},
-	install = { colorscheme = { "belafonte" } },
+	install = { colorscheme = { "dayfox", "terafox" } },
 	custom_keys = {},
 	checker = {
 		enabled = true,
