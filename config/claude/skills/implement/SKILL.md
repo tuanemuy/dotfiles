@@ -169,6 +169,8 @@ CLAUDE.md と README.md を読み、以下を確認する:
 
 `../implement-test/SKILL.md` を読み、その Phase 2（実装）と Phase 3（レビューサイクル）の手順に従う。
 
+テスト実装では `../_shared/references/e2e-test-methodology.md` のE2Eテスト方法論に基づき、spec/testcases/ の定義を網羅しつつ、実装コードの分析から見えた追加観点（境界値・異常系・状態遷移等）もカバーする。
+
 レビューサイクルが完了したら Phase 6 へ。
 
 ---
@@ -188,8 +190,12 @@ CLAUDE.md と README.md を読み、以下を確認する:
 ```
 1. typecheck（CLAUDE.md のコマンドに従う）
 2. lint（CLAUDE.md のコマンドに従う）
-3. test run（CLAUDE.md のコマンドに従う）
+3. test run（CLAUDE.md のコマンドに従う）— Phase 5 で作成したテストを含む全テストを実行
 ```
+
+テスト失敗がある場合は、失敗内容を分析する:
+- Phase 5 で作成したテストの失敗 → テストまたは実装の修正が必要
+- 既存テストの失敗 → 実装が既存機能を壊している可能性がある（リグレッション）
 
 エラーがある場合はサブエージェントを起動して修正させる。サブエージェントにはエラー内容と関連ファイルを渡す。
 
