@@ -1,3 +1,15 @@
+vim.g.clipboard = {
+  name = 'OSC 52',
+  copy = {
+    ['+'] = require('vim.ui.clipboard.osc52').copy('+'),
+    ['*'] = require('vim.ui.clipboard.osc52').copy('*'),
+  },
+  paste = {
+    ['+'] = require('vim.ui.clipboard.osc52').paste('+'),
+    ['*'] = require('vim.ui.clipboard.osc52').paste('*'),
+  },
+}
+
 vim.opt.background = os.getenv("CURRENT_THEME") == "light" and "light" or "dark"
 vim.opt.number = true
 -- vim.opt.relativenumber = true

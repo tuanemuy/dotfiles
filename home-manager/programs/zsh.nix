@@ -23,6 +23,10 @@
       lt = "eza --icons --tree -L";
       dark = "chth dark";
       light = "chth light";
+      autoth = "chth auto";
+    }
+    // pkgs.lib.optionalAttrs pkgs.stdenv.isDarwin {
+      tailscale = "/Applications/Tailscale.app/Contents/MacOS/Tailscale";
     };
   plugins = [
     {
@@ -42,14 +46,25 @@
       ${import ../workarounds/starship.nix}
     '')
     (pkgs.lib.mkAfter ''
+      export LANG=ja_JP.UTF-8
       export CURRENT_THEME="light"
       export GIT_DIRECTORY=${gitDirectory}
       export PATH=$PATH:$(npm prefix --location=global)/bin:$HOME/.local/bin
       export PATH="$PATH:/Applications/WezTerm.app/Contents/MacOS"
       export PATH="$PATH:/Applications/Ghostty.app/Contents/MacOS"
       bindkey '^y' autosuggest-accept
+      function fzf-or-complete() {
+        if [[ "$LBUFFER" =~ '\*\*$' ]]; then
+          zle fzf-completion
+        else
+          zle expand-or-complete
+        fi
+      }
+      zle -N fzf-or-complete
+      bindkey '^I' fzf-or-complete
       abbr -S -q tn="tmux new -s"
       abbr -S -q ta="tmux a -t"
+      abbr -S -q authrestart="sudo fdesetup authrestart"
       test -e "$HOME"/.wezterm_shell_integration.zsh && source "$HOME"/.wezterm_shell_integration.zsh
       test -e /Applications/Ghostty.app/Contents/Resources/ghostty/shell-integration/zsh/ghostty-integration && source /Applications/Ghostty.app/Contents/Resources/ghostty/shell-integration/zsh/ghostty-integration
       function note() {
@@ -61,17 +76,14 @@
         nvim "$id"_"$title".md
       }
       function chth() {
-        result=$($GIT_DIRECTORY/dotfiles/tools/change-theme/run.sh $1)
-        if [ "$result" = "light" ]; then
-            echo "Switched to light theme"
-            export CURRENT_THEME="light"
-            export BAT_THEME="gruvbox-light"
-        else
-            echo "Switched to dark theme"
-            export CURRENT_THEME="dark"
-            export BAT_THEME="gruvbox-dark"
+        export CURRENT_THEME=$($GIT_DIRECTORY/dotfiles/tools/change-theme/run.sh $1)
+        export BAT_THEME="gruvbox-''${CURRENT_THEME}"
+        if [ "$2" != "--silent" ]; then
+          echo "Switched to $CURRENT_THEME theme"
         fi
       }
+      # Auto-detect theme from macOS appearance on startup
+      chth auto --silent
     '')
   ];
   profileExtra = ''

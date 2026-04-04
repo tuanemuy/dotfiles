@@ -4,13 +4,14 @@
   inputs = {
     # Specify the source of Home Manager and Nixpkgs.
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixpkgs-darwin.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nix-darwin = {
       url = "github:nix-darwin/nix-darwin/master";
-      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs.follows = "nixpkgs-darwin";
     };
     neovim-overlay = {
       url = "https://github.com/nix-community/neovim-nightly-overlay/archive/master.tar.gz";
@@ -22,6 +23,7 @@
     inputs@{
       self,
       nixpkgs,
+      nixpkgs-darwin,
       home-manager,
       nix-darwin,
       neovim-overlay,
@@ -29,7 +31,7 @@
     }:
     let
       username = "hikaru";
-      hostname = "h-mba-rudy";
+      hostname = "h-mbp-regain";
       homeDirectory = "/home/${username}";
       darwinHomeDirectory = "/Users/${username}";
     in
