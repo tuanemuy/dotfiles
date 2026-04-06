@@ -2,7 +2,6 @@ return {
 	"shellRaining/hlchunk.nvim",
 	enabled = false,
 	event = { "BufReadPre", "BufNewFile" },
-	dependencies = { "nvim-treesitter/nvim-treesitter" },
 	config = function()
 		require("hlchunk").setup({
 			chunk = {

@@ -48,6 +48,10 @@ in
     ".claude/settings.json".source =
       mkOutOfStoreSymlink "${gitDirectory}/dotfiles/config/claude/settings.json";
     ".aerospace.toml".source = mkOutOfStoreSymlink "${gitDirectory}/dotfiles/config/aerospace.toml";
+  } // pkgs.lib.optionalAttrs pkgs.stdenv.isDarwin {
+    # Home Manager's Darwin font sync hook is not needed here and currently
+    # trips a Nix runtime failure during activation evaluation on this system.
+    "Library/Fonts/.home-manager-fonts-version".enable = false;
   };
 
   home.sessionVariables = {

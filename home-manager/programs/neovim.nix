@@ -12,6 +12,7 @@
     yaml-language-server
     lua-language-server
     stylua
+    tree-sitter
     typos-lsp
   ];
 }

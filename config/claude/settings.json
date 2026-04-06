@@ -296,10 +296,20 @@
     "type": "command",
     "command": "npx ccusage statusline"
   },
+  "enabledPlugins": {
+    "figma@claude-plugins-official": true,
+    "document-skills@anthropic-agent-skills": true,
+    "example-skills@anthropic-agent-skills": true
+  },
+  "extraKnownMarketplaces": {
+    "anthropic-agent-skills": {
+      "source": {
+        "source": "github",
+        "repo": "anthropics/skills"
+      }
+    }
+  },
   "alwaysThinkingEnabled": true,
   "effortLevel": "high",
-  "skipDangerousModePermissionPrompt": true,
-  "enabledPlugins": {
-    "figma@claude-plugins-official": true
-  }
+  "skipDangerousModePermissionPrompt": true
 }
