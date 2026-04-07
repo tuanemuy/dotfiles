@@ -28,6 +28,7 @@ in
     imagemagick
     pm2
     ripgrep
+    watchman
     nodejs_24
   ];
 
@@ -47,10 +48,9 @@ in
     "biome.json".source = mkOutOfStoreSymlink "${gitDirectory}/dotfiles/biome.json";
     ".claude/settings.json".source =
       mkOutOfStoreSymlink "${gitDirectory}/dotfiles/config/claude/settings.json";
+    ".claude/skills".source = mkOutOfStoreSymlink "${gitDirectory}/dotfiles/config/claude/skills";
     ".aerospace.toml".source = mkOutOfStoreSymlink "${gitDirectory}/dotfiles/config/aerospace.toml";
   } // pkgs.lib.optionalAttrs pkgs.stdenv.isDarwin {
-    # Home Manager's Darwin font sync hook is not needed here and currently
-    # trips a Nix runtime failure during activation evaluation on this system.
     "Library/Fonts/.home-manager-fonts-version".enable = false;
   };
 
@@ -78,6 +78,7 @@ in
         program:
         import ./programs/${program}.nix {
           inherit inputs;
+          inherit config;
           inherit pkgs;
           inherit gitDirectory;
         }

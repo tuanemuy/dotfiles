@@ -1,13 +1,15 @@
-{ pkgs, ... }:
+{ inputs, pkgs, ... }:
 {
   enable = true;
+  package = inputs.neovim-overlay.packages.${pkgs.stdenv.hostPlatform.system}.default;
   extraPackages = with pkgs; [
+    tree-sitter
     biome
     copilot-language-server
     prettierd
     markdownlint-cli2
     nil
-    nixfmt-rfc-style
+    nixfmt
     vscode-langservers-extracted
     yaml-language-server
     lua-language-server

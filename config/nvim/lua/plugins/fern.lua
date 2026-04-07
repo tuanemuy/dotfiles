@@ -1,5 +1,7 @@
 return {
 	"lambdalisue/fern.vim",
+	keys = { { "<leader>fe", ":Fern . -drawer -toggle -reveal=%<CR>", desc = "Fern Toggle" } },
+	cmd = "Fern",
 	dependencies = {
 		{ "lambdalisue/nerdfont.vim" },
 		{
@@ -11,7 +13,6 @@ return {
 		{ "lambdalisue/glyph-palette.vim" },
 	},
 	config = function()
-		vim.keymap.set("n", "<leader>fe", ":Fern . -drawer -toggle -reveal=%<CR>")
 		vim.g["fern#drawer_width"] = 27
 		vim.g["fern#default_hidden"] = 1
 		vim.g["fern#keepjump_on_edit"] = 1

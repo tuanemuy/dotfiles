@@ -47,6 +47,8 @@ return {
 				rust = { "rustfmt", lsp_format = "fallback" },
 				python = { "ruff_format" },
 				nix = { "nixfmt" },
+				sql = { "sleek" },
+				php = { "intelephense" },
 			},
 		})
 	end,

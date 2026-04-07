@@ -26,7 +26,11 @@ return {
 			filetypes = {
 				markdown = true,
 				yaml = true,
+				csv = false,
+				tsv = false,
+				php = true,
 				gitcommit = true,
+				octo = true,
 			},
 		})
 	end,

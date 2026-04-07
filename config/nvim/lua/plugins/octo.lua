@@ -1,5 +1,6 @@
 return {
 	"pwntester/octo.nvim",
+	commit = "7967322",
 	cmd = "Octo",
 	opts = {
 		picker = "snacks",
@@ -16,6 +17,16 @@ return {
 			"<leader>op",
 			"<CMD>Octo pr list<CR>",
 			desc = "List GitHub PullRequests",
+		},
+		{
+			"<leader>od",
+			"<CMD>Octo discussion list<CR>",
+			desc = "List GitHub Discussions",
+		},
+		{
+			"<leader>on",
+			"<CMD>Octo notification list<CR>",
+			desc = "List GitHub Notifications",
 		},
 		{
 			"<leader>os",

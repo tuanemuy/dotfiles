@@ -1,6 +1,7 @@
 { pkgs, ... }:
 {
   enable = true;
+  signing.format = null;
   settings = {
     user = {
       name = "tuanemuy";

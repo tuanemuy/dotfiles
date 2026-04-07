@@ -1,5 +1,18 @@
-vim.opt.background = os.getenv("CURRENT_THEME") == "dark" and "dark" or "light"
+vim.g.clipboard = {
+  name = 'OSC 52',
+  copy = {
+    ['+'] = require('vim.ui.clipboard.osc52').copy('+'),
+    ['*'] = require('vim.ui.clipboard.osc52').copy('*'),
+  },
+  paste = {
+    ['+'] = require('vim.ui.clipboard.osc52').paste('+'),
+    ['*'] = require('vim.ui.clipboard.osc52').paste('*'),
+  },
+}
+
+vim.opt.background = os.getenv("CURRENT_THEME") == "light" and "light" or "dark"
 vim.opt.number = true
+-- vim.opt.relativenumber = true
 vim.opt.hlsearch = true
 vim.opt.ruler = true
 vim.opt.title = true
@@ -72,41 +85,38 @@ vim.api.nvim_create_autocmd({ "BufNewFile", "BufRead" }, {
 	group = "Filetype",
 })
 
--- 外部からファイルを変更されたら反映する
 vim.api.nvim_create_autocmd({ "WinEnter", "FocusGained", "BufEnter" }, {
 	pattern = "*",
 	command = "checktime",
 })
 
 -- ステージングされた変更のdiffを取得し、コメントアウトしてコミットメッセージに挿入する
-local function append_diff_to_commit_message()
+local function append_diff()
 	-- Gitリポジトリのルートディレクトリを取得
 	local git_root = vim.fn.system("git rev-parse --show-toplevel")
+	-- 末尾の改行を削除
 	git_root = string.gsub(git_root, "\n$", "")
 
 	if git_root == "" then
 		return
 	end
 
-	-- ステージングされた変更のdiffを取得
+	-- ステージングされた変更のdiffを取得 (git -C <path> diff --cached)
 	local diff_command = "git -C " .. vim.fn.shellescape(git_root) .. " diff --cached"
 	local diff = vim.fn.system(diff_command)
 
-	-- diffをコメントアウト形式に変換
+	-- diffの各行にコメント文字 '#' を追加
 	local commented_diff = {}
 	for _, line in ipairs(vim.split(diff, "\n", {})) do
 		table.insert(commented_diff, "# " .. line)
 	end
 
-	-- コミットメッセージの末尾にdiffを挿入
+	-- コミットメッセージの末尾にdiffを追記
 	vim.api.nvim_buf_set_lines(0, vim.fn.line("$"), vim.fn.line("$"), false, commented_diff)
-
-	-- コミットメッセージの先頭にコミットメッセージの説明を挿入
-	vim.api.nvim_buf_set_lines(0, 0, 0, false, { "# ${prefix}: に続けて日本語でコミットメッセージを書いてください", "" })
 end
 
 vim.api.nvim_create_autocmd("BufReadPost", {
 	pattern = "COMMIT_EDITMSG",
-	callback = append_diff_to_commit_message,
+	callback = append_diff,
 	desc = "Append staged diff to commit message",
 })

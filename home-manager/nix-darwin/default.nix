@@ -1,27 +1,19 @@
-{
-  self,
-  pkgs,
-  inputs,
-  username,
-  ...
-}:
+{ self, pkgs, inputs, username, ... }:
 {
   nix = {
-    enable = false;
-    # optimise.automatic = true;
+    optimise.automatic = true;
 
     settings = {
       experimental-features = "nix-command flakes";
+      download-buffer-size = 524288000;
     };
   };
 
   nixpkgs = {
     # The platform the configuration will be used on.
     hostPlatform = "aarch64-darwin";
+    config.allowUnfree = true;
     overlays = [ inputs.neovim-overlay.overlays.default ];
-    config = {
-      allowUnfree = true;
-    };
   };
 
   users.users.${username} = {
