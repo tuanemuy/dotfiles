@@ -46,7 +46,7 @@ $direnv\
 $line_break\
 $character"""
 
-palette = 'terafox'
+palette = 'dayfox'
 
 [cmd_duration]
 format = "[ $duration ]()"
