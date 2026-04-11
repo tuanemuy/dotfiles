@@ -9,7 +9,7 @@ return {
 			},
 			suggestion = {
 				auto_trigger = true,
-				keymap = {
+					keymap = {
 					accept = "<C-j>",
 				},
 			},

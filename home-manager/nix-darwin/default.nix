@@ -13,7 +13,14 @@
     # The platform the configuration will be used on.
     hostPlatform = "aarch64-darwin";
     config.allowUnfree = true;
-    overlays = [ inputs.neovim-overlay.overlays.default ];
+    overlays = [
+      inputs.neovim-overlay.overlays.default
+      (final: prev: {
+        direnv = prev.direnv.overrideAttrs (_: {
+          doCheck = false;
+        });
+      })
+    ];
   };
 
   users.users.${username} = {
