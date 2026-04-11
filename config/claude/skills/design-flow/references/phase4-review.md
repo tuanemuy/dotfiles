@@ -10,15 +10,45 @@
 以下の順序でレビューを行う。各ステップで問題が見つかれば修正し、クリーンになってから次に進む。
 
 ```
-Step 1: /critique（UX・デザイン品質）
+Step 1: agent-browser による視覚的確認
   → 修正
-Step 2: /polish（ディテール・一貫性）
+Step 2: /critique（UX・デザイン品質）
   → 修正
-Step 3: /audit（アクセシビリティ・パフォーマンス）
+Step 3: /polish（ディテール・一貫性）
+  → 修正
+Step 4: /audit（アクセシビリティ・パフォーマンス）
   → 修正
 ```
 
-## Step 1: /critique によるUXレビュー
+## Step 1: agent-browser による視覚的確認
+
+レビュースキルを適用する前に、agent-browserで全画面のデザインをブラウザ上で確認する。
+コードレビューでは見落とす実際のレンダリング結果を視覚的に検証する。
+
+各画面について:
+
+```bash
+agent-browser --session design-review open file:///absolute/path/to/spec/design/pages/{画面名}.html
+agent-browser --session design-review screenshot /tmp/design-screenshots/review/{画面名}.png
+```
+
+スクリーンショットを Read ツールで確認し、以下の観点でチェックする:
+
+- **レイアウト崩れ**: 要素の重なり、はみ出し、予期しない折り返し
+- **画面間の一貫性**: ヘッダー、ナビゲーション、フッターの統一
+- **視覚的バランス**: 余白、配色、フォントサイズのバランス
+- **コンテンツの見え方**: ダミーデータが実際にどう表示されるか
+
+問題が見つかれば修正し、修正後に再度スクリーンショットを撮って確認する。
+確認が終わったらセッションを閉じる:
+
+```bash
+agent-browser --session design-review close
+```
+
+指摘事項を `spec/design/review/${連番}.md` に記録する。
+
+## Step 2: /critique によるUXレビュー
 
 Skill ツールで `/critique` を呼び出し、`spec/design/pages/` 配下のHTMLデザインを評価する。
 
@@ -33,7 +63,7 @@ Skill ツールで `/critique` を呼び出し、`spec/design/pages/` 配下のH
 指摘事項を `spec/design/review/${連番}.md` に記録し、修正する。
 修正後、問題が残っていれば再度 `/critique` でレビューする。
 
-## Step 2: /polish による仕上げレビュー
+## Step 3: /polish による仕上げレビュー
 
 /critique の問題がクリーンになったら、Skill ツールで `/polish` を呼び出す。
 
@@ -45,7 +75,7 @@ Skill ツールで `/critique` を呼び出し、`spec/design/pages/` 配下のH
 
 指摘事項を `spec/design/review/${連番}.md` に記録し、修正する。
 
-## Step 3: /audit によるアクセシビリティレビュー
+## Step 4: /audit によるアクセシビリティレビュー
 
 /polish の問題がクリーンになったら、Skill ツールで `/audit` を呼び出す。
 

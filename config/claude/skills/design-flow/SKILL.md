@@ -23,6 +23,15 @@ description: >
 spec スキルの成果物（シナリオ、ページ設計など）をもとに、UIデザインを段階的に作成する。
 ユーザーとの対話を通じて方向性を固め、デザイントークンで一貫性を担保しながら全画面のデザインを仕上げる。
 
+## 前提条件
+
+`agent-browser` CLIが必要。HTMLデザインのスクリーンショット取得・視覚的レビューに使用する。
+
+```bash
+agent-browser --version  # 確認
+agent-browser install     # Chrome for Testingのセットアップ（初回のみ）
+```
+
 ## なぜこの順序か
 
 代表画面のドラフトを先に複数提案することで、抽象的な言葉だけでは伝わらないビジュアルの方向性を具体的にすり合わせられる。方向性が決まってからトークンを定義し、全画面に展開することで、手戻りと画面間の不整合を最小化できる。
@@ -38,6 +47,32 @@ spec スキルの成果物（シナリオ、ページ設計など）をもとに
 
 design-flow の成果物は `spec/design/` 配下に出力し、完了時に `spec/index.md` を更新する。
 
+## アーキテクチャ
+
+```
+メインエージェント（オーケストレーション）
+  ├── /frontend-design（HTMLデザイン作成）
+  ├── agent-browser（スクリーンショット取得・視覚的レビュー）
+  └── /critique, /polish, /audit（レビュー）
+```
+
+メインエージェントは agent-browser を直接操作してもよいし、サブエージェントに委譲してもよい。
+HTMLデザインファイルのスクリーンショット取得やビジュアル確認が主な用途。
+
+## セッション管理
+
+agent-browser の操作時は `--session` でセッションを分離する:
+
+```bash
+agent-browser --session design-draft open file:///path/to/draft.html
+agent-browser --session design-review screenshot /tmp/design-screenshots/page.png
+```
+
+命名規則:
+- `design-draft` — ドラフトのプレビュー・スクリーンショット
+- `design-page-{画面名}` — 各画面デザインのプレビュー
+- `design-review` — レビュー時の視覚的確認
+
 ## Workflow Overview
 
 ```
@@ -47,6 +82,7 @@ Phase 0: 準備
 
 Phase 1: ドラフト提案
   代表画面を自動選定 → 5案のHTMLドラフトを /frontend-design で作成
+  → agent-browser でスクリーンショットを取得
   → ユーザーに提示し、方向性を選択してもらう
 
 Phase 2: デザイントークン・方針決定
@@ -56,10 +92,11 @@ Phase 2: デザイントークン・方針決定
 
 Phase 3: デザイン作成
   トークン・方針に基づき全画面のHTMLデザインを /frontend-design で作成
+  → agent-browser でスクリーンショットを取得し視覚的に確認
   → spec/design/pages/*.html を生成
 
 Phase 4: レビュー
-  /critique → 修正 → /polish → /audit（アクセシビリティ）
+  agent-browser で視覚的確認 → /critique → 修正 → /polish → /audit（アクセシビリティ）
   → クリーンになるまで繰り返す
 ```
 

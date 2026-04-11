@@ -45,9 +45,32 @@ Skill ツールで `/frontend-design` を呼び出す。
 - レスポンシブ対応は不要（デスクトップ幅で固定してよい）
 - 各案の方向性の違いが一目でわかるようにする
 
-## Step 3: ユーザーへの提示
+## Step 3: スクリーンショットの取得
 
-各ドラフトについて以下を簡潔に説明する:
+作成したHTMLドラフトをagent-browserで開き、スクリーンショットを取得する。
+ユーザーが視覚的にドラフトを比較できるようにする。
+
+各ドラフトについて:
+
+```bash
+# HTMLファイルをブラウザで開く
+agent-browser --session design-draft open file:///absolute/path/to/spec/design/drafts/draft-1-clean-editorial.html
+
+# スクリーンショットを取得
+agent-browser --session design-draft screenshot /tmp/design-screenshots/drafts/draft-1-clean-editorial.png
+
+# セッションを閉じる（次のドラフトに進む前に）
+agent-browser --session design-draft close
+```
+
+スクリーンショットの保存先: `/tmp/design-screenshots/drafts/`
+
+ドラフトが複数ある場合、サブエージェントに委譲して並列でスクリーンショットを取得してもよい（最大3並列）。
+その場合はセッション名を `design-draft-1`, `design-draft-2` のように分離する。
+
+## Step 4: ユーザーへの提示
+
+スクリーンショットを Read ツールで表示しながら、各ドラフトについて以下を簡潔に説明する:
 - 方向性の名前と意図
 - 特徴的なデザイン要素
 

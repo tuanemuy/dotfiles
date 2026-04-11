@@ -1,18 +1,22 @@
 #!/bin/bash
 
-theme="dark"
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+source "$SCRIPT_DIR/config.sh"
+
+theme_name="${DARK_THEME}"
 if [ "$1" = "light" ]; then
-    theme="light"
+    theme_name="${LIGHT_THEME}"
 elif [ "$1" = "auto" ]; then
     if [ "$(uname)" = "Darwin" ]; then
         if ! defaults read -g AppleInterfaceStyle &>/dev/null; then
-            theme="light"
+            theme_name="${LIGHT_THEME}"
         fi
     fi
+elif [ -n "$1" ]; then
+    theme_name="$1"
 fi
 
-SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-source "$SCRIPT_DIR/themes/${theme}.sh"
+source "$SCRIPT_DIR/themes/${theme_name}.sh"
 
 weztermConfig="$GIT_DIRECTORY/dotfiles/config/wezterm.lua"
 ghosttyConfig="$GIT_DIRECTORY/dotfiles/config/ghostty.config"
