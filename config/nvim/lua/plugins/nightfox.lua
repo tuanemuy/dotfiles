@@ -1,5 +1,6 @@
 return {
 	"edeneast/nightfox.nvim",
+	enabled = false,
 	lazy = false,
 	priority = 1000,
 	config = function()

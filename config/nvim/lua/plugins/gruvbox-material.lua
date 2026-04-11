@@ -1,6 +1,5 @@
 return {
 	"sainnhe/gruvbox-material",
-	enabled = false,
 	lazy = false,
 	priority = 1000,
 	config = function()
@@ -10,6 +9,11 @@ return {
 		vim.g.gruvbox_material_better_performance = 1
 		vim.g.gruvbox_material_ui_contrast = "high"
 		vim.g.gruvbox_material_statusline_style = "original"
+		if vim.env.CURRENT_THEME == "light" then
+			vim.opt.background = "light"
+		else
+			vim.opt.background = "dark"
+		end
 		vim.cmd.colorscheme("gruvbox-material")
 	end,
 }
