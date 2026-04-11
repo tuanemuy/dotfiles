@@ -66,7 +66,22 @@ git checkout -b issue/{Issue番号}/{短い説明}
 
 該当なしの場合は progress.md を作成しない。
 
-## Step 3: E2Eテストの作成
+## Step 3: デプロイ確認とE2Eテストの作成
+
+### デプロイ確認
+
+E2Eテストの前に、testing.md の「デプロイ・起動手順」に記載されたコマンドでアプリケーションが正常にビルド・起動できることを確認する。
+
+```bash
+# testing.md に記載された手順に従う（例）
+pnpm install
+pnpm build   # ビルドエラーがないか確認
+pnpm dev     # 開発サーバーが起動するか確認
+```
+
+ビルドや起動でエラーが発生した場合は、E2Eテスト作成前に修正する。
+
+### E2Eテストの作成
 
 `../../_shared/references/e2e-test-methodology.md` の方法論に基づき、plan.md の要件・実装コード・testing.md の3つを総合的に分析し、仕様を網羅するE2Eテストを作成する。testing.md は手動確認向けに書かれているため、そのまま自動化するのではなく、実装後の視点で改めてテストすべき観点を設計する。
 
@@ -122,6 +137,22 @@ git checkout -b issue/{Issue番号}/{短い説明}
 
 E2Eテストの既存環境がプロジェクトに存在しない場合は、テスト作成をスキップし、その旨を PR の Test plan に記載する。
 
+## Step 3.5: ブラウザ検証（条件付き）
+
+Web UI を持つプロジェクトで、かつ `.issue/{Issue番号}/testing.md` にブラウザで確認可能なテスト項目がある場合、`../manual-test/SKILL.md` を読み、その手順に従ってブラウザ検証を実行する。
+
+manual-test に渡す情報:
+- テストソース: `.issue/{Issue番号}/testing.md`
+- 成果物ディレクトリ: `.issue/{Issue番号}/manual-test/`
+- Issue番号: #{Issue番号}
+
+以下の場合はスキップする:
+- Web UI を持たないプロジェクト（CLI ツール、ライブラリ等）
+- testing.md にブラウザ操作を伴うテスト項目がない
+- agent-browser が利用できない
+
+ブラウザ検証で失敗がある場合は、manual-test が原因分析を行い GitHub Issue を起票する。起票された Issue は PR の Test plan に記載する。
+
 ## Step 4: コミットとPR作成
 
 1. 変更をステージング＆コミット
@@ -156,6 +187,11 @@ Closes #{Issue番号}
 Based on `.issue/{Issue番号}/plan.md`
 
 ## Test plan
+
+### デプロイ・動作確認方法
+{testing.md の「デプロイ・起動手順」から正確なコマンドを転記}
+
+### 確認項目
 - {testing.md からの主要確認項目}
 
 ## E2E Test
