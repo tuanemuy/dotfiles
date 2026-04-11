@@ -165,8 +165,12 @@ agent-browser --session scout --profile /tmp/myservice-profile open https://exam
    - 認証の要否
    - 除外すべきページ（管理画面等）
 2. agent-browser の利用可能性を確認
-3. 認証が必要なら上記パターンに従ってセットアップ
-4. spec/ ディレクトリを作成
+3. agent-browser プロセスのクリーンアップ
+
+   Skill ツールで `/agent-browser-cleanup` を呼び出す。別セッションで使用中でなければ残存プロセスをクリーンアップしてから調査を開始できる。
+
+4. 認証が必要なら上記パターンに従ってセットアップ
+5. spec/ ディレクトリを作成
 
 ### Phase 2: 偵察（scout サブエージェント）
 

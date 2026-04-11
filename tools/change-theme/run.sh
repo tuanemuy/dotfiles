@@ -76,7 +76,11 @@ set-window-option -gq window-status-current-format "#[bg=default,fg=${COLOR_YELL
 set-window-option -gq window-status-format "#[bg=default,fg=${TMUX_FG},nobold,noitalics,nounderscore] 󰍹 "
 TMUX
 
-# Apply to all tmux sessions (works both inside and outside tmux)
+# Apply to all tmux sessions and force immediate refresh on all clients
 tmux source-file "$tmuxDir/theme.conf" 2>/dev/null || true
+tmux list-clients -F '#{client_name}' 2>/dev/null | xargs -I{} tmux refresh-client -t {} -S 2>/dev/null || true
+
+# Ghostty - reload config via Cmd+Shift+,
+osascript -e 'tell application "System Events" to tell process "Ghostty" to keystroke "," using {command down, shift down}' 2>/dev/null || true
 
 echo "$BACKGROUND"
