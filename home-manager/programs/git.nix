@@ -15,6 +15,10 @@
     init = {
       defaultBranch = "main";
     };
+    merge."ours-lockfile" = {
+      name = "Keep ours on conflict";
+      driver = "true";
+    };
   };
   ignores = [
     # General

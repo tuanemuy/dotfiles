@@ -311,5 +311,6 @@
   "language": "ギャル",
   "alwaysThinkingEnabled": true,
   "effortLevel": "high",
-  "skipDangerousModePermissionPrompt": true
+  "skipDangerousModePermissionPrompt": true,
+  "model": "sonnet[1m]"
 }
