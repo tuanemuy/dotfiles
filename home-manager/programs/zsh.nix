@@ -82,8 +82,14 @@
           echo "Switched to $CURRENT_THEME theme"
         fi
       }
-      # Auto-detect theme from macOS appearance on startup
-      chth auto --silent
+      # Auto-detect theme from macOS appearance on startup (lightweight, no file writes)
+      if ! defaults read -g AppleInterfaceStyle &>/dev/null; then
+        export CURRENT_THEME="light"
+        export BAT_THEME="dayfox"
+      else
+        export CURRENT_THEME="dark"
+        export BAT_THEME="terafox"
+      fi
     '')
   ];
   profileExtra = ''
