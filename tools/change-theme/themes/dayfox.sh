@@ -3,7 +3,7 @@ BACKGROUND="light"
 
 # Terminal emulators
 WEZTERM_COLOR_SCHEME="dayfox"
-GHOSTTY_THEME="dayfox"
+GHOSTTY_THEME="Dayfox"
 
 # Palette colors (starship, tmux, etc.)
 COLOR_FG0="#3d2b5a"

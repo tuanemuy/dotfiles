@@ -3,7 +3,7 @@ BACKGROUND="dark"
 
 # Terminal emulators
 WEZTERM_COLOR_SCHEME="terafox"
-GHOSTTY_THEME="terafox"
+GHOSTTY_THEME="Terafox"
 
 # Palette colors (starship, tmux, etc.)
 COLOR_FG0="#e6eaea"
