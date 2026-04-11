@@ -80,7 +80,17 @@ TMUX
 tmux source-file "$tmuxDir/theme.conf" 2>/dev/null || true
 tmux list-clients -F '#{client_name}' 2>/dev/null | xargs -I{} tmux refresh-client -t {} -S 2>/dev/null || true
 
-# Ghostty - reload config via Cmd+Shift+,
-osascript -e 'tell application "System Events" to tell process "Ghostty" to keystroke "," using {command down, shift down}' 2>/dev/null || true
+# Neovim - update colorscheme in all running instances
+find "${TMPDIR}nvim.${USER}" -type s 2>/dev/null | while read -r socket; do
+  nvim --server "$socket" --remote-send ":silent! set background=${BACKGROUND}<CR>:silent! colorscheme gruvbox-material<CR>" 2>/dev/null &
+done
+
+# Ghostty - reload config via Cmd+Shift+, (3s timeout, non-blocking)
+if pgrep -qi "ghostty" >/dev/null 2>&1; then
+  osascript \
+    -e 'with timeout of 3 seconds' \
+    -e 'tell application "System Events" to tell process "Ghostty" to keystroke "," using {command down, shift down}' \
+    -e 'end timeout' 2>/dev/null &
+fi
 
 echo "$BACKGROUND"

@@ -77,13 +77,19 @@
       }
       function chth() {
         export CURRENT_THEME=$($GIT_DIRECTORY/dotfiles/tools/change-theme/run.sh $1)
-        if [ "$CURRENT_THEME" = "light" ]; then export BAT_THEME="dayfox"; else export BAT_THEME="terafox"; fi
+        if [ "$CURRENT_THEME" = "light" ]; then export BAT_THEME="gruvbox-light"; else export BAT_THEME="gruvbox-dark"; fi
         if [ "$2" != "--silent" ]; then
           echo "Switched to $CURRENT_THEME theme"
         fi
       }
-      # Auto-detect theme from macOS appearance on startup
-      chth auto --silent
+      # Auto-detect theme from macOS appearance on startup (lightweight, no file writes)
+      if ! defaults read -g AppleInterfaceStyle &>/dev/null; then
+        export CURRENT_THEME="light"
+        export BAT_THEME="gruvbox-light"
+      else
+        export CURRENT_THEME="dark"
+        export BAT_THEME="gruvbox-dark"
+      fi
     '')
   ];
   profileExtra = ''
