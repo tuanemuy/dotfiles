@@ -107,11 +107,29 @@ export AGENT_BROWSER_IDLE_TIMEOUT_MS=120000  # daemon無操作: 2分で自動終
 
 呼び出し元に応じて成果物の保存先を決める:
 
-- issue-implement から: `.issue/{Issue番号}/manual-test/`
-- implement から: `.manual-test/`
-- 単体実行: `.manual-test/`
+実行日時を `YYYY-MM-DD` 形式で取得してサブディレクトリにすることで、複数回の実行結果を混在させない:
 
-以降、この保存先を `{output_dir}` と表記する。
+```bash
+TEST_DATE=$(date +%Y-%m-%d)
+```
+
+- issue-implement から: `.issue/{Issue番号}/manual-test/{YYYY-MM-DD}/`
+- implement から: `.manual-test/{YYYY-MM-DD}/`
+- 単体実行: `.manual-test/{YYYY-MM-DD}/`
+
+以降、この保存先を `{output_dir}` と表記する。例:
+- `.manual-test/2026-04-13/`
+- `.issue/123/manual-test/2026-04-13/`
+
+`{output_dir}` の中に以下のファイル・ディレクトリが生成される:
+- `report.md` — 最終レポート
+- `seed-data.md` — シードデータ整備の記録
+- `server-info.md` — サーバー起動情報（PID・ポート・URL、gitignore対象）
+- `results/` — 各テストケースの結果（`TC-{番号}.md` と `summary.md`、`analysis.md`）
+- `screenshots/` — スクリーンショット（gitignore対象）
+- `issues.md` — 起票した Issue 一覧（起票した場合のみ）
+
+同日中に同じテストソースで再実行した場合は既存の `{output_dir}` を上書きする（同日内の複数回実行は差分比較のためではなく、最新結果の参照を優先する想定）。異なる日に実行した結果は別ディレクトリとして残り、時系列で追跡できる。
 
 ---
 
