@@ -67,6 +67,7 @@
       abbr -S -q tl="tmux ls"
       abbr -S -q tk="tmux kill-session -t"
       abbr -S -q cld="claude --dangerously-skip-permissions"
+      abbr -S -q codexd="codex --dangerously-bypass-approvals-and-sandbox"
       abbr -S -q authrestart="sudo fdesetup authrestart"
       test -e "$HOME"/.wezterm_shell_integration.zsh && source "$HOME"/.wezterm_shell_integration.zsh
       test -e /Applications/Ghostty.app/Contents/Resources/ghostty/shell-integration/zsh/ghostty-integration && source /Applications/Ghostty.app/Contents/Resources/ghostty/shell-integration/zsh/ghostty-integration

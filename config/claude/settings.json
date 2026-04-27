@@ -297,6 +297,10 @@
     "defaultMode": "default"
   },
   "hooks": {},
+  "statusLine": {
+    "type": "command",
+    "command": "bash /Users/hikaru/.claude/statusline-command.sh"
+  },
   "enabledPlugins": {
     "document-skills@anthropic-agent-skills": true
   },
@@ -311,6 +315,5 @@
   "language": "ギャル",
   "alwaysThinkingEnabled": true,
   "effortLevel": "high",
-  "skipDangerousModePermissionPrompt": true,
-  "model": "sonnet"
+  "skipDangerousModePermissionPrompt": true
 }
