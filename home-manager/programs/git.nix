@@ -48,7 +48,8 @@
     "Temporary Items"
     ".apdisk"
 
-    # Editor
-    ".cursor"
+    # direnv
+    ".envrc"
+    ".direnv"
   ];
 }
