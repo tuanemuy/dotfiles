@@ -81,19 +81,22 @@ pnpm dev     # 開発サーバーが起動するか確認
 
 ### ブラウザ検証
 
-`../manual-test/SKILL.md` を読み、その手順に従ってブラウザ検証を実行する。シードデータの準備も manual-test スキルに委ねる。
+`../manual-test/SKILL.md` の手順に従ってブラウザ検証を実行する。シードデータの準備も manual-test に委ねる。
 
 manual-test に渡す情報:
 - テストソース: `.issue/{Issue番号}/testing.md`
 - 成果物ディレクトリ: `.issue/{Issue番号}/manual-test/`
 - Issue番号: #{Issue番号}
 
-以下の場合はスキップして、その旨を PR の Test plan に記載する:
-- Web UI を持たないプロジェクト（CLI ツール、ライブラリ等）
-- testing.md にブラウザ操作を伴うテスト項目がない
-- manual-test の前提条件（agent-browser 等）が満たせない
+**スキップは原則しない。** 以下のいずれかを実際に確認した場合のみスキップ可:
 
-ブラウザ検証で失敗がある場合は、manual-test が原因分析を行い GitHub Issue を起票する。起票された Issue は PR の Test plan に記載する。
+- Web UIなし（`package.json` の dev/start 系欠如、UIファイル不在を確認）
+- testing.md に画面操作項目が1件もない（実際に読んで確認）
+- `agent-browser --version` がエラー
+
+スキップする場合は PR の Test plan に「スキップ理由: {確認した内容}」を一行で記載する。「該当しそう」での自己判断は不可。
+
+ブラウザ検証で失敗が出たら、変更箇所起因かつ即時修正可能なら Phase 2 に戻って修正・再検証。それ以外は manual-test がIssue起票する。
 
 ## Step 4: コミットとPR作成
 

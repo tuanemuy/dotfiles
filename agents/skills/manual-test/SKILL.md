@@ -1,6 +1,5 @@
 ---
 name: manual-test
-model: sonnet
 description: >
   testing.md や spec/manual-tests/ のテスト手順書を agent-browser で自動実行し、
   実装の動作をブラウザ上で検証するスキル。

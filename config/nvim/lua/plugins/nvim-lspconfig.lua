@@ -38,7 +38,6 @@ return {
 		})
 
 		vim.lsp.config("vtsls", {
-			root_markers = { "package.json" },
 			workspace_required = true,
 		})
 

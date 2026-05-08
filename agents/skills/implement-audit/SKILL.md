@@ -1,6 +1,5 @@
 ---
 name: implement-audit
-model: sonnet
 description: >
   implement スキルファミリー（implement, implement-domain, implement-adapter,
   implement-usecase, implement-test, implement-frontend, issue-implement）の
