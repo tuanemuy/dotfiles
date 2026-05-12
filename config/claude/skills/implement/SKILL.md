@@ -169,7 +169,7 @@ CLAUDE.md と README.md を読み、以下を確認する:
 
 `../implement-test/SKILL.md` を読み、その Phase 2（実装）と Phase 3（レビューサイクル）の手順に従う。
 
-テスト実装では `../_shared/references/e2e-test-methodology.md` のE2Eテスト方法論に基づき、spec/testcases/ の定義を網羅しつつ、実装コードの分析から見えた追加観点（境界値・異常系・状態遷移等）もカバーする。
+テスト実装では `../_shared/references/test-methodology.md` の方法論に基づき、spec/testcases/ の定義を網羅しつつ、実装コードの分析から見えた追加観点（境界値・異常系・状態遷移等）もカバーする。コンポーネントのテストは不要であり、既存のテスト体系に明確な必然性がない限り追加しない。
 
 レビューサイクルが完了したら Phase 6 へ。
 

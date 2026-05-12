@@ -40,7 +40,7 @@ CLAUDE.md と README.md を読み、以下を確認する:
 
 ## Phase 2: 実装
 
-`references/impl-guide.md` を読み、その手順に従ってテストを実装する。テストケース定義（spec/testcases/）をベースにしつつ、実装コードの分析と `../_shared/references/e2e-test-methodology.md` のE2Eテスト方法論に基づいて、仕様を網羅的にカバーする。
+`references/impl-guide.md` を読み、その手順に従ってテストを実装する。テストケース定義（spec/testcases/）をベースにしつつ、実装コードの分析と `../_shared/references/test-methodology.md` の方法論に基づいて、仕様を網羅的にカバーする。
 
 ドメインごとにサブエージェントを起動する。
 
@@ -76,6 +76,7 @@ CLAUDE.md と README.md を読み、以下を確認する:
 - **プロジェクトコンテキストに従う** — 言語・ディレクトリ構成・規約は CLAUDE.md / README.md から読み取る
 - 仕様に合わせたテストを作成する — 実装に合わせない
 - テストケース定義のカバレッジを網羅する
+- コンポーネントのテストは不要。既存のテスト体系に明確な必然性がない限り追加しない
 - **TODO・FIXME・仮実装を残さない**
 - 品質チェック（typecheck + lint + test）はごまかさない
 - **spec ドキュメントを実装と同期させる** — 設計の誤りや不足を発見したら spec を更新する

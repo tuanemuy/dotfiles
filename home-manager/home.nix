@@ -9,19 +9,11 @@ let
   mkOutOfStoreSymlink = config.lib.file.mkOutOfStoreSymlink;
 in
 {
-  nixpkgs = {
-    config = {
-      allowUnfree = true;
-    };
-  };
-
   home.stateVersion = "24.11";
 
   home.packages = with pkgs; [
-    awscli2
     cocoapods
     deno
-    eternal-terminal
     eza
     fd
     gh
@@ -50,7 +42,8 @@ in
       mkOutOfStoreSymlink "${gitDirectory}/dotfiles/config/claude/settings.json";
     ".claude/skills".source = mkOutOfStoreSymlink "${gitDirectory}/dotfiles/config/claude/skills";
     ".aerospace.toml".source = mkOutOfStoreSymlink "${gitDirectory}/dotfiles/config/aerospace.toml";
-  } // pkgs.lib.optionalAttrs pkgs.stdenv.isDarwin {
+  }
+  // pkgs.lib.optionalAttrs pkgs.stdenv.isDarwin {
     "Library/Fonts/.home-manager-fonts-version".enable = false;
   };
 
@@ -63,6 +56,7 @@ in
         "home-manager"
         "bat"
         "bottom"
+        "delta"
         "direnv"
         "fzf"
         "git"
@@ -83,36 +77,4 @@ in
           inherit gitDirectory;
         }
       );
-
-  systemd.user.services.et =
-    if pkgs.stdenv.isDarwin then
-      null
-    else
-      {
-        Unit = {
-          Description = "Eternal Terminal server";
-          After = [ "network.target" ];
-        };
-        Service = {
-          ExecStart = "${pkgs.eternal-terminal}/bin/etserver";
-          Restart = "always";
-        };
-        Install = {
-          WantedBy = [ "default.target" ];
-        };
-      };
-
-  launchd.agents.et =
-    if pkgs.stdenv.isDarwin then
-      {
-        enable = true;
-        config = {
-          Label = "com.nix.etserver";
-          ProgramArguments = [ "${pkgs.eternal-terminal}/bin/etserver" ];
-          KeepAlive = true;
-          RunAtLoad = true;
-        };
-      }
-    else
-      null;
 }

@@ -35,6 +35,11 @@
       homeDirectory = "/home/${username}";
       darwinHomeDirectory = "/Users/${username}";
       stableVersion = "25.11";
+      linuxPkgs = import nixpkgs {
+        system = "x86_64-linux";
+        config.allowUnfree = true;
+        overlays = [ inputs.neovim-overlay.overlays.default ];
+      };
       stableCheckScript = ''
         CURRENT="${stableVersion}"
         YEAR=''${CURRENT%.*}
@@ -53,7 +58,7 @@
     in
     {
       homeConfigurations.${username} = home-manager.lib.homeManagerConfiguration {
-        pkgs = nixpkgs.legacyPackages."x86_64-linux";
+        pkgs = linuxPkgs;
 
         # Specify your home configuration modules here, for example,
         # the path to your home.nix.
@@ -92,6 +97,7 @@
           {
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
+	    home-manager.backupFileExtension = "backup";
             home-manager.extraSpecialArgs = {
               inherit inputs;
               gitDirectory = "${darwinHomeDirectory}/github.com/tuanemuy";
@@ -128,10 +134,49 @@
                   "${darwinHomeDirectory}/.config/home-manager"
                 else
                   "${homeDirectory}/.config/home-manager";
+              cacheCheck =
+                if isDarwin then
+                  ''
+                    echo "🔍 Checking binary cache availability..."
+                    DRY_RUN_OUTPUT=$(darwin-rebuild build --dry-run --flake ${flakePath}#${hostname} 2>&1) || true
+
+                    # Lines containing .drv paths = derivations that must be built from source
+                    BUILD_DRVS=$(echo "$DRY_RUN_OUTPUT" | grep '/nix/store/.*\.drv' || true)
+                    BUILD_COUNT=$(echo "$BUILD_DRVS" | grep -c '/nix/store/' || true)
+
+                    # Lines with store paths but no .drv = fetched from cache
+                    FETCH_PATHS=$(echo "$DRY_RUN_OUTPUT" | grep '/nix/store/' | grep -v '\.drv' || true)
+                    FETCH_COUNT=$(echo "$FETCH_PATHS" | grep -c '/nix/store/' || true)
+
+                    if [ "$BUILD_COUNT" -gt 0 ]; then
+                      echo ""
+                      echo "⚠️  $BUILD_COUNT derivation(s) need to be built from source (not cached):"
+                      echo "$BUILD_DRVS" | sed 's|.*/nix/store/[a-z0-9]*-||; s|\.drv$||' | head -20
+                      if [ "$BUILD_COUNT" -gt 20 ]; then
+                        echo "  ... and $((BUILD_COUNT - 20)) more"
+                      fi
+                      echo "($FETCH_COUNT path(s) will be fetched from cache)"
+                      echo ""
+                      echo "This may take a while and could fail in the Nix sandbox."
+                      echo "Tip: Try again later when Hydra has finished building caches."
+                      echo ""
+                      printf "Proceed anyway? [y/N] "
+                      read -r REPLY
+                      if [ "$REPLY" != "y" ] && [ "$REPLY" != "Y" ]; then
+                        echo "Aborted."
+                        exit 0
+                      fi
+                    else
+                      echo "✅ All derivations are cached. Proceeding with switch."
+                    fi
+                  ''
+                else
+                  "";
               switch =
                 if isDarwin then
                   ''
-                    echo " Detected macOS: Running darwin-rebuild..."
+                    echo "🍎 Detected macOS: Running darwin-rebuild..."
+                    ${cacheCheck}
                     sudo darwin-rebuild switch --flake ${flakePath}#${hostname}
                     ${stableCheckScript}
                   ''

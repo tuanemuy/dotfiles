@@ -47,11 +47,14 @@
     '')
     (pkgs.lib.mkAfter ''
       export LANG=ja_JP.UTF-8
-      export CURRENT_THEME="light"
+      export CURRENT_THEME="dark"
+      export CURRENT_THEME_MODE="auto"
+      export THEME_MODE_FILE="${config.xdg.configHome}/theme-mode"
       export GIT_DIRECTORY=${gitDirectory}
       export PATH=$PATH:$(npm prefix --location=global)/bin:$HOME/.local/bin
       export PATH="$PATH:/Applications/WezTerm.app/Contents/MacOS"
       export PATH="$PATH:/Applications/Ghostty.app/Contents/MacOS"
+      export TMPDIR=$(getconf DARWIN_USER_TEMP_DIR)
       bindkey '^y' autosuggest-accept
       function fzf-or-complete() {
         if [[ "$LBUFFER" =~ '\*\*$' ]]; then
@@ -76,14 +79,42 @@
         nvim "$id"_"$title".md
       }
       function chth() {
-        export CURRENT_THEME=$($GIT_DIRECTORY/dotfiles/tools/change-theme/run.sh $1)
-        if [ "$CURRENT_THEME" = "light" ]; then export BAT_THEME="gruvbox-light"; else export BAT_THEME="gruvbox-dark"; fi
+        local mode="$1"
+        case "$mode" in
+          auto|dark|light)
+            ;;
+          "")
+            mode="$CURRENT_THEME_MODE"
+            ;;
+          *)
+            echo "Usage: chth [auto|dark|light] [--silent]" >&2
+            return 1
+            ;;
+        esac
+
+        export CURRENT_THEME_MODE="$mode"
+        printf '%s\n' "$CURRENT_THEME_MODE" >| "$THEME_MODE_FILE"
+        export CURRENT_THEME=$($GIT_DIRECTORY/dotfiles/tools/change-theme/run.sh "$CURRENT_THEME_MODE")
+        if [ "$CURRENT_THEME" = "light" ]; then
+          export BAT_THEME="gruvbox-light"
+          export DELTA_FEATURES="theme-gruvbox-light"
+        else
+          export BAT_THEME="gruvbox-dark"
+          export DELTA_FEATURES="theme-gruvbox-dark"
+        fi
         if [ "$2" != "--silent" ]; then
           echo "Switched to $CURRENT_THEME theme"
         fi
       }
-      # Auto-detect theme from macOS appearance on startup
-      chth auto --silent
+      if [ -f "$THEME_MODE_FILE" ]; then
+        saved_theme_mode=$(<"$THEME_MODE_FILE")
+        case "$saved_theme_mode" in
+          auto|dark|light)
+            export CURRENT_THEME_MODE="$saved_theme_mode"
+            ;;
+        esac
+      fi
+      chth "$CURRENT_THEME_MODE" --silent
     '')
   ];
   profileExtra = ''

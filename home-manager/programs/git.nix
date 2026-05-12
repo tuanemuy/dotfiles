@@ -15,6 +15,9 @@
     init = {
       defaultBranch = "main";
     };
+    merge = {
+      conflictStyle = "zdiff3";
+    };
   };
   ignores = [
     # General
@@ -46,5 +49,8 @@
 
     # Editor
     ".cursor"
+
+    # direnv
+    ".direnv"
   ];
 }

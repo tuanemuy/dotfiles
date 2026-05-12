@@ -10,12 +10,15 @@
   extraConfig = ''
     set -g xterm-keys on
     set -g set-clipboard on
+    set -g extended-keys on
+    set -g extended-keys-format csi-u
     set-option -g status-interval 3
     set-option -g status-position top
     set-option -ga terminal-overrides ",xterm-256color:Tc"
     bind c new-window -c '#{pane_current_path}'
     bind v split-window -h -c '#{pane_current_path}'
     bind s split-window -v -c '#{pane_current_path}'
+    bind-key -n C-h send-keys \u007f
 
     set-option -gq status-justify left
     set-option -gq status-left-style none

@@ -3,16 +3,14 @@
 ## Step 1: ブランチの作成
 
 ```bash
-git checkout -b issue/{Issue番号}/{短い説明}
+git checkout -b feature/issue-{Issue番号}
 ```
-
-ブランチ名の `{短い説明}` はIssueのタイトルからケバブケースで生成する（英語・小文字・ハイフン区切り、30文字以内）。
 
 既に同名のブランチがあればユーザーに確認する。
 
 ## Step 2: plan.md に沿った実装
 
-サブエージェント（Agent tool, subagent_type="general-purpose"）を起動し、plan.md に沿って実装させる。
+サブエージェントを起動し、plan.md に沿って実装させる（委譲方式は `../../_shared/references/subagent-policy.md` に従う）。
 
 サブエージェントに渡す内容:
 
@@ -21,14 +19,15 @@ git checkout -b issue/{Issue番号}/{短い説明}
 
 ## 対象Issue
 - Issue番号: #{Issue番号}
-- 計画ファイル: .issue/{Issue番号}/plan.md
+- 計画ファイル: docs/plans/{Issue番号}/plan.md
 
 ## やること
-1. .issue/{Issue番号}/plan.md を読む
-2. 各実装ステップについて、対象ファイルを Read で読んで現状を把握する
-3. 計画の指示に従って Edit/Write で変更を適用する
-4. CLAUDE.md や README.md にテスト・lint・型チェックの実行方法が記載されていれば、それに従って確認する
-5. 実装中に非自明な設計判断を下した場合は、.issue/{Issue番号}/adr.md に追記する
+1. プロジェクトルートの `CLAUDE.md` を最初に読み、コマンド・規約・構成を把握する
+2. docs/plans/{Issue番号}/plan.md を読む
+3. 各実装ステップについて、対象ファイルを読んで現状を把握する
+4. 計画の指示に従って変更を適用する
+5. CLAUDE.md や README.md にテスト・lint・型チェックの実行方法が記載されていれば、それに従って確認する
+6. 実装中に非自明な設計判断を下した場合は、docs/plans/{Issue番号}/adr.md に追記する
    - 既に adr.md がある場合は末尾に追記、なければ新規作成
    - 形式: 各決定ごとに「## 決定タイトル」「コンテキスト」「決定内容」「理由」を記載
 
@@ -55,7 +54,7 @@ git checkout -b issue/{Issue番号}/{短い説明}
 
 ### 残存課題の記録
 
-実装結果を確認した後、以下のいずれかに該当する項目があれば `.issue/{Issue番号}/progress.md` に記録する:
+実装結果を確認した後、以下のいずれかに該当する項目があれば `docs/plans/{Issue番号}/progress.md` に記録する:
 
 - plan.md の項目のうち、完全には実装できなかったもの
 - 既知の制限事項やエッジケース
@@ -66,41 +65,43 @@ git checkout -b issue/{Issue番号}/{短い説明}
 
 該当なしの場合は progress.md を作成しない。
 
-## Step 3: E2Eテストの作成
+## Step 3: 必要なテストの追加
 
-`../../_shared/references/e2e-test-methodology.md` の方法論に基づき、plan.md の要件・実装コード・testing.md の3つを総合的に分析し、仕様を網羅するE2Eテストを作成する。testing.md は手動確認向けに書かれているため、そのまま自動化するのではなく、実装後の視点で改めてテストすべき観点を設計する。
+`../../_shared/references/test-methodology.md` の方法論に基づき、plan.md の要件・実装コード・testing.md の3つを総合的に分析し、仕様を網羅するテストを追加する。testing.md は手動確認向けに書かれているため、そのまま自動化するのではなく、実装後の視点で改めてテストすべき観点を設計する。
 
-サブエージェント（Agent tool, subagent_type="general-purpose"）を起動し、E2Eテストを実装させる。
+サブエージェントを起動し、必要なテストを実装させる（委譲方式は `../../_shared/references/subagent-policy.md` に従う）。
 
 サブエージェントに渡す内容:
 
 ```
-あなたはE2Eテストを設計・実装するエンジニアです。
+あなたは仕様ベースのテストを設計・実装するエンジニアです。
 
 ## 対象Issue
 - Issue番号: #{Issue番号}
-- 実装計画: .issue/{Issue番号}/plan.md
-- 動作確認計画（参考）: .issue/{Issue番号}/testing.md
+- 実装計画: docs/plans/{Issue番号}/plan.md
+- 動作確認計画（参考）: docs/plans/{Issue番号}/testing.md
 
 ## やること
-1. .issue/{Issue番号}/plan.md を読み、Issueの要件とスコープを把握する
-2. 今回の実装で変更・追加されたコードを Read で確認し、実際の振る舞いを理解する
-3. .issue/{Issue番号}/testing.md を参考情報として読む（手動確認向けなのでそのまま自動化するのではなく、観点の参考にする）
-4. プロジェクトの既存テスト構成を調査する
-   - テストフレームワーク、ディレクトリ構成、設定ファイル、既存E2Eテストを Glob/Grep/Read で確認する
+1. プロジェクトルートの `CLAUDE.md` を最初に読み、コマンド・規約・構成を把握する
+2. docs/plans/{Issue番号}/plan.md を読み、Issueの要件とスコープを把握する
+3. 今回の実装で変更・追加されたコードを確認し、実際の振る舞いを理解する
+4. docs/plans/{Issue番号}/testing.md を参考情報として読む（手動確認向けなのでそのまま自動化するのではなく、観点の参考にする）
+5. プロジェクトの既存テスト構成を調査する
+   - テストフレームワーク、ディレクトリ構成、設定ファイル、既存テストを検索ツールやファイル参照ツールで確認する
    - CLAUDE.md や README.md にテスト関連の記述があればそれも参照する
-5. 上記を踏まえ、仕様を網羅するテストケースを設計する。以下の観点を含めること:
+6. 上記を踏まえ、仕様を網羅するテストケースを設計する。以下の観点を含めること:
    - 正常系: 要件が満たされていることの検証
    - 境界値・エッジケース: 入力の境界、空値、上限・下限
    - 異常系: エラー時の振る舞い、バリデーション
    - 状態遷移: 前提条件が異なる場合の挙動
    - 既存機能への影響: 変更が既存の動作を壊していないこと
-6. 既存のテストパターン・規約に合わせてE2Eテストを実装する
-7. テストを実行して PASS することを確認する
+7. 既存のテストパターン・規約に合わせてテストを実装する
+8. テストを実行して PASS することを確認する
 
 ## 重要な原則
 - 既存のテストフレームワーク・パターンに合わせる — 新しいフレームワークを導入しない
 - plan.md の要件を網羅的にカバーすることを目指す
+- コンポーネントのテストは不要。既存のテスト体系に明確な必然性がない限り追加しない
 - UIの目視確認など自動化が困難な項目は無理に書かない
 - テストは安定して再現可能であること — フレイキーなテストは書かない
 - テストファイル名・配置は既存の規約に従う
@@ -120,7 +121,7 @@ git checkout -b issue/{Issue番号}/{短い説明}
 2. 自動化を見送った項目がある場合、妥当性を確認する
 3. テストが失敗している場合は修正する
 
-E2Eテストの既存環境がプロジェクトに存在しない場合は、テスト作成をスキップし、その旨を PR の Test plan に記載する。
+自動テストの追加が妥当でない変更では、テスト作成をスキップし、その旨を PR の Test plan に記載する。
 
 ## Step 4: コミットとPR作成
 
@@ -139,7 +140,7 @@ EOF
 2. リモートにプッシュ
 
 ```bash
-git push -u origin issue/{Issue番号}/{短い説明}
+git push -u origin feature/issue-{Issue番号}
 ```
 
 3. PR作成
@@ -153,13 +154,13 @@ gh pr create --title "{PRタイトル}" --body "$(cat <<'EOF'
 Closes #{Issue番号}
 
 ## Implementation Plan
-Based on `.issue/{Issue番号}/plan.md`
+Based on `docs/plans/{Issue番号}/plan.md`
 
 ## Test plan
 - {testing.md からの主要確認項目}
 
-## E2E Test
-- {E2Eテストの実行結果サマリー — 全PASS / 一部スキップ等}
+## Test Result
+- {テスト実行結果サマリー — 全PASS / 一部スキップ等}
 - {自動化を見送った項目があればその旨と理由}
 
 🤖 Generated with [Claude Code](https://claude.com/claude-code)

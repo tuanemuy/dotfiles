@@ -1,10 +1,15 @@
 { inputs, pkgs, ... }:
+let
+  system = pkgs.stdenv.hostPlatform.system;
+in
 {
-  home.packages = with inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}; [
+  home.packages = with inputs.llm-agents.packages.${system}; [
     agent-browser
     claude-code
+    codex
     copilot-cli
-    opencode
     gemini-cli
+    opencode
+    pi
   ];
 }

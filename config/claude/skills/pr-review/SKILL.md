@@ -11,7 +11,7 @@ description: >
 
 # PR Review Skill
 
-Structured, multi-layer code review for GitHub Pull Requests. Each review round spawns parallel subagents that examine the PR through different architectural lenses, compiles findings into a numbered Markdown file, then iteratively fixes issues until the code is clean.
+Structured, multi-layer code review for GitHub Pull Requests. Each review round uses parallel subagents when available to examine the PR through different architectural lenses, compiles findings into a numbered Markdown file, then iteratively fixes issues until the code is clean.
 
 ## Workflow Overview
 
@@ -53,7 +53,7 @@ gh pr diff <PR>
 
 ## Step 3: サブエージェントで並列レビュー
 
-判定したレイヤーごとに、サブエージェント（Agent tool, subagent_type="general-purpose"）を **並列に** 起動する。
+判定したレイヤーごとに、サブエージェントを **並列に** 起動する（委譲方式は `../_shared/references/subagent-policy.md` に従う）。
 
 各サブエージェントには以下を渡す:
 
@@ -65,9 +65,10 @@ gh pr diff <PR>
 - リポジトリ: {リポジトリパス}
 
 ## やること
-1. `gh pr diff {PR番号}` で差分を取得
-2. 必要に応じて関連ファイルを読む
-3. 「{レイヤー名}」の観点で厳しくレビュー
+1. プロジェクトルートの `CLAUDE.md` を最初に読み、コマンド・規約・構成を把握する
+2. `gh pr diff {PR番号}` で差分を取得
+3. 必要に応じて関連ファイルを読む
+4. 「{レイヤー名}」の観点で厳しくレビュー
 
 ## 出力フォーマット
 以下のフォーマットで結果を返して:
@@ -139,8 +140,7 @@ review-NNN.md に指摘がある場合:
 2. **Blockerから着手し、続けてWarningもすべて修正する** — Warningも放置せず潰す
 3. どうしてもこのPRのスコープでは対応できない場合のみ後回しにする:
    - `.pr/{PR番号}/adr.md` に判断理由を記録する（なぜ今やらないのか、どう対応すべきか）
-   - `gh issue create` で別Issueを起票し、ADRへのリンクを含める
-   - レビューファイルの該当指摘に `→ 別Issue #{新Issue番号} で対応` と追記する
+   - レビューファイルの該当指摘に `→ スコープ外として見送り` と追記する
 4. 修正が終わったら、Step 3に戻って再レビュー（次の連番ファイルを作る）
 
 ## Step 6: ADR への追記
@@ -196,18 +196,17 @@ PR Review 完了！
 全{N}ラウンドのレビューを実施しました。
 - 初回ブロッカー: {数}件
 - 修正済み: {数}件
-- 後回し（別Issue起票）: {数}件
+- 後回し（スコープ外）: {数}件
 - 最終ステータス: APPROVED
 - ADR追加: {あれば .pr/{PR番号}/adr.md に記載}
-- 別Issue: {起票したIssue番号のリスト}
 - レビューファイル: .pr/{PR番号}/review/review-001.md 〜 review-{NNN}.md
 ```
 
 ## 重要な注意点
 
-- サブエージェントは**必ず並列で**起動する。直列だと遅すぎる
+- 委譲方式・並列実行・失敗時の扱いは `../_shared/references/subagent-policy.md` に従う
 - レビューは**厳しく**行う。「まあいいか」は禁止。ただし誤検知は避ける
 - 修正するのは自分が確信を持てるものだけ。判断に迷うものはユーザーに聞く
-- **修正が基本**。後回しにするのは「このPRのスコープ外」と明確に判断できるときだけ。後回し時は必ずADR記録＋別Issue起票する
+- **修正が基本**。後回しにするのは「このPRのスコープ外」と明確に判断できるときだけ。後回し時は必ずADR記録する
 - レビューファイルは追記ではなく、毎ラウンド新規作成（履歴が残る）
 - ADRは本当に重要な設計判断のみ。些細な実装詳細はADRにしない
