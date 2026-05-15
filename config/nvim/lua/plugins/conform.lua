@@ -17,6 +17,9 @@ return {
 				lsp_format = "fallback",
 			},
 			formatters = {
+				biome = {
+					command = require("conform.util").from_node_modules("biome"),
+				},
 				markdownlint_cli2 = {
 					command = "markdownlint-cli2",
 					stdin = false,

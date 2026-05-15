@@ -42,28 +42,37 @@ Skill ツールで `/frontend-design` を呼び出す。
 作成条件:
 - 1つのHTMLファイルに CSS をインラインで含め、単体でブラウザ表示できるようにする
 - ダミーデータを使ってリアルな見た目にする
-- レスポンシブ対応は不要（デスクトップ幅で固定してよい）
+- **レスポンシブ対応必須**: モバイルファーストで設計し、標準ブレークポイント（`sm: 640px` / `md: 768px` / `lg: 1024px` / `xl: 1280px` / `2xl: 1536px`）を使用する。最低限モバイル（<640px）・タブレット（≥768px）・デスクトップ（≥1024px）の3レンジで破綻なく表示されること。Flexbox/Grid と `clamp()`、流動的な単位（%, vw, fr）、`min()`/`max()` を活用し、固定幅 px のレイアウトは避ける
 - 各案の方向性の違いが一目でわかるようにする
+- `<meta name="viewport" content="width=device-width, initial-scale=1">` を必ず含める
 
 ## Step 3: スクリーンショットの取得
 
-作成したHTMLドラフトをagent-browserで開き、スクリーンショットを取得する。
-ユーザーが視覚的にドラフトを比較できるようにする。
+作成したHTMLドラフトをagent-browserで開き、デスクトップとモバイルの両方でスクリーンショットを取得する。
+ユーザーが視覚的にドラフトを比較でき、かつレスポンシブ挙動も確認できるようにする。
 
-各ドラフトについて:
+各ドラフトについて、デスクトップ（1280×800、`xl` ブレークポイント）とモバイル（375×667、`sm` 未満のモバイル幅）の2サイズを取得する:
 
 ```bash
 # HTMLファイルをブラウザで開く
 agent-browser --session design-draft open file:///absolute/path/to/spec/design/drafts/draft-1-clean-editorial.html
 
-# スクリーンショットを取得
-agent-browser --session design-draft screenshot /tmp/design-screenshots/drafts/draft-1-clean-editorial.png
+# デスクトップ表示でスクリーンショット（xl: 1280px）
+agent-browser --session design-draft viewport 1280 800
+agent-browser --session design-draft screenshot /tmp/design-screenshots/drafts/draft-1-clean-editorial-desktop.png
+
+# モバイル表示でスクリーンショット（sm 未満: 375px）
+agent-browser --session design-draft viewport 375 667
+agent-browser --session design-draft screenshot /tmp/design-screenshots/drafts/draft-1-clean-editorial-mobile.png
 
 # セッションを閉じる（次のドラフトに進む前に）
 agent-browser --session design-draft close
 ```
 
 スクリーンショットの保存先: `/tmp/design-screenshots/drafts/`
+命名規則: `{ドラフト名}-desktop.png`, `{ドラフト名}-mobile.png`
+
+agent-browser に `viewport` サブコマンドが無い場合は、CLIヘルプで該当する画面サイズ指定オプション（`--width`/`--height`、`--device` など）を確認して同等のことを行う。
 
 ドラフトが複数ある場合、サブエージェントに委譲して並列でスクリーンショットを取得してもよい（最大3並列）。
 その場合はセッション名を `design-draft-1`, `design-draft-2` のように分離する。

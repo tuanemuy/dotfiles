@@ -20,24 +20,34 @@ Step 4: /audit（アクセシビリティ・パフォーマンス）
   → 修正
 ```
 
-## Step 1: agent-browser による視覚的確認
+## Step 1: agent-browser による視覚的確認（マルチビューポート）
 
-レビュースキルを適用する前に、agent-browserで全画面のデザインをブラウザ上で確認する。
-コードレビューでは見落とす実際のレンダリング結果を視覚的に検証する。
+レビュースキルを適用する前に、agent-browserで全画面のデザインを**モバイル・タブレット・デスクトップの3サイズ**でブラウザ上で確認する。
+コードレビューでは見落とす実際のレンダリング結果と、各ブレークポイントを跨ぐレスポンシブ挙動を視覚的に検証する。
 
-各画面について:
+各画面について、Phase 3 と同じ3ビューポート（モバイル 375×667 / タブレット 768×1024 / デスクトップ 1280×800）でスクリーンショットを取得する:
 
 ```bash
 agent-browser --session design-review open file:///absolute/path/to/spec/design/pages/{画面名}.html
-agent-browser --session design-review screenshot /tmp/design-screenshots/review/{画面名}.png
+
+agent-browser --session design-review viewport 375 667
+agent-browser --session design-review screenshot /tmp/design-screenshots/review/{画面名}-mobile.png
+
+agent-browser --session design-review viewport 768 1024
+agent-browser --session design-review screenshot /tmp/design-screenshots/review/{画面名}-tablet.png
+
+agent-browser --session design-review viewport 1280 800
+agent-browser --session design-review screenshot /tmp/design-screenshots/review/{画面名}-desktop.png
 ```
 
 スクリーンショットを Read ツールで確認し、以下の観点でチェックする:
 
-- **レイアウト崩れ**: 要素の重なり、はみ出し、予期しない折り返し
+- **レイアウト崩れ**: 要素の重なり、はみ出し、予期しない折り返し（全ビューポート）
 - **画面間の一貫性**: ヘッダー、ナビゲーション、フッターの統一
 - **視覚的バランス**: 余白、配色、フォントサイズのバランス
 - **コンテンツの見え方**: ダミーデータが実際にどう表示されるか
+- **レスポンシブ挙動**: ブレークポイント切替時のレイアウト変化が自然か、ナビ・テーブル・カードが各サイズで適切に変形しているか
+- **モバイル固有**: 横スクロール非発生、タッチターゲット 44×44px 以上、テキストの可読性
 
 問題が見つかれば修正し、修正後に再度スクリーンショットを撮って確認する。
 確認が終わったらセッションを閉じる:
@@ -79,12 +89,16 @@ Skill ツールで `/critique` を呼び出し、`spec/design/pages/` 配下のH
 
 /polish の問題がクリーンになったら、Skill ツールで `/audit` を呼び出す。
 
-ここではアクセシビリティとプロダクション品質に焦点を当てる:
+ここではアクセシビリティ・プロダクション品質・レスポンシブ動作に焦点を当てる:
 - カラーコントラスト比（WCAG AA 基準）
 - フォーカス表示の視認性
 - セマンティックHTMLの適切さ
 - 画像の alt テキスト
 - フォームのラベル関連付け
+- レスポンシブ完全性: モバイル・タブレット・デスクトップで横スクロール・要素重なり・はみ出しがないこと
+- タッチターゲットサイズ（モバイル時 44×44px 以上）
+- 流動的タイポグラフィ・スペーシングが破綻していないこと
+- `<meta name="viewport">` 設定の妥当性
 
 指摘事項を `spec/design/review/${連番}.md` に記録し、修正する。
 

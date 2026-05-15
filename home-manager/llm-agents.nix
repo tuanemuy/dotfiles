@@ -34,9 +34,10 @@ in
       agent-browser
       codex
       copilot-cli
+      gemini-cli
       opencode
       pi
-      gemini-cli
+      rtk
     ])
     ++ [ claudeCode ];
 }
