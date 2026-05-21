@@ -179,8 +179,16 @@ spec スキルの成果物（`spec/index.md`, `spec/pages/index.md`, `spec/scena
 
 すべてのフェーズが完了したら:
 
-1. `spec/index.md` にデザインフェーズの成果物と完了ステータスを追記する
-2. 成果物のサマリーを出す
+1. agent-browser の残存プロセスを片付ける
+   - 各セッション（`design-draft`, `design-page-{画面名}`, `design-review`）は使用後に個別に `close` するのが原則。最後に取りこぼし対策として一括で閉じる:
+
+     ```bash
+     agent-browser close --all 2>/dev/null || true
+     ```
+
+   - その後 Skill ツールで `/agent-browser-cleanup` を呼び出し、別セッションで使用中でなければ残存プロセスをクリーンな状態に戻す。
+2. `spec/index.md` にデザインフェーズの成果物と完了ステータスを追記する
+3. 成果物のサマリーを出す
 
 ```
 デザインが完了しました！

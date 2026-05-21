@@ -303,6 +303,18 @@ allowed-domains: {domains}
 
 フィードバックに基づいて追加調査（Phase 3-4を部分的に再実行）し、spec/を更新する。
 
+### Phase 7: クリーンアップ
+
+すべての調査・レビューが完了したら、agent-browser の残存プロセスを片付ける。
+
+1. 各サブエージェントで使用したセッションを明示的に閉じる（取りこぼし対策に `agent-browser close --all` も実行）:
+
+   ```bash
+   agent-browser close --all 2>/dev/null || true
+   ```
+
+2. Skill ツールで `/agent-browser-cleanup` を呼び出す。別セッションで使用中でなければ残存プロセスをすべて終了してクリーンな状態に戻す。
+
 ## agent-browser 頻出コマンドリファレンス
 
 ```bash
