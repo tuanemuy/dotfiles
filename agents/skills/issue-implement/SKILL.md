@@ -23,10 +23,10 @@ Phase 1: 計画（issue-plannerに委譲）
   → .issue/{Issue番号}/plan.md, testing.md, (adr.md) を作成
 
 Phase 2: 実装
-  ブランチ作成 → plan.md に沿って実装 → 検証環境確認 → manual-test スキルでブラウザ検証（シードデータ準備含む）→ コミット → PR作成
+  ブランチ作成 → plan.md に沿って実装 → 検証環境確認 → manual-test スキルでブラウザ検証（シードデータ準備含む）→ コミット → **Draft PR 作成**
 
 Phase 3: レビュー・修正
-  → 指摘修正 → 再レビュー（1ラウンドでクリーンなら完了、最大10ラウンド）
+  → 指摘修正 → 再レビュー（1ラウンドでクリーンなら完了、最大10ラウンド）→ APPROVED で **Ready for review に切替**
 
 Phase 4: スコープ外Issueの起票
   → 全フェーズで見送ったスコープ外の改善・課題をIssueとして起票
@@ -101,6 +101,7 @@ Issue #{Issue番号} の実装が完了しました！
 - 初回ブロッカー: {数}件
 - 修正済み: {数}件
 - 最終ステータス: APPROVED
+- PR状態: Ready for review（10ラウンド到達時のみ Draft のまま）
 - レビューファイル: .issue/{Issue番号}/review/review-001.md 〜 review-{NNN}.md
 
 ## スコープ外Issue

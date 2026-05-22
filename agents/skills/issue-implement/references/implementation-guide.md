@@ -118,10 +118,10 @@ EOF
 git push -u origin issue/{Issue番号}/{短い説明}
 ```
 
-3. PR作成
+3. PR作成（Draftで作成する）
 
 ```bash
-gh pr create --title "{PRタイトル}" --body "$(cat <<'EOF'
+gh pr create --draft --title "{PRタイトル}" --body "$(cat <<'EOF'
 ## Summary
 - {変更内容の箇条書き}
 
