@@ -486,6 +486,8 @@ kill $(cat /tmp/manual-test-server.pid) 2>/dev/null
 rm /tmp/manual-test-server.pid /tmp/manual-test-server.log 2>/dev/null
 ```
 
+その後、Skill ツールで `/agent-browser-cleanup` を呼び出し、別セッションで使用中でなければ残存プロセスをすべて終了してクリーンな状態に戻す。
+
 ## agent-browser コマンドリファレンス
 
 ```bash

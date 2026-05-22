@@ -15,6 +15,7 @@ description: >
   該当フェーズから開始する。
   途中のフェーズから再開することも可能（既存の成果物を確認して続きから進める）。
   ドメイン設計以降の技術設計は spec-domain スキルに委譲する。
+  技術設計まで完了したらマニュアルテストドキュメント生成（spec-manual-test）まで自動的に進める。
   UIデザイン（ビジュアルデザイン）は本スキルの範囲外。design-flow スキルを別途使用すること。
 ---
 
@@ -91,6 +92,9 @@ Phase 2: ページ設計
 Phase 3: 技術設計（spec-domain スキルに委譲）
   ドメイン設計 → ユースケース設計 → DB設計 → テストケース定義 → クロスフェーズ検証
 
+Phase 4: マニュアルテストドキュメント生成（spec-manual-test スキルに委譲）
+  spec/ の成果物からシナリオ単位のテスト手順書を生成 → spec/manual-tests/
+
 ※ ADR は全フェーズを通じて随時作成 → spec/adr/
 ```
 
@@ -128,6 +132,19 @@ spec-domain がドメイン設計 → ユースケース設計 → DB設計 → 
 
 ---
 
+## Phase 4: マニュアルテストドキュメント生成
+
+Phase 3 が完了したら、spec-manual-test スキルを使ってマニュアルテストドキュメントを生成する。
+spec-manual-test がシナリオ・ページ・ユースケース・テストケースをもとに、人間が実行可能な手順書を `spec/manual-tests/` に生成する。
+
+成果物:
+- `spec/manual-tests/index.md` — テスト一覧と実行管理表
+- `spec/manual-tests/{scenario-category}.md` — シナリオ別テストドキュメント
+
+完了後、`spec/index.md` を更新する。
+
+---
+
 ## レビューの共通原則
 
 各フェーズのレビューでは以下を守る:
@@ -156,7 +173,7 @@ spec-domain がドメイン設計 → ユースケース設計 → DB設計 → 
 すべてのフェーズが完了したら、作成した設計ドキュメントのサマリーを出す。
 
 ```
-体験設計が完了しました！引き続き spec-domain で技術設計を進めます。
+設計が完了しました！
 
 ## 成果物
 
@@ -166,6 +183,16 @@ spec-domain がドメイン設計 → ユースケース設計 → DB設計 → 
 
 ### ページ設計
 - spec/pages/index.md
+
+### 技術設計（spec-domain）
+- spec/domains/
+- spec/usecases/
+- spec/database/
+- spec/testcases/
+
+### マニュアルテスト（spec-manual-test）
+- spec/manual-tests/index.md
+- spec/manual-tests/${category}.md (x{数})
 
 ### ADR
 - spec/adr/ (x{数} 件)
