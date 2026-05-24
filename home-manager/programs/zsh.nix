@@ -40,6 +40,8 @@
   ];
   sessionVariables = {
     GIT_DIRECTORY = gitDirectory;
+    EDITOR = "nvim";
+    VISUAL = "nvim";
   };
   initContent = pkgs.lib.mkMerge [
     (pkgs.lib.mkBefore ''
