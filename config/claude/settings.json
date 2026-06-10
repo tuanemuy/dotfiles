@@ -296,19 +296,6 @@
     ],
     "defaultMode": "default"
   },
-  "hooks": {
-    "PreToolUse": [
-      {
-        "matcher": "Bash",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "rtk hook claude"
-          }
-        ]
-      }
-    ]
-  },
   "statusLine": {
     "type": "command",
     "command": "bash /Users/hikaru/.claude/statusline-command.sh"
@@ -328,6 +315,7 @@
   "alwaysThinkingEnabled": true,
   "effortLevel": "high",
   "skipDangerousModePermissionPrompt": true,
-  "theme": "light-ansi",
-  "editorMode": "vim"
+  "theme": "dark-ansi",
+  "editorMode": "vim",
+  "model": "sonnet"
 }

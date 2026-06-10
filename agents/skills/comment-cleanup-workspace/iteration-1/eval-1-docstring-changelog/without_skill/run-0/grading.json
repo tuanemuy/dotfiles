@@ -1,0 +1,38 @@
+{
+  "eval_id": 1,
+  "eval_name": "eval-1-docstring-changelog",
+  "config": "without_skill",
+  "summary": {
+    "pass_rate": 1.0,
+    "passed": 5,
+    "failed": 0,
+    "total": 5
+  },
+  "expectations": [
+    {
+      "text": "docstring 内の Created 行と Changelog セクションが削除されている",
+      "passed": true,
+      "evidence": "docstringにCreated行とChangelogブロックが存在しない"
+    },
+    {
+      "text": "docstring の Args / Returns の契約情報が保持されている",
+      "passed": true,
+      "evidence": "Args(amount/currency)とReturnsの記述が残存"
+    },
+    {
+      "text": "端数を切り捨てる理由（合計が合わなくなるため）の why コメントが残っている",
+      "passed": true,
+      "evidence": "# 端数は切り捨てる。四捨五入だと合計が合わなくなる... のwhyコメントが残存"
+    },
+    {
+      "text": "自明な行コメント（currency が JPY かチェック、通貨コードを前につけて返す、amount を小数点2桁に丸める 等）が削除されている",
+      "passed": true,
+      "evidence": "JPYチェック/小数点2桁/通貨コード前置/quantizeの自明コメントが全て削除"
+    },
+    {
+      "text": "実行されるコード行が一切変更されていない",
+      "passed": true,
+      "evidence": "実行コード行はフィクスチャと一致。挙動不変"
+    }
+  ]
+}

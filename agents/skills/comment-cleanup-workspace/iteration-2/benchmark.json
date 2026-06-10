@@ -1,0 +1,380 @@
+{
+  "metadata": {
+    "skill_name": "comment-cleanup",
+    "skill_path": "<path/to/skill>",
+    "executor_model": "<model-name>",
+    "analyzer_model": "<model-name>",
+    "timestamp": "2026-05-30T01:46:05Z",
+    "evals_run": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "runs_per_configuration": 3
+  },
+  "runs": [
+    {
+      "eval_id": 0,
+      "configuration": "with_skill",
+      "run_number": 0,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 4,
+        "failed": 0,
+        "total": 4,
+        "time_seconds": 16.7,
+        "tokens": 22813,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "\u7591\u4f3cwhy\u30b3\u30e1\u30f3\u30c8\u300e\u30ec\u30b9\u30dd\u30f3\u30b9\u3092\u30ad\u30e3\u30c3\u30b7\u30e5\u3057\u3066\u9ad8\u901f\u5316\u3059\u308b\u300f\u304c\u524a\u9664\u3055\u308c\u3066\u3044\u308b\uff08\u9ad8\u901f\u5316\u306f\u30ad\u30e3\u30c3\u30b7\u30e5\u304b\u3089\u81ea\u660e\u3067\u60c5\u5831\u3092\u8db3\u3057\u3066\u3044\u306a\u3044\uff09",
+          "passed": true,
+          "evidence": "\u300e\u30ec\u30b9\u30dd\u30f3\u30b9\u3092\u30ad\u30e3\u30c3\u30b7\u30e5\u3057\u3066\u9ad8\u901f\u5316\u3059\u308b\u300f\u306f\u524a\u9664\u6e08\u307f"
+        },
+        {
+          "text": "\u81ea\u660e\u306a\u884c\u30b3\u30e1\u30f3\u30c8\uff08\u30ad\u30e3\u30c3\u30b7\u30e5\u306b\u3042\u308c\u3070\u305d\u308c\u3092\u8fd4\u3059\u3001stock \u3092\u8fd4\u3059\uff09\u304c\u524a\u9664\u3055\u308c\u3066\u3044\u308b",
+          "passed": true,
+          "evidence": "\u300e\u30ad\u30e3\u30c3\u30b7\u30e5\u306b\u3042\u308c\u3070\u305d\u308c\u3092\u8fd4\u3059\u300f\u300estock \u3092\u8fd4\u3059\u300f\u306f\u524a\u9664\u6e08\u307f"
+        },
+        {
+          "text": "\u672c\u7269\u306ewhy\u30b3\u30e1\u30f3\u30c8\u300eTTL\u306f5\u79d2\u2026\u5728\u5eab\u5207\u308c\u306e\u885d\u7a81\u304c\u8d77\u304d\u308b\u2026\u300f\u304c\u6b8b\u3063\u3066\u3044\u308b",
+          "passed": true,
+          "evidence": "TTL 5\u79d2\u306e\u7406\u7531\uff08\u5728\u5eab\u5909\u52d5\u30fb\u8cfc\u5165\u6642\u885d\u7a81\uff09\u306ewhy\u304c\u6b8b\u5b58"
+        },
+        {
+          "text": "\u5b9f\u884c\u3055\u308c\u308b\u30b3\u30fc\u30c9\u884c\u304c\u4e00\u5207\u5909\u66f4\u3055\u308c\u3066\u3044\u306a\u3044",
+          "passed": true,
+          "evidence": "\u30b3\u30fc\u30c9\u884c\u306f\u30d5\u30a3\u30af\u30b9\u30c1\u30e3\u3068\u5b8c\u5168\u4e00\u81f4"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 1,
+      "configuration": "with_skill",
+      "run_number": 0,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 4,
+        "failed": 0,
+        "total": 4,
+        "time_seconds": 22.0,
+        "tokens": 22809,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "\u7406\u7531\u30fb\u6587\u8108\u306a\u3057\u306e\u300e# TODO: \u5f8c\u3067\u76f4\u3059\u300f\u304c\u524a\u9664\u3055\u308c\u3066\u3044\u308b",
+          "passed": true,
+          "evidence": "\u300e# TODO: \u5f8c\u3067\u76f4\u3059\u300f\u524a\u9664\u6e08\u307f"
+        },
+        {
+          "text": "\u7406\u7531\u3068\u6587\u8108\uff08O(n^2)\u30fb\u4ed5\u69d8\u78ba\u5b9a\u5f85\u3061\u30fbPROD-77\uff09\u3092\u6301\u3064 FIXME \u30b3\u30e1\u30f3\u30c8\u304c\u6b8b\u3063\u3066\u3044\u308b",
+          "passed": true,
+          "evidence": "O(n^2)\u30fbPROD-77\u30fb\u4ed5\u69d8\u78ba\u5b9a\u5f85\u3061\u306e\u5185\u5bb9\u306f\u6b8b\u5b58\u3002\u305f\u3060\u3057\u300eFIXME:\u300f\u30de\u30fc\u30ab\u30fc\u3068\u300e\u512a\u5148\u5ea6\u306f\u9ad8\u3044\u304c\u300f\u3082\u524a\u9664\u3057\u3066\u304a\u308a\u3001\u672a\u5b8c\u4e86\u30b7\u30b0\u30ca\u30eb\u304c\u5f31\u307e\u3063\u3066\u3044\u308b\uff08\u8981\u691c\u8a0e\uff09"
+        },
+        {
+          "text": "\u81ea\u660e\u306a\u884c\u30b3\u30e1\u30f3\u30c8\uff08\u884c\u3092\u30eb\u30fc\u30d7\u3059\u308b\u3001\u6709\u52b9\u306a\u884c\u3060\u3051\u8ffd\u52a0\u3059\u308b\u3001\u4e00\u6642\u7684\u306b\u30ea\u30b9\u30c8\u3067\u6301\u3063\u3066\u304a\u304f\u3001row \u3092\u8f9e\u66f8\u306b\u5909\u63db\u3059\u308b \u7b49\uff09\u304c\u524a\u9664\u3055\u308c\u3066\u3044\u308b",
+          "passed": true,
+          "evidence": "\u30eb\u30fc\u30d7/\u6709\u52b9\u884c/\u4e00\u6642\u30ea\u30b9\u30c8/\u8f9e\u66f8\u5909\u63db\u306e\u81ea\u660e\u30b3\u30e1\u30f3\u30c84\u4ef6\u524a\u9664\u6e08\u307f"
+        },
+        {
+          "text": "\u5b9f\u884c\u3055\u308c\u308b\u30b3\u30fc\u30c9\u884c\u304c\u4e00\u5207\u5909\u66f4\u3055\u308c\u3066\u3044\u306a\u3044",
+          "passed": true,
+          "evidence": "\u30b3\u30fc\u30c9\u884c\u4e0d\u5909"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 2,
+      "configuration": "with_skill",
+      "run_number": 0,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 5,
+        "failed": 0,
+        "total": 5,
+        "time_seconds": 27.7,
+        "tokens": 23250,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "JSDoc\u306e\u9010\u6b21\u7684\u306a\u51e6\u7406\u8aac\u660e\uff08\u30eb\u30fc\u30d7\u3059\u308b\u30fb\u30d5\u30a3\u30eb\u30bf\u3059\u308b\u30fb\u4e26\u3079\u66ff\u3048\u308b\u30fb\u8fd4\u3059\u7b49\u306e\u30b3\u30fc\u30c9\u3092\u8a00\u3044\u63db\u3048\u305f\u3060\u3051\u306e\u90e8\u5206\uff09\u304c\u524a\u9664\u307e\u305f\u306f\u5927\u5e45\u306b\u5727\u7e2e\u3055\u308c\u3066\u3044\u308b",
+          "passed": true,
+          "evidence": "JSDoc\u306e\u9010\u6b21\u8aac\u660e\u30927\u884c\u21922\u884c\u306b\u5727\u7e2e"
+        },
+        {
+          "text": "\u5b89\u5b9a\u30bd\u30fc\u30c8\u304c\u5fc5\u8981\u306a\u7406\u7531\uff08\u540c\u70b9\u6642\u306b\u767b\u9332\u9806\u4fdd\u6301\u304cUI\u4ed5\u69d8\uff09\u306ewhy\u304c\u6b8b\u3063\u3066\u3044\u308b",
+          "passed": true,
+          "evidence": "\u5b89\u5b9a\u30bd\u30fc\u30c8\u306e\u7406\u7531\uff08\u540c\u540d\u6642\u306b\u767b\u9332\u9806=UI\u4ed5\u69d8\uff09\u304cJSDoc\u306b\u6b8b\u5b58"
+        },
+        {
+          "text": "\u672c\u4f53\u306e\u81ea\u660e\u306a\u884c\u30b3\u30e1\u30f3\u30c8\uff08\u30a2\u30af\u30c6\u30a3\u30d6\u306a\u30e6\u30fc\u30b6\u30fc\u3060\u3051\u3092\u30d5\u30a3\u30eb\u30bf\u3059\u308b\u3001\u540d\u524d\u3067\u30bd\u30fc\u30c8\u3059\u308b\uff09\u304c\u524a\u9664\u3055\u308c\u3066\u3044\u308b",
+          "passed": true,
+          "evidence": "filter/sort\u76f4\u524d\u306e\u81ea\u660e\u30b3\u30e1\u30f3\u30c82\u4ef6\u524a\u9664\u6e08\u307f"
+        },
+        {
+          "text": "\u300e\u540d\u524d\u304c\u540c\u3058\u306a\u3089\u767b\u9332\u9806\u3092\u4fdd\u3064\u300f\u306e\u3088\u3046\u306a\u975e\u81ea\u660e\u306a\u610f\u56f3\u30b3\u30e1\u30f3\u30c8\u306f\u6b8b\u3063\u3066\u3044\u308b",
+          "passed": true,
+          "evidence": "\u30bf\u30a4\u30d6\u30ec\u30fc\u30af\u884c\u306e\u30a4\u30f3\u30e9\u30a4\u30f3why\u300e\u540d\u524d\u304c\u540c\u3058\u306a\u3089\u767b\u9332\u9806\u3092\u4fdd\u3064\u300f\u3092\u6b8b\u3057\u3066\u3044\u308b"
+        },
+        {
+          "text": "\u5b9f\u884c\u3055\u308c\u308b\u30b3\u30fc\u30c9\u884c\u304c\u4e00\u5207\u5909\u66f4\u3055\u308c\u3066\u3044\u306a\u3044",
+          "passed": true,
+          "evidence": "\u30b3\u30fc\u30c9\u884c\u4e0d\u5909"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 3,
+      "configuration": "with_skill",
+      "run_number": 0,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 4,
+        "failed": 0,
+        "total": 4,
+        "time_seconds": 18.5,
+        "tokens": 22260,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "JSDoc\u306e\u524d\u63d0\u6761\u4ef6\uff08\u547c\u3073\u51fa\u3057\u5074\u3067\u30bd\u30fc\u30c8\u6e08\u307f\uff09\u3068\u5951\u7d04\uff08\u7b49\u3057\u3044\u8981\u7d20\u304c\u8907\u6570\u3042\u308b\u5834\u5408\u306f\u672a\u898f\u5b9a\uff09\u304c\u6b8b\u3063\u3066\u3044\u308b",
+          "passed": true,
+          "evidence": "TSDoc\u306e\u524d\u63d0\u6761\u4ef6\u30fb\u672a\u898f\u5b9a\u306e\u5951\u7d04\u304c\u6b8b\u5b58\uff08\u5909\u66f4\u30bc\u30ed\uff09"
+        },
+        {
+          "text": "\u30aa\u30fc\u30d0\u30fc\u30d5\u30ed\u30fc\u56de\u907f\u306e\u5f0f\u306b\u95a2\u3059\u308bwhy\u30b3\u30e1\u30f3\u30c8\u304c\u6b8b\u3063\u3066\u3044\u308b",
+          "passed": true,
+          "evidence": "\u30aa\u30fc\u30d0\u30fc\u30d5\u30ed\u30fc\u56de\u907f\u306ewhy\u304c\u6b8b\u5b58"
+        },
+        {
+          "text": "\u6b63\u5f53\u306a\u30b3\u30e1\u30f3\u30c8\u3092\u8aa4\u3063\u3066\u524a\u9664\u3057\u3066\u3044\u306a\u3044\uff08\u524a\u9664\u306f\u30bc\u30ed\u304b\u3001\u3042\u3063\u3066\u3082\u3054\u304f\u8efd\u5fae\u306a\u8a00\u3044\u56de\u3057\u306e\u5727\u7e2e\u306e\u307f\uff09",
+          "passed": true,
+          "evidence": "\u6b63\u5f53\u306a\u30b3\u30e1\u30f3\u30c8\u3092\u4e00\u5207\u524a\u9664\u3057\u3066\u3044\u306a\u3044\uff08\u7de8\u96c6\u30bc\u30ed\uff09"
+        },
+        {
+          "text": "\u5b9f\u884c\u3055\u308c\u308b\u30b3\u30fc\u30c9\u884c\u304c\u4e00\u5207\u5909\u66f4\u3055\u308c\u3066\u3044\u306a\u3044",
+          "passed": true,
+          "evidence": "\u30b3\u30fc\u30c9\u884c\u4e0d\u5909"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 0,
+      "configuration": "without_skill",
+      "run_number": 0,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 4,
+        "failed": 0,
+        "total": 4,
+        "time_seconds": 19.4,
+        "tokens": 22089,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "\u7591\u4f3cwhy\u30b3\u30e1\u30f3\u30c8\u300e\u30ec\u30b9\u30dd\u30f3\u30b9\u3092\u30ad\u30e3\u30c3\u30b7\u30e5\u3057\u3066\u9ad8\u901f\u5316\u3059\u308b\u300f\u304c\u524a\u9664\u3055\u308c\u3066\u3044\u308b\uff08\u9ad8\u901f\u5316\u306f\u30ad\u30e3\u30c3\u30b7\u30e5\u304b\u3089\u81ea\u660e\u3067\u60c5\u5831\u3092\u8db3\u3057\u3066\u3044\u306a\u3044\uff09",
+          "passed": true,
+          "evidence": "\u300e\u9ad8\u901f\u5316\u3059\u308b\u300f\u524a\u9664\uff08\u30b9\u30ad\u30eb\u3042\u308a\u7248\u3068\u5b8c\u5168\u4e00\u81f4\u306e\u51fa\u529b\uff09"
+        },
+        {
+          "text": "\u81ea\u660e\u306a\u884c\u30b3\u30e1\u30f3\u30c8\uff08\u30ad\u30e3\u30c3\u30b7\u30e5\u306b\u3042\u308c\u3070\u305d\u308c\u3092\u8fd4\u3059\u3001stock \u3092\u8fd4\u3059\uff09\u304c\u524a\u9664\u3055\u308c\u3066\u3044\u308b",
+          "passed": true,
+          "evidence": "\u81ea\u660e\u30b3\u30e1\u30f3\u30c82\u4ef6\u524a\u9664\u6e08\u307f"
+        },
+        {
+          "text": "\u672c\u7269\u306ewhy\u30b3\u30e1\u30f3\u30c8\u300eTTL\u306f5\u79d2\u2026\u5728\u5eab\u5207\u308c\u306e\u885d\u7a81\u304c\u8d77\u304d\u308b\u2026\u300f\u304c\u6b8b\u3063\u3066\u3044\u308b",
+          "passed": true,
+          "evidence": "\u672c\u7269\u306ewhy\u304c\u6b8b\u5b58"
+        },
+        {
+          "text": "\u5b9f\u884c\u3055\u308c\u308b\u30b3\u30fc\u30c9\u884c\u304c\u4e00\u5207\u5909\u66f4\u3055\u308c\u3066\u3044\u306a\u3044",
+          "passed": true,
+          "evidence": "\u30b3\u30fc\u30c9\u884c\u4e0d\u5909"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 1,
+      "configuration": "without_skill",
+      "run_number": 0,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 4,
+        "failed": 0,
+        "total": 4,
+        "time_seconds": 22.6,
+        "tokens": 22125,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "\u7406\u7531\u30fb\u6587\u8108\u306a\u3057\u306e\u300e# TODO: \u5f8c\u3067\u76f4\u3059\u300f\u304c\u524a\u9664\u3055\u308c\u3066\u3044\u308b",
+          "passed": true,
+          "evidence": "\u300e# TODO: \u5f8c\u3067\u76f4\u3059\u300f\u524a\u9664\u6e08\u307f"
+        },
+        {
+          "text": "\u7406\u7531\u3068\u6587\u8108\uff08O(n^2)\u30fb\u4ed5\u69d8\u78ba\u5b9a\u5f85\u3061\u30fbPROD-77\uff09\u3092\u6301\u3064 FIXME \u30b3\u30e1\u30f3\u30c8\u304c\u6b8b\u3063\u3066\u3044\u308b",
+          "passed": true,
+          "evidence": "\u300eFIXME:\u300f\u30de\u30fc\u30ab\u30fc\u8fbc\u307f\u3067\u7406\u7531\u30fb\u6587\u8108\u3092\u5b8c\u5168\u4fdd\u6301\uff08O(n^2)\u30fb\u512a\u5148\u5ea6\u30fbPROD-77\uff09"
+        },
+        {
+          "text": "\u81ea\u660e\u306a\u884c\u30b3\u30e1\u30f3\u30c8\uff08\u884c\u3092\u30eb\u30fc\u30d7\u3059\u308b\u3001\u6709\u52b9\u306a\u884c\u3060\u3051\u8ffd\u52a0\u3059\u308b\u3001\u4e00\u6642\u7684\u306b\u30ea\u30b9\u30c8\u3067\u6301\u3063\u3066\u304a\u304f\u3001row \u3092\u8f9e\u66f8\u306b\u5909\u63db\u3059\u308b \u7b49\uff09\u304c\u524a\u9664\u3055\u308c\u3066\u3044\u308b",
+          "passed": true,
+          "evidence": "\u81ea\u660e\u30b3\u30e1\u30f3\u30c84\u4ef6\u524a\u9664\u6e08\u307f"
+        },
+        {
+          "text": "\u5b9f\u884c\u3055\u308c\u308b\u30b3\u30fc\u30c9\u884c\u304c\u4e00\u5207\u5909\u66f4\u3055\u308c\u3066\u3044\u306a\u3044",
+          "passed": true,
+          "evidence": "\u30b3\u30fc\u30c9\u884c\u4e0d\u5909"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 2,
+      "configuration": "without_skill",
+      "run_number": 0,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 5,
+        "failed": 0,
+        "total": 5,
+        "time_seconds": 24.5,
+        "tokens": 22370,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "JSDoc\u306e\u9010\u6b21\u7684\u306a\u51e6\u7406\u8aac\u660e\uff08\u30eb\u30fc\u30d7\u3059\u308b\u30fb\u30d5\u30a3\u30eb\u30bf\u3059\u308b\u30fb\u4e26\u3079\u66ff\u3048\u308b\u30fb\u8fd4\u3059\u7b49\u306e\u30b3\u30fc\u30c9\u3092\u8a00\u3044\u63db\u3048\u305f\u3060\u3051\u306e\u90e8\u5206\uff09\u304c\u524a\u9664\u307e\u305f\u306f\u5927\u5e45\u306b\u5727\u7e2e\u3055\u308c\u3066\u3044\u308b",
+          "passed": true,
+          "evidence": "JSDoc\u30922\u884c\u306b\u5727\u7e2e"
+        },
+        {
+          "text": "\u5b89\u5b9a\u30bd\u30fc\u30c8\u304c\u5fc5\u8981\u306a\u7406\u7531\uff08\u540c\u70b9\u6642\u306b\u767b\u9332\u9806\u4fdd\u6301\u304cUI\u4ed5\u69d8\uff09\u306ewhy\u304c\u6b8b\u3063\u3066\u3044\u308b",
+          "passed": true,
+          "evidence": "\u5b89\u5b9a\u30bd\u30fc\u30c8\u306e\u7406\u7531\u3092JSDoc\u306b\u6b8b\u5b58"
+        },
+        {
+          "text": "\u672c\u4f53\u306e\u81ea\u660e\u306a\u884c\u30b3\u30e1\u30f3\u30c8\uff08\u30a2\u30af\u30c6\u30a3\u30d6\u306a\u30e6\u30fc\u30b6\u30fc\u3060\u3051\u3092\u30d5\u30a3\u30eb\u30bf\u3059\u308b\u3001\u540d\u524d\u3067\u30bd\u30fc\u30c8\u3059\u308b\uff09\u304c\u524a\u9664\u3055\u308c\u3066\u3044\u308b",
+          "passed": true,
+          "evidence": "\u81ea\u660e\u30b3\u30e1\u30f3\u30c82\u4ef6\u524a\u9664\u6e08\u307f"
+        },
+        {
+          "text": "\u300e\u540d\u524d\u304c\u540c\u3058\u306a\u3089\u767b\u9332\u9806\u3092\u4fdd\u3064\u300f\u306e\u3088\u3046\u306a\u975e\u81ea\u660e\u306a\u610f\u56f3\u30b3\u30e1\u30f3\u30c8\u306f\u6b8b\u3063\u3066\u3044\u308b",
+          "passed": true,
+          "evidence": "\u610f\u56f3\u306fJSDoc\u306b\u96c6\u7d04\u3002\u305f\u3060\u3057\u672b\u5c3e\u306e\u30a4\u30f3\u30e9\u30a4\u30f3why\u306f\u524a\u9664\uff08\u60c5\u5831\u306fdoc\u306b\u4fdd\u6301\u3055\u308c\u308b\u304c\u914d\u7f6e\u304c\u7570\u306a\u308b\uff09"
+        },
+        {
+          "text": "\u5b9f\u884c\u3055\u308c\u308b\u30b3\u30fc\u30c9\u884c\u304c\u4e00\u5207\u5909\u66f4\u3055\u308c\u3066\u3044\u306a\u3044",
+          "passed": true,
+          "evidence": "\u30b3\u30fc\u30c9\u884c\u4e0d\u5909"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 3,
+      "configuration": "without_skill",
+      "run_number": 0,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 4,
+        "failed": 0,
+        "total": 4,
+        "time_seconds": 16.4,
+        "tokens": 21517,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "JSDoc\u306e\u524d\u63d0\u6761\u4ef6\uff08\u547c\u3073\u51fa\u3057\u5074\u3067\u30bd\u30fc\u30c8\u6e08\u307f\uff09\u3068\u5951\u7d04\uff08\u7b49\u3057\u3044\u8981\u7d20\u304c\u8907\u6570\u3042\u308b\u5834\u5408\u306f\u672a\u898f\u5b9a\uff09\u304c\u6b8b\u3063\u3066\u3044\u308b",
+          "passed": true,
+          "evidence": "TSDoc\u306e\u5951\u7d04\u304c\u6b8b\u5b58\uff08\u5909\u66f4\u30bc\u30ed\uff09"
+        },
+        {
+          "text": "\u30aa\u30fc\u30d0\u30fc\u30d5\u30ed\u30fc\u56de\u907f\u306e\u5f0f\u306b\u95a2\u3059\u308bwhy\u30b3\u30e1\u30f3\u30c8\u304c\u6b8b\u3063\u3066\u3044\u308b",
+          "passed": true,
+          "evidence": "\u30aa\u30fc\u30d0\u30fc\u30d5\u30ed\u30fc\u56de\u907f\u306ewhy\u304c\u6b8b\u5b58"
+        },
+        {
+          "text": "\u6b63\u5f53\u306a\u30b3\u30e1\u30f3\u30c8\u3092\u8aa4\u3063\u3066\u524a\u9664\u3057\u3066\u3044\u306a\u3044\uff08\u524a\u9664\u306f\u30bc\u30ed\u304b\u3001\u3042\u3063\u3066\u3082\u3054\u304f\u8efd\u5fae\u306a\u8a00\u3044\u56de\u3057\u306e\u5727\u7e2e\u306e\u307f\uff09",
+          "passed": true,
+          "evidence": "\u7de8\u96c6\u30bc\u30ed\u3002\u904e\u5270\u524a\u9664\u306a\u3057"
+        },
+        {
+          "text": "\u5b9f\u884c\u3055\u308c\u308b\u30b3\u30fc\u30c9\u884c\u304c\u4e00\u5207\u5909\u66f4\u3055\u308c\u3066\u3044\u306a\u3044",
+          "passed": true,
+          "evidence": "\u30b3\u30fc\u30c9\u884c\u4e0d\u5909"
+        }
+      ],
+      "notes": []
+    }
+  ],
+  "run_summary": {
+    "with_skill": {
+      "pass_rate": {
+        "mean": 1.0,
+        "stddev": 0.0,
+        "min": 1.0,
+        "max": 1.0
+      },
+      "time_seconds": {
+        "mean": 21.225,
+        "stddev": 4.8452,
+        "min": 16.7,
+        "max": 27.7
+      },
+      "tokens": {
+        "mean": 22783.0,
+        "stddev": 405.4602,
+        "min": 22260,
+        "max": 23250
+      }
+    },
+    "without_skill": {
+      "pass_rate": {
+        "mean": 1.0,
+        "stddev": 0.0,
+        "min": 1.0,
+        "max": 1.0
+      },
+      "time_seconds": {
+        "mean": 20.725,
+        "stddev": 3.5697,
+        "min": 16.4,
+        "max": 24.5
+      },
+      "tokens": {
+        "mean": 22025.25,
+        "stddev": 361.1024,
+        "min": 21517,
+        "max": 22370
+      }
+    },
+    "delta": {
+      "pass_rate": "+0.00",
+      "time_seconds": "+0.5",
+      "tokens": "+758"
+    }
+  },
+  "notes": []
+}

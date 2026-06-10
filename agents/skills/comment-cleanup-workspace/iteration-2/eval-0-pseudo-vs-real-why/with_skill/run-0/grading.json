@@ -1,0 +1,33 @@
+{
+  "eval_id": 0,
+  "eval_name": "eval-0-pseudo-vs-real-why",
+  "config": "with_skill",
+  "summary": {
+    "pass_rate": 1.0,
+    "passed": 4,
+    "failed": 0,
+    "total": 4
+  },
+  "expectations": [
+    {
+      "text": "疑似whyコメント『レスポンスをキャッシュして高速化する』が削除されている（高速化はキャッシュから自明で情報を足していない）",
+      "passed": true,
+      "evidence": "『レスポンスをキャッシュして高速化する』は削除済み"
+    },
+    {
+      "text": "自明な行コメント（キャッシュにあればそれを返す、stock を返す）が削除されている",
+      "passed": true,
+      "evidence": "『キャッシュにあればそれを返す』『stock を返す』は削除済み"
+    },
+    {
+      "text": "本物のwhyコメント『TTLは5秒…在庫切れの衝突が起きる…』が残っている",
+      "passed": true,
+      "evidence": "TTL 5秒の理由（在庫変動・購入時衝突）のwhyが残存"
+    },
+    {
+      "text": "実行されるコード行が一切変更されていない",
+      "passed": true,
+      "evidence": "コード行はフィクスチャと完全一致"
+    }
+  ]
+}

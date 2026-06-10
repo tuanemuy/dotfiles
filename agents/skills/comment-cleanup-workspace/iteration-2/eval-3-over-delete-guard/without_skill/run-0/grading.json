@@ -1,0 +1,33 @@
+{
+  "eval_id": 3,
+  "eval_name": "eval-3-over-delete-guard",
+  "config": "without_skill",
+  "summary": {
+    "pass_rate": 1.0,
+    "passed": 4,
+    "failed": 0,
+    "total": 4
+  },
+  "expectations": [
+    {
+      "text": "JSDocの前提条件（呼び出し側でソート済み）と契約（等しい要素が複数ある場合は未規定）が残っている",
+      "passed": true,
+      "evidence": "TSDocの契約が残存（変更ゼロ）"
+    },
+    {
+      "text": "オーバーフロー回避の式に関するwhyコメントが残っている",
+      "passed": true,
+      "evidence": "オーバーフロー回避のwhyが残存"
+    },
+    {
+      "text": "正当なコメントを誤って削除していない（削除はゼロか、あってもごく軽微な言い回しの圧縮のみ）",
+      "passed": true,
+      "evidence": "編集ゼロ。過剰削除なし"
+    },
+    {
+      "text": "実行されるコード行が一切変更されていない",
+      "passed": true,
+      "evidence": "コード行不変"
+    }
+  ]
+}

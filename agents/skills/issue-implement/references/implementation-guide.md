@@ -3,8 +3,13 @@
 ## Step 1: ブランチの作成
 
 ```bash
-git checkout -b issue/{Issue番号}/{短い説明}
+DEFAULT_BRANCH=$(gh repo view --json defaultBranchRef --jq '.defaultBranchRef.name')
+
+git fetch origin
+git checkout -b issue/{Issue番号}/{短い説明} "origin/${DEFAULT_BRANCH}"
 ```
+
+`gh` が使えない場合は `git remote show origin` の "HEAD branch" や `git symbolic-ref refs/remotes/origin/HEAD` からデフォルトブランチ名を得てもよい。
 
 ブランチ名の `{短い説明}` はIssueのタイトルからケバブケースで生成する（英語・小文字・ハイフン区切り、30文字以内）。
 
@@ -14,19 +19,22 @@ git checkout -b issue/{Issue番号}/{短い説明}
 
 サブエージェントを起動し、plan.md に沿って実装させる（委譲方式は `../../_shared/references/subagent-policy.md` に従う）。
 
+Phase 1.5 でデザインモック（`spec/design/pages/*.html`）を作成している場合は、該当する画面のモックのパスをサブエージェントに渡し、それを完成イメージとして実装させる。モックは視覚的・構造的な仕様であって、そのまま貼り付けるものではない点（既存コンポーネントを使った実フレームワークのコードに落とし込む）を明記する。デザインモックが無い場合は下記の「デザインモック」項を省く。
+
 サブエージェントに渡す内容:
 
-```
+```text
 あなたは実装計画に基づいてコードを実装するエンジニアです。
 
 ## 対象Issue
 - Issue番号: #{Issue番号}
 - 計画ファイル: .issue/{Issue番号}/plan.md
+- デザインモック: spec/design/pages/{画面名}.html（Phase 1.5 で作成した場合のみ。完成イメージとして参照し、既存コンポーネントを使った実コードに落とし込む）
 
 ## やること
-1. .issue/{Issue番号}/plan.md を読む
+1. .issue/{Issue番号}/plan.md を読む（デザインモックがあれば併せて確認する）
 2. 各実装ステップについて、対象ファイルを読んで現状を把握する
-3. 計画の指示に従って変更を適用する
+3. 計画の指示に従って変更を適用する（UI はデザインモックの完成イメージに沿わせる）
 4. CLAUDE.md や README.md にテスト・lint・型チェックの実行方法が記載されていれば、それに従って確認する
 5. 実装中に非自明な設計判断を下した場合は、.issue/{Issue番号}/adr.md に追記する
    - 既に adr.md がある場合は末尾に追記、なければ新規作成
@@ -84,6 +92,7 @@ pnpm dev     # 開発サーバーが起動するか確認
 `../manual-test/SKILL.md` の手順に従ってブラウザ検証を実行する。シードデータの準備も manual-test に委ねる。
 
 manual-test に渡す情報:
+
 - テストソース: `.issue/{Issue番号}/testing.md`
 - 成果物ディレクトリ: `.issue/{Issue番号}/manual-test/`
 - Issue番号: #{Issue番号}

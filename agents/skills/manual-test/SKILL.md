@@ -306,14 +306,29 @@ FAIL のテストケースがない場合はこの Phase をスキップして P
    - **テスト手順の問題**: テスト手順や期待結果が現実と合っていない
    - **環境問題**: データ不足・サーバー状態等
    - **デザイン差異**: 機能は動くがUI配置やテキストが異なる
+   - **agent-browser 偽陽性**: 実ブラウザでは動くが agent-browser でのみ FAIL（下記 Known Issue 参照）
 
 分析結果は `{output_dir}/results/analysis.md` に記録する。
 
+#### Known Issue: agent-browser の `click @ref` が React の合成 onClick まで届かないことがある
+
+**症状**: `agent-browser --session ... click @eN` でボタンをクリックしても、React の `onClick` ハンドラが発火せず、サーバーに POST も飛ばない。Console エラーも出ず、サイレントに失敗する。同セッションでナビゲーションリンク等の他のクリックは正常動作する。
+
+**観察された例**: `/billing/closing` の「請求書を作成」ボタン（Issue #601、PR #605）。React Router v7 + React 19 + `useFetcher` の programmatic `fetcher.submit(formData, { method: "post" })` パターン。
+
+**切り分け**: 実ブラウザ（Chrome / Safari 等）で同じ手順を踏み、PASS するなら agent-browser 起因の偽陽性。FAIL するなら実装バグ。**「実装バグ」と即断する前に、必ず実ブラウザでの再現確認を行う**。
+
+**ワークアラウンド**: agent-browser 上で再現したい場合、`button.click()` を `eval` 経由で直接呼ぶと発火することがある。ただし synthetic event と trusted event の差があるため、それで通っても実装の動作保証にはならない。**切り分けには実ブラウザを使う**。
+
+**Issue 起票の判断**: 偽陽性と確定したらコード側の Issue は起票しない（または既存 Issue を close）。テスト手順書側（testing.md）に「実ブラウザでの確認を必須」と注記しておくと再発防止に効く。
+
 ### Issue起票
 
-分類ごとにまとめて GitHub Issue を起票する。1つの失敗が1つのIssueとは限らない — 同じ原因に起因する複数の失敗は1つのIssueにまとめる。
+失敗を次の打ち手につなぐのが狙い。Issueの量産・細分化ではない。
 
-起票前に `gh issue list --search "{キーワード}"` で既存 Issue との重複を確認する。重複がある場合は起票せず、既存 Issue へのコメント追記で対応する。
+- **簡単なものは起票しない。** 即座に直せる軽微なもの（小さなデザイン差異、テスト手順の誤り、シードデータ不足のような環境問題）は、その場で直すかレポートに一行記録。起票はまとまった調査・修正が要るバグに絞る。
+- **割らずにまとめる。** 同じ原因・テーマの失敗は1本に束ねる。
+- **既存へのマージを優先。** `gh issue list --search "{キーワード}"` で関連を探し、近ければ既存にコメント追記。独立した新規だけ起票する。
 
 ```bash
 gh issue create --title "{タイトル}" --body "$(cat <<'EOF'

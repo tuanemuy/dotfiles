@@ -1,0 +1,33 @@
+{
+  "eval_id": 1,
+  "eval_name": "eval-1-todo-with-reason",
+  "config": "without_skill",
+  "summary": {
+    "pass_rate": 1.0,
+    "passed": 4,
+    "failed": 0,
+    "total": 4
+  },
+  "expectations": [
+    {
+      "text": "理由・文脈なしの『# TODO: 後で直す』が削除されている",
+      "passed": true,
+      "evidence": "『# TODO: 後で直す』削除済み"
+    },
+    {
+      "text": "理由と文脈（O(n^2)・仕様確定待ち・PROD-77）を持つ FIXME コメントが残っている",
+      "passed": true,
+      "evidence": "『FIXME:』マーカー込みで理由・文脈を完全保持（O(n^2)・優先度・PROD-77）"
+    },
+    {
+      "text": "自明な行コメント（行をループする、有効な行だけ追加する、一時的にリストで持っておく、row を辞書に変換する 等）が削除されている",
+      "passed": true,
+      "evidence": "自明コメント4件削除済み"
+    },
+    {
+      "text": "実行されるコード行が一切変更されていない",
+      "passed": true,
+      "evidence": "コード行不変"
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "eval_id": 0,
+  "eval_name": "eval-0-jsdoc-metadata-and-obvious",
+  "config": "without_skill",
+  "summary": {
+    "pass_rate": 1.0,
+    "passed": 6,
+    "failed": 0,
+    "total": 6
+  },
+  "expectations": [
+    {
+      "text": "JSDoc内の作成日・変更経緯（2024/02/10 tanaka 作成、sato が追加、平文から変更 など）が削除されている",
+      "passed": true,
+      "evidence": "JSDocは概要+@param+@returnsのみ。作成日/作者/sato追加/平文→ハッシュの3行は消えている"
+    },
+    {
+      "text": "JSDocの @param / @returns の契約情報が保持されている",
+      "passed": true,
+      "evidence": "@param input/@param input.email/@param input.password/@returns が全て残存"
+    },
+    {
+      "text": "経緯を示す行コメント（bcrypt から argon2 に変えた等）から日付・経緯が消え、残すなら why に絞られている",
+      "passed": true,
+      "evidence": "bcrypt→argon2 の経緯コメントは完全に削除され、日付・経緯は残っていない"
+    },
+    {
+      "text": "自明な行コメント（メールアドレスで既存ユーザーを検索する、パスワードをハッシュ化する、i 番目のユーザーを無効化 等）が削除されている",
+      "passed": true,
+      "evidence": "findByEmail/throw/hash/insert/ループ各所の自明コメントが全て削除"
+    },
+    {
+      "text": "コメントアウトされた死にコード（oldId の2行）が削除されている",
+      "passed": true,
+      "evidence": "// const oldId ... と // return oldId; の2行が削除されている"
+    },
+    {
+      "text": "実行されるコード行が一切変更されていない",
+      "passed": true,
+      "evidence": "コード行(12-30)はフィクスチャと完全一致。挙動不変"
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "skill_name": "issue-dashboard",
+  "notes": "gh issue list の代わりに evals/fixtures/issues.json をIssueデータとして使う。各プロンプトはそのファイルを指す。",
+  "evals": [
+    {
+      "id": 0,
+      "name": "standard-dashboard-build",
+      "prompt": "うちのプロジェクトのIssueが溜まってきて何からやればいいか分からなくなってきた…。Issueの一覧データを evals/fixtures/issues.json に置いてあるから（gh issue list の出力形式そのまま）、これを使ってIssueのダッシュボードを作ってほしい。どれから着手すべきか、どれを並行で進められるかが視覚的に分かるようにして。",
+      "expected_output": "ダッシュボードがGitHub Issue（タイトル Issue Dashboard、本文先頭に <!-- issue-dashboard --> マーカー）として作成される。本文は独立カテゴリーごとの ## セクション（重要度順、見出し後に空行）に分かれ、各Issueは - #番号 タイトル、依存先は番号だけのサブリスト。依存先のない#101,#108,#109はサブリストなし。装飾なし。",
+      "files": ["evals/fixtures/issues.json"]
+    },
+    {
+      "id": 1,
+      "name": "what-to-start-first",
+      "prompt": "evals/fixtures/issues.json にオープンIssueの一覧があります（gh issue listのjson出力）。今スプリントを始めるところで、まず手をつけるべきIssueと、チームで手分けして並行で進められるIssueを知りたいです。依存関係も踏まえて全体像を整理してください。",
+      "expected_output": "依存先のない#101,#108,#109がサブリストなしで「すぐ着手可能」とわかる。各Issueの依存先が番号だけのサブリストで列挙され、カテゴリーごとにセクション分けされている。ダッシュボードがGitHub Issueとして作成される。",
+      "files": ["evals/fixtures/issues.json"]
+    },
+    {
+      "id": 2,
+      "name": "conflict-and-bottleneck-awareness",
+      "prompt": "evals/fixtures/issues.json のIssue群を分析して、進め方のダッシュボードを作って。特に「これを先に終わらせないと他が詰まる」っていうボトルネックのIssueと、同時に着手するとコンフリクトしそうなIssueのペアが知りたい。",
+      "expected_output": "#101(DB基盤)が多くをブロックする要注意Issueとわかり、#111↔#112(同じタスク詳細モーダルを触る)が末尾に `競合 #111 #112` の1行で示される。ダッシュボードがGitHub Issueとして作成される。",
+      "files": ["evals/fixtures/issues.json"]
+    }
+  ]
+}

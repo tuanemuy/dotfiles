@@ -1,0 +1,33 @@
+{
+  "eval_id": 0,
+  "eval_name": "eval-0-pseudo-vs-real-why",
+  "config": "without_skill",
+  "summary": {
+    "pass_rate": 1.0,
+    "passed": 4,
+    "failed": 0,
+    "total": 4
+  },
+  "expectations": [
+    {
+      "text": "疑似whyコメント『レスポンスをキャッシュして高速化する』が削除されている（高速化はキャッシュから自明で情報を足していない）",
+      "passed": true,
+      "evidence": "『高速化する』削除（スキルあり版と完全一致の出力）"
+    },
+    {
+      "text": "自明な行コメント（キャッシュにあればそれを返す、stock を返す）が削除されている",
+      "passed": true,
+      "evidence": "自明コメント2件削除済み"
+    },
+    {
+      "text": "本物のwhyコメント『TTLは5秒…在庫切れの衝突が起きる…』が残っている",
+      "passed": true,
+      "evidence": "本物のwhyが残存"
+    },
+    {
+      "text": "実行されるコード行が一切変更されていない",
+      "passed": true,
+      "evidence": "コード行不変"
+    }
+  ]
+}
