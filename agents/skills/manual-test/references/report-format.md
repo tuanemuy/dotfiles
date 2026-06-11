@@ -67,21 +67,7 @@
 - **分類**: {実装バグ/テスト手順の問題/環境問題/デザイン差異}
 - **原因分析**: {分析結果}
 - **対応Issue**: #{Issue番号}
-- **スクリーンショット**: `screenshots/tc-{番号}/fail-step-{N}.png`
-
----
-
-## スクリーンショット一覧
-
-{output_dir}/screenshots/ 配下のファイル一覧
-
-| TC | ステップ | ファイル | 備考 |
-|----|---------|---------|------|
-| TC-001 | Step 1 | `screenshots/tc-001/step-01.png` | |
-| TC-001 | Step 2 | `screenshots/tc-001/step-02.png` | |
-| TC-002 | Step 1 | `screenshots/tc-002/step-01.png` | |
-| TC-002 | Fail | `screenshots/tc-002/fail-step-03.png` | 修正前 |
-| TC-002 | Step 3 (Round 1) | `screenshots/tc-002/round1-step-03.png` | 修正後 |
+- **画面状態**: {失敗時点の snapshot から読み取れた要点}
 
 ---
 
