@@ -1,0 +1,48 @@
+{
+  "skill_name": "comment-cleanup",
+  "evals": [
+    {
+      "id": 0,
+      "name": "jsdoc-metadata-and-obvious",
+      "prompt": "userService.ts のコメントを整理して。",
+      "expected_output": "変更履歴・日付・作者・バグ番号・自明な行コメント・死にコードが削除され、JSDocは契約情報（引数・戻り値）に絞って残る。コードの挙動は不変。",
+      "files": ["userService.ts"],
+      "assertions": [
+        "JSDoc内の作成日・変更経緯（2024/02/10 tanaka 作成、sato が追加、平文から変更 など）が削除されている",
+        "JSDocの @param / @returns の契約情報が保持されている",
+        "経緯を示す行コメント（bcrypt から argon2 に変えた等）から日付・経緯が消え、残すなら why に絞られている",
+        "自明な行コメント（メールアドレスで既存ユーザーを検索する、パスワードをハッシュ化する、i 番目のユーザーを無効化 等）が削除されている",
+        "コメントアウトされた死にコード（oldId の2行）が削除されている",
+        "実行されるコード行が一切変更されていない"
+      ]
+    },
+    {
+      "id": 1,
+      "name": "docstring-changelog",
+      "prompt": "formatter.py のコメントを簡潔にして。",
+      "expected_output": "docstring の Created/Changelog が削除され Args/Returns は残る。端数処理の理由コメントは残り、自明な行コメントは削除。コード不変。",
+      "files": ["formatter.py"],
+      "assertions": [
+        "docstring 内の Created 行と Changelog セクションが削除されている",
+        "docstring の Args / Returns の契約情報が保持されている",
+        "端数を切り捨てる理由（合計が合わなくなるため）の why コメントが残っている",
+        "自明な行コメント（currency が JPY かチェック、通貨コードを前につけて返す、amount を小数点2桁に丸める 等）が削除されている",
+        "実行されるコード行が一切変更されていない"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "preserve-why-comments",
+      "prompt": "retryQueue.ts のコメントをきれいにして。",
+      "expected_output": "ファイル冒頭のメタデータと自明コメントは削除されるが、ヒープvs配列の判断とバックオフ上限の理由（why/why not）は残る。コード不変。",
+      "files": ["retryQueue.ts"],
+      "assertions": [
+        "ファイル冒頭の作成者・最終更新日・ファイル名のメタデータコメントが削除されている",
+        "ヒープではなく配列を使う判断理由（why not）のコメントが残っている",
+        "バックオフ上限をクランプする理由（why）のコメントが残っている",
+        "自明な行コメント（ジョブを追加する、size を返す、jobs の長さを返す 等）が削除されている",
+        "実行されるコード行が一切変更されていない"
+      ]
+    }
+  ]
+}

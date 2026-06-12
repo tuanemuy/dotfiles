@@ -4,7 +4,7 @@ description: >
   testing.md や spec/manual-tests/ のテスト手順書を agent-browser で自動実行し、
   実装の動作をブラウザ上で検証するスキル。
   Webサーバーの起動（空きポート自動検出）→ シードデータ整備 → テストケース実行 →
-  スクリーンショット付き結果レポート → 失敗時は原因分析してGitHub Issueを起票する。
+  結果レポート → 失敗時は原因分析してGitHub Issueを起票する。
   issue-implement の Phase 2 完了後や implement の Phase 7 完了後に呼ばれることを想定するが、
   単体でも使える。
   ユーザーが「ブラウザで動作確認して」「testing.md を実行して」「マニュアルテスト自動実行して」
@@ -19,7 +19,7 @@ description: >
 # Browser Verify — agent-browser によるテスト手順の自動実行＋修正ループ
 
 testing.md や spec/manual-tests/ に書かれたテスト手順を、agent-browser で実際のブラウザ上で自動実行する。
-テスト結果はスクリーンショット付きレポートとして記録し、失敗したテストは原因分析→修正→再テストのループで解消する。
+テスト結果はレポートとして記録する。スクリーンショットは検証中の**確認用に撮るのはよい**が、レポートの成果物としては保存・添付しない（画像はトークン消費が大きい — 証跡はテキストの snapshot とログで残す）。失敗したテストは原因分析→修正→再テストのループで解消する。
 
 ## 前提条件
 
@@ -53,7 +53,7 @@ Phase 3: サーバー起動
   空きポート検出 → サーバーをバックグラウンド起動 → ヘルスチェック
 
 Phase 4: テスト実行
-  テストケースを agent-browser で順番に実行 → スクリーンショット → 結果記録
+  テストケースを agent-browser で順番に実行 → 結果記録
 
 Phase 5: 失敗分析＆Issue起票
   失敗テストの原因分析 → 分類 → GitHub Issue を起票
@@ -259,18 +259,12 @@ done
 | 1 | {操作内容} | {期待結果} | {実際に確認できた内容} | PASS/FAIL |
 | 2 | ... | ... | ... | ... |
 
-## スクリーンショット
-
-- Step 1: `screenshots/tc-{番号}/step-01.png`
-- Step 2: `screenshots/tc-{番号}/step-02.png`
-- ...
-
 ## 失敗詳細（FAILの場合）
 
 - **失敗ステップ**: Step {N}
 - **期待**: {期待結果}
 - **実際**: {実際の結果}
-- **スクリーンショット**: `screenshots/tc-{番号}/fail-step-{N}.png`
+- **画面状態**: {失敗時点の snapshot から読み取れる画面の要点（表示されていた要素・エラーメッセージ等）}
 ```
 
 全テストケースの実行が完了したら、サマリーを `{output_dir}/results/summary.md` に生成する:
@@ -299,21 +293,36 @@ FAIL のテストケースがない場合はこの Phase をスキップして P
 ### 原因分析
 
 失敗した各テストケースについて:
-1. 失敗ステップのスクリーンショットとログを確認する
+1. 失敗ステップの snapshot 記録（テスト結果ファイルの「画面状態」）とサーバーログを確認する
 2. 期待結果と実際の結果の差分を分析する
 3. 以下のいずれかに分類する:
    - **実装バグ**: コードが仕様通りに動いていない
    - **テスト手順の問題**: テスト手順や期待結果が現実と合っていない
    - **環境問題**: データ不足・サーバー状態等
    - **デザイン差異**: 機能は動くがUI配置やテキストが異なる
+   - **agent-browser 偽陽性**: 実ブラウザでは動くが agent-browser でのみ FAIL（下記 Known Issue 参照）
 
 分析結果は `{output_dir}/results/analysis.md` に記録する。
 
+#### Known Issue: agent-browser の `click @ref` が React の合成 onClick まで届かないことがある
+
+**症状**: `agent-browser --session ... click @eN` でボタンをクリックしても、React の `onClick` ハンドラが発火せず、サーバーに POST も飛ばない。Console エラーも出ず、サイレントに失敗する。同セッションでナビゲーションリンク等の他のクリックは正常動作する。
+
+**観察された例**: `/billing/closing` の「請求書を作成」ボタン（Issue #601、PR #605）。React Router v7 + React 19 + `useFetcher` の programmatic `fetcher.submit(formData, { method: "post" })` パターン。
+
+**切り分け**: 実ブラウザ（Chrome / Safari 等）で同じ手順を踏み、PASS するなら agent-browser 起因の偽陽性。FAIL するなら実装バグ。**「実装バグ」と即断する前に、必ず実ブラウザでの再現確認を行う**。
+
+**ワークアラウンド**: agent-browser 上で再現したい場合、`button.click()` を `eval` 経由で直接呼ぶと発火することがある。ただし synthetic event と trusted event の差があるため、それで通っても実装の動作保証にはならない。**切り分けには実ブラウザを使う**。
+
+**Issue 起票の判断**: 偽陽性と確定したらコード側の Issue は起票しない（または既存 Issue を close）。テスト手順書側（testing.md）に「実ブラウザでの確認を必須」と注記しておくと再発防止に効く。
+
 ### Issue起票
 
-分類ごとにまとめて GitHub Issue を起票する。1つの失敗が1つのIssueとは限らない — 同じ原因に起因する複数の失敗は1つのIssueにまとめる。
+失敗を次の打ち手につなぐのが狙い。Issueの量産・細分化ではない。
 
-起票前に `gh issue list --search "{キーワード}"` で既存 Issue との重複を確認する。重複がある場合は起票せず、既存 Issue へのコメント追記で対応する。
+- **簡単なものは起票しない。** 即座に直せる軽微なもの（小さなデザイン差異、テスト手順の誤り、シードデータ不足のような環境問題）は、その場で直すかレポートに一行記録。起票はまとまった調査・修正が要るバグに絞る。
+- **割らずにまとめる。** 同じ原因・テーマの失敗は1本に束ねる。
+- **既存へのマージを優先。** `gh issue list --search "{キーワード}"` で関連を探し、近ければ既存にコメント追記。独立した新規だけ起票する。
 
 ```bash
 gh issue create --title "{タイトル}" --body "$(cat <<'EOF'
@@ -340,9 +349,9 @@ gh issue create --title "{タイトル}" --body "$(cat <<'EOF'
 
 {実際の結果}
 
-## スクリーンショット
+## 失敗時の画面状態
 
-{失敗時のスクリーンショットを添付 or パスを記載}
+{失敗時点の snapshot から読み取れた画面の要点}
 
 ## 原因分析
 
@@ -398,7 +407,6 @@ EOF
 ## 成果物
 - レポート: {output_dir}/report.md
 - テスト結果: {output_dir}/results/
-- スクリーンショット: {output_dir}/screenshots/
 - Issue一覧: {output_dir}/issues.md（起票した場合）
 
 {全PASSの場合}
@@ -499,7 +507,7 @@ agent-browser --session {s} reload
 # 調査
 agent-browser --session {s} snapshot --max-output 8000
 agent-browser --session {s} snapshot --ref @e3
-agent-browser --session {s} screenshot /path/to/screenshot.png
+agent-browser --session {s} screenshot /tmp/check.png   # 確認用のみ。成果物として保存・添付しない
 agent-browser --session {s} get text --ref @e5
 agent-browser --session {s} get url
 agent-browser --session {s} get title
@@ -514,8 +522,8 @@ agent-browser --session {s} scroll down 500
 agent-browser --session {s} hover @e6
 
 # バッチ実行（複数コマンドを1回で実行、効率的）
-agent-browser --session {s} batch "open {url}" "snapshot -i" "screenshot /path/to/shot.png"
-agent-browser --session {s} batch --bail "fill @e1 'test'" "click @e2" "screenshot /path/to/shot.png"  # --bail: エラーで中断
+agent-browser --session {s} batch "open {url}" "snapshot -i"
+agent-browser --session {s} batch --bail "fill @e1 'test'" "click @e2" "snapshot -i"  # --bail: エラーで中断
 
 # 待機
 agent-browser --session {s} wait 2000                              # ミリ秒待機
@@ -560,7 +568,7 @@ agent-browser --session {s} wait --text "ダッシュボード"
 ## 原則
 
 - **テストソースに忠実に実行する** — 手順を勝手に変えたり省略したりしない
-- **スクリーンショットは証拠** — 各ステップ・特に失敗時は必ず撮影し、レポートから参照できるようにする
+- **スクリーンショットは成果物にしない** — 検証中に視覚的な確認が必要なら撮ってよいが、全ステップでの撮影・レポートへの保存/添付はしない。証跡は実行ログと失敗時の snapshot（テキスト）で残す
 - **サーバーは必ず停止する** — テスト終了後（成功・失敗問わず）サーバーを停止し、ポートを解放する
 - **コードは修正しない** — 失敗を検出したら原因分析とIssue起票に留め、修正は別のIssue対応フローに委ねる
 - **Issue は重複起票しない** — 起票前に既存 Issue を検索し、同じ原因の失敗はまとめて1つのIssueにする

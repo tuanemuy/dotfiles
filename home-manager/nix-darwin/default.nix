@@ -6,6 +6,14 @@
     settings = {
       experimental-features = "nix-command flakes";
       download-buffer-size = 524288000;
+      trusted-users = [
+        "root"
+        username
+      ];
+      extra-substituters = [ "https://cache.numtide.com" ];
+      extra-trusted-public-keys = [
+        "niks3.numtide.com-1:DTx8wZduET09hRmMtKdQDxNNthLQETkc/yaX7M4qK0g="
+      ];
     };
   };
 
@@ -25,6 +33,11 @@
 
   users.users.${username} = {
     shell = pkgs.zsh;
+  };
+
+  environment.variables = {
+    EDITOR = "nvim";
+    VISUAL = "nvim";
   };
 
   # Enable Touch ID for sudo (including tmux support via pam-reattach)

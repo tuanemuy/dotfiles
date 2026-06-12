@@ -1,0 +1,38 @@
+{
+  "eval_id": 2,
+  "eval_name": "eval-2-buried-why-in-verbose",
+  "config": "with_skill",
+  "summary": {
+    "pass_rate": 1.0,
+    "passed": 5,
+    "failed": 0,
+    "total": 5
+  },
+  "expectations": [
+    {
+      "text": "JSDocの逐次的な処理説明（ループする・フィルタする・並べ替える・返す等のコードを言い換えただけの部分）が削除または大幅に圧縮されている",
+      "passed": true,
+      "evidence": "JSDocの逐次説明を7行→2行に圧縮"
+    },
+    {
+      "text": "安定ソートが必要な理由（同点時に登録順保持がUI仕様）のwhyが残っている",
+      "passed": true,
+      "evidence": "安定ソートの理由（同名時に登録順=UI仕様）がJSDocに残存"
+    },
+    {
+      "text": "本体の自明な行コメント（アクティブなユーザーだけをフィルタする、名前でソートする）が削除されている",
+      "passed": true,
+      "evidence": "filter/sort直前の自明コメント2件削除済み"
+    },
+    {
+      "text": "『名前が同じなら登録順を保つ』のような非自明な意図コメントは残っている",
+      "passed": true,
+      "evidence": "タイブレーク行のインラインwhy『名前が同じなら登録順を保つ』を残している"
+    },
+    {
+      "text": "実行されるコード行が一切変更されていない",
+      "passed": true,
+      "evidence": "コード行不変"
+    }
+  ]
+}

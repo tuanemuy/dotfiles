@@ -8,6 +8,5 @@
     gemini-cli
     opencode
     pi
-    rtk
   ];
 }

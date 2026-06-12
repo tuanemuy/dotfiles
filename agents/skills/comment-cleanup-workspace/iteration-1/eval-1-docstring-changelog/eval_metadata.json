@@ -1,0 +1,12 @@
+{
+  "eval_id": 1,
+  "eval_name": "docstring-changelog",
+  "prompt": "formatter.py のコメントを簡潔にして。",
+  "assertions": [
+    "docstring 内の Created 行と Changelog セクションが削除されている",
+    "docstring の Args / Returns の契約情報が保持されている",
+    "端数を切り捨てる理由（合計が合わなくなるため）の why コメントが残っている",
+    "自明な行コメント（currency が JPY かチェック、通貨コードを前につけて返す、amount を小数点2桁に丸める 等）が削除されている",
+    "実行されるコード行が一切変更されていない"
+  ]
+}

@@ -8,7 +8,7 @@
 
 ### パターン
 
-```
+```text
 TODO
 FIXME
 HACK
@@ -29,7 +29,7 @@ grep -rni "TODO\|FIXME\|HACK\|XXX\|TEMP\b\|PLACEHOLDER\|WORKAROUND\|REVISIT\|REF
 ```
 
 ただし Grep ツールを使う場合は正規表現で:
-```
+```regex
 (?i)(TODO|FIXME|HACK|XXX|TEMP\b|PLACEHOLDER|WORKAROUND|REVISIT|REFACTOR|INCOMPLETE)
 ```
 
@@ -39,15 +39,13 @@ grep -rni "TODO\|FIXME\|HACK\|XXX\|TEMP\b\|PLACEHOLDER\|WORKAROUND\|REVISIT\|REF
 - `HACK` / `WORKAROUND` / `TEMP` → **Warning**（暫定対応の可能性）
 - `REVISIT` / `REFACTOR` → **Info**（改善余地の示唆）
 
----
-
 ## 2. 未実装シグナル
 
 関数やメソッドが存在するが、実質的に何も実装されていないパターン。
 
 ### 言語共通パターン
 
-```
+```text
 not implemented
 not yet implemented
 to be implemented
@@ -113,8 +111,6 @@ panic!\("not implemented"\)
 - 空の関数ボディ → **Warning**（意図的な場合もある）
 - `pass`（Python）→ コンテキストに依存（抽象メソッドなら正当）
 
----
-
 ## 3. 省略シグナル
 
 コードの一部が省略されたことを示すパターン。AI によるコード生成で特に多い。
@@ -145,8 +141,6 @@ panic!\("not implemented"\)
 - 「ここに〜を追加」系のコメント → **Critical**（未完成の指示）
 - 「以下同様」「残りは」→ **Warning**（省略の可能性）
 
----
-
 ## 4. 仮実装シグナル
 
 本来は動的な値や外部設定であるべきものがハードコードされているパターン。
@@ -172,8 +166,6 @@ panic!\("not implemented"\)
 - テスト以外での `dummy`, `stub`, `fake` → **Warning**
 - ハードコードされた認証情報 → **Critical**（セキュリティリスク）
 - `example.com` 等のプレースホルダーURL → **Warning**
-
----
 
 ## 5. 不完全な制御フロー
 
@@ -211,15 +203,13 @@ except:\s*\n\s+pass
 - エラー握り潰し → **Warning**
 - 空の default → **Info**
 
----
-
 ## 除外パターン
 
 以下のパスやファイルはスキャン対象から除外する:
 
 ### ディレクトリ
 
-```
+```text
 node_modules/
 vendor/
 .next/
@@ -234,7 +224,7 @@ __pycache__/
 
 ### ファイル
 
-```
+```text
 *.lock
 *.generated.*
 *.g.dart

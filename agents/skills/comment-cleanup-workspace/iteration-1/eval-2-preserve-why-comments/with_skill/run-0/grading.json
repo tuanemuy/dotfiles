@@ -1,0 +1,38 @@
+{
+  "eval_id": 2,
+  "eval_name": "eval-2-preserve-why-comments",
+  "config": "with_skill",
+  "summary": {
+    "pass_rate": 1.0,
+    "passed": 5,
+    "failed": 0,
+    "total": 5
+  },
+  "expectations": [
+    {
+      "text": "ファイル冒頭の作成者・最終更新日・ファイル名のメタデータコメントが削除されている",
+      "passed": true,
+      "evidence": "ファイル冒頭の作成者:nakamura/最終更新/ファイル名のメタデータが削除されている"
+    },
+    {
+      "text": "ヒープではなく配列を使う判断理由（why not）のコメントが残っている",
+      "passed": true,
+      "evidence": "add内の『配列ではなくヒープを...見合わないため配列のまま』のwhy notが残存"
+    },
+    {
+      "text": "バックオフ上限をクランプする理由（why）のコメントが残っている",
+      "passed": true,
+      "evidence": "backoff内の『上限なしだと永久に再実行されない...』のwhyが残存"
+    },
+    {
+      "text": "自明な行コメント（ジョブを追加する、size を返す、jobs の長さを返す 等）が削除されている",
+      "passed": true,
+      "evidence": "ジョブを追加する/size を返す/jobs の長さを返す 等の自明コメントが全て削除"
+    },
+    {
+      "text": "実行されるコード行が一切変更されていない",
+      "passed": true,
+      "evidence": "実行コード行はフィクスチャと一致。挙動不変"
+    }
+  ]
+}

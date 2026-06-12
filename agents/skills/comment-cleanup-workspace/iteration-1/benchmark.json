@@ -1,0 +1,333 @@
+{
+  "metadata": {
+    "skill_name": "comment-cleanup",
+    "skill_path": "<path/to/skill>",
+    "executor_model": "<model-name>",
+    "analyzer_model": "<model-name>",
+    "timestamp": "2026-05-30T01:39:33Z",
+    "evals_run": [
+      0,
+      1,
+      2
+    ],
+    "runs_per_configuration": 3
+  },
+  "runs": [
+    {
+      "eval_id": 0,
+      "configuration": "with_skill",
+      "run_number": 0,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 6,
+        "failed": 0,
+        "total": 6,
+        "time_seconds": 24.0,
+        "tokens": 23582,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "JSDoc\u5185\u306e\u4f5c\u6210\u65e5\u30fb\u5909\u66f4\u7d4c\u7def\uff082024/02/10 tanaka \u4f5c\u6210\u3001sato \u304c\u8ffd\u52a0\u3001\u5e73\u6587\u304b\u3089\u5909\u66f4 \u306a\u3069\uff09\u304c\u524a\u9664\u3055\u308c\u3066\u3044\u308b",
+          "passed": true,
+          "evidence": "JSDoc\u306f\u6982\u8981+@param+@returns\u306e\u307f\u3002\u4f5c\u6210\u65e5/\u4f5c\u8005/sato\u8ffd\u52a0/\u5e73\u6587\u2192\u30cf\u30c3\u30b7\u30e5\u306e3\u884c\u306f\u6d88\u3048\u3066\u3044\u308b"
+        },
+        {
+          "text": "JSDoc\u306e @param / @returns \u306e\u5951\u7d04\u60c5\u5831\u304c\u4fdd\u6301\u3055\u308c\u3066\u3044\u308b",
+          "passed": true,
+          "evidence": "@param input/@param input.email/@param input.password/@returns \u304c\u5168\u3066\u6b8b\u5b58"
+        },
+        {
+          "text": "\u7d4c\u7def\u3092\u793a\u3059\u884c\u30b3\u30e1\u30f3\u30c8\uff08bcrypt \u304b\u3089 argon2 \u306b\u5909\u3048\u305f\u7b49\uff09\u304b\u3089\u65e5\u4ed8\u30fb\u7d4c\u7def\u304c\u6d88\u3048\u3001\u6b8b\u3059\u306a\u3089 why \u306b\u7d5e\u3089\u308c\u3066\u3044\u308b",
+          "passed": true,
+          "evidence": "bcrypt\u2192argon2 \u306e\u7d4c\u7def\u30b3\u30e1\u30f3\u30c8\u306f\u5b8c\u5168\u306b\u524a\u9664\u3055\u308c\u3001\u65e5\u4ed8\u30fb\u7d4c\u7def\u306f\u6b8b\u3063\u3066\u3044\u306a\u3044"
+        },
+        {
+          "text": "\u81ea\u660e\u306a\u884c\u30b3\u30e1\u30f3\u30c8\uff08\u30e1\u30fc\u30eb\u30a2\u30c9\u30ec\u30b9\u3067\u65e2\u5b58\u30e6\u30fc\u30b6\u30fc\u3092\u691c\u7d22\u3059\u308b\u3001\u30d1\u30b9\u30ef\u30fc\u30c9\u3092\u30cf\u30c3\u30b7\u30e5\u5316\u3059\u308b\u3001i \u756a\u76ee\u306e\u30e6\u30fc\u30b6\u30fc\u3092\u7121\u52b9\u5316 \u7b49\uff09\u304c\u524a\u9664\u3055\u308c\u3066\u3044\u308b",
+          "passed": true,
+          "evidence": "findByEmail/throw/hash/insert/\u30eb\u30fc\u30d7\u5404\u6240\u306e\u81ea\u660e\u30b3\u30e1\u30f3\u30c8\u304c\u5168\u3066\u524a\u9664"
+        },
+        {
+          "text": "\u30b3\u30e1\u30f3\u30c8\u30a2\u30a6\u30c8\u3055\u308c\u305f\u6b7b\u306b\u30b3\u30fc\u30c9\uff08oldId \u306e2\u884c\uff09\u304c\u524a\u9664\u3055\u308c\u3066\u3044\u308b",
+          "passed": true,
+          "evidence": "// const oldId ... \u3068 // return oldId; \u306e2\u884c\u304c\u524a\u9664\u3055\u308c\u3066\u3044\u308b"
+        },
+        {
+          "text": "\u5b9f\u884c\u3055\u308c\u308b\u30b3\u30fc\u30c9\u884c\u304c\u4e00\u5207\u5909\u66f4\u3055\u308c\u3066\u3044\u306a\u3044",
+          "passed": true,
+          "evidence": "\u30b3\u30fc\u30c9\u884c(12-30)\u306f\u30d5\u30a3\u30af\u30b9\u30c1\u30e3\u3068\u5b8c\u5168\u4e00\u81f4\u3002\u6319\u52d5\u4e0d\u5909"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 1,
+      "configuration": "with_skill",
+      "run_number": 0,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 5,
+        "failed": 0,
+        "total": 5,
+        "time_seconds": 20.6,
+        "tokens": 23258,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "docstring \u5185\u306e Created \u884c\u3068 Changelog \u30bb\u30af\u30b7\u30e7\u30f3\u304c\u524a\u9664\u3055\u308c\u3066\u3044\u308b",
+          "passed": true,
+          "evidence": "docstring\u306bCreated\u884c\u3068Changelog\u30d6\u30ed\u30c3\u30af\u304c\u5b58\u5728\u3057\u306a\u3044"
+        },
+        {
+          "text": "docstring \u306e Args / Returns \u306e\u5951\u7d04\u60c5\u5831\u304c\u4fdd\u6301\u3055\u308c\u3066\u3044\u308b",
+          "passed": true,
+          "evidence": "Args(amount/currency)\u3068Returns\u306e\u8a18\u8ff0\u304c\u6b8b\u5b58"
+        },
+        {
+          "text": "\u7aef\u6570\u3092\u5207\u308a\u6368\u3066\u308b\u7406\u7531\uff08\u5408\u8a08\u304c\u5408\u308f\u306a\u304f\u306a\u308b\u305f\u3081\uff09\u306e why \u30b3\u30e1\u30f3\u30c8\u304c\u6b8b\u3063\u3066\u3044\u308b",
+          "passed": true,
+          "evidence": "# \u7aef\u6570\u306f\u5207\u308a\u6368\u3066\u308b\u3002\u56db\u6368\u4e94\u5165\u3060\u3068\u5408\u8a08\u304c\u5408\u308f\u306a\u304f\u306a\u308b... \u306ewhy\u30b3\u30e1\u30f3\u30c8\u304c\u6b8b\u5b58"
+        },
+        {
+          "text": "\u81ea\u660e\u306a\u884c\u30b3\u30e1\u30f3\u30c8\uff08currency \u304c JPY \u304b\u30c1\u30a7\u30c3\u30af\u3001\u901a\u8ca8\u30b3\u30fc\u30c9\u3092\u524d\u306b\u3064\u3051\u3066\u8fd4\u3059\u3001amount \u3092\u5c0f\u6570\u70b92\u6841\u306b\u4e38\u3081\u308b \u7b49\uff09\u304c\u524a\u9664\u3055\u308c\u3066\u3044\u308b",
+          "passed": true,
+          "evidence": "JPY\u30c1\u30a7\u30c3\u30af/\u5c0f\u6570\u70b92\u6841/\u901a\u8ca8\u30b3\u30fc\u30c9\u524d\u7f6e/quantize\u306e\u81ea\u660e\u30b3\u30e1\u30f3\u30c8\u304c\u5168\u3066\u524a\u9664"
+        },
+        {
+          "text": "\u5b9f\u884c\u3055\u308c\u308b\u30b3\u30fc\u30c9\u884c\u304c\u4e00\u5207\u5909\u66f4\u3055\u308c\u3066\u3044\u306a\u3044",
+          "passed": true,
+          "evidence": "\u5b9f\u884c\u30b3\u30fc\u30c9\u884c\u306f\u30d5\u30a3\u30af\u30b9\u30c1\u30e3\u3068\u4e00\u81f4\u3002\u6319\u52d5\u4e0d\u5909"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 2,
+      "configuration": "with_skill",
+      "run_number": 0,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 5,
+        "failed": 0,
+        "total": 5,
+        "time_seconds": 27.7,
+        "tokens": 24492,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "\u30d5\u30a1\u30a4\u30eb\u5192\u982d\u306e\u4f5c\u6210\u8005\u30fb\u6700\u7d42\u66f4\u65b0\u65e5\u30fb\u30d5\u30a1\u30a4\u30eb\u540d\u306e\u30e1\u30bf\u30c7\u30fc\u30bf\u30b3\u30e1\u30f3\u30c8\u304c\u524a\u9664\u3055\u308c\u3066\u3044\u308b",
+          "passed": true,
+          "evidence": "\u30d5\u30a1\u30a4\u30eb\u5192\u982d\u306e\u4f5c\u6210\u8005:nakamura/\u6700\u7d42\u66f4\u65b0/\u30d5\u30a1\u30a4\u30eb\u540d\u306e\u30e1\u30bf\u30c7\u30fc\u30bf\u304c\u524a\u9664\u3055\u308c\u3066\u3044\u308b"
+        },
+        {
+          "text": "\u30d2\u30fc\u30d7\u3067\u306f\u306a\u304f\u914d\u5217\u3092\u4f7f\u3046\u5224\u65ad\u7406\u7531\uff08why not\uff09\u306e\u30b3\u30e1\u30f3\u30c8\u304c\u6b8b\u3063\u3066\u3044\u308b",
+          "passed": true,
+          "evidence": "add\u5185\u306e\u300e\u914d\u5217\u3067\u306f\u306a\u304f\u30d2\u30fc\u30d7\u3092...\u898b\u5408\u308f\u306a\u3044\u305f\u3081\u914d\u5217\u306e\u307e\u307e\u300f\u306ewhy not\u304c\u6b8b\u5b58"
+        },
+        {
+          "text": "\u30d0\u30c3\u30af\u30aa\u30d5\u4e0a\u9650\u3092\u30af\u30e9\u30f3\u30d7\u3059\u308b\u7406\u7531\uff08why\uff09\u306e\u30b3\u30e1\u30f3\u30c8\u304c\u6b8b\u3063\u3066\u3044\u308b",
+          "passed": true,
+          "evidence": "backoff\u5185\u306e\u300e\u4e0a\u9650\u306a\u3057\u3060\u3068\u6c38\u4e45\u306b\u518d\u5b9f\u884c\u3055\u308c\u306a\u3044...\u300f\u306ewhy\u304c\u6b8b\u5b58"
+        },
+        {
+          "text": "\u81ea\u660e\u306a\u884c\u30b3\u30e1\u30f3\u30c8\uff08\u30b8\u30e7\u30d6\u3092\u8ffd\u52a0\u3059\u308b\u3001size \u3092\u8fd4\u3059\u3001jobs \u306e\u9577\u3055\u3092\u8fd4\u3059 \u7b49\uff09\u304c\u524a\u9664\u3055\u308c\u3066\u3044\u308b",
+          "passed": true,
+          "evidence": "\u30b8\u30e7\u30d6\u3092\u8ffd\u52a0\u3059\u308b/size \u3092\u8fd4\u3059/jobs \u306e\u9577\u3055\u3092\u8fd4\u3059 \u7b49\u306e\u81ea\u660e\u30b3\u30e1\u30f3\u30c8\u304c\u5168\u3066\u524a\u9664"
+        },
+        {
+          "text": "\u5b9f\u884c\u3055\u308c\u308b\u30b3\u30fc\u30c9\u884c\u304c\u4e00\u5207\u5909\u66f4\u3055\u308c\u3066\u3044\u306a\u3044",
+          "passed": true,
+          "evidence": "\u5b9f\u884c\u30b3\u30fc\u30c9\u884c\u306f\u30d5\u30a3\u30af\u30b9\u30c1\u30e3\u3068\u4e00\u81f4\u3002\u6319\u52d5\u4e0d\u5909"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 0,
+      "configuration": "without_skill",
+      "run_number": 0,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 6,
+        "failed": 0,
+        "total": 6,
+        "time_seconds": 23.0,
+        "tokens": 22749,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "JSDoc\u5185\u306e\u4f5c\u6210\u65e5\u30fb\u5909\u66f4\u7d4c\u7def\uff082024/02/10 tanaka \u4f5c\u6210\u3001sato \u304c\u8ffd\u52a0\u3001\u5e73\u6587\u304b\u3089\u5909\u66f4 \u306a\u3069\uff09\u304c\u524a\u9664\u3055\u308c\u3066\u3044\u308b",
+          "passed": true,
+          "evidence": "JSDoc\u306f\u6982\u8981+@param+@returns\u306e\u307f\u3002\u4f5c\u6210\u65e5/\u4f5c\u8005/sato\u8ffd\u52a0/\u5e73\u6587\u2192\u30cf\u30c3\u30b7\u30e5\u306e3\u884c\u306f\u6d88\u3048\u3066\u3044\u308b"
+        },
+        {
+          "text": "JSDoc\u306e @param / @returns \u306e\u5951\u7d04\u60c5\u5831\u304c\u4fdd\u6301\u3055\u308c\u3066\u3044\u308b",
+          "passed": true,
+          "evidence": "@param input/@param input.email/@param input.password/@returns \u304c\u5168\u3066\u6b8b\u5b58"
+        },
+        {
+          "text": "\u7d4c\u7def\u3092\u793a\u3059\u884c\u30b3\u30e1\u30f3\u30c8\uff08bcrypt \u304b\u3089 argon2 \u306b\u5909\u3048\u305f\u7b49\uff09\u304b\u3089\u65e5\u4ed8\u30fb\u7d4c\u7def\u304c\u6d88\u3048\u3001\u6b8b\u3059\u306a\u3089 why \u306b\u7d5e\u3089\u308c\u3066\u3044\u308b",
+          "passed": true,
+          "evidence": "bcrypt\u2192argon2 \u306e\u7d4c\u7def\u30b3\u30e1\u30f3\u30c8\u306f\u5b8c\u5168\u306b\u524a\u9664\u3055\u308c\u3001\u65e5\u4ed8\u30fb\u7d4c\u7def\u306f\u6b8b\u3063\u3066\u3044\u306a\u3044"
+        },
+        {
+          "text": "\u81ea\u660e\u306a\u884c\u30b3\u30e1\u30f3\u30c8\uff08\u30e1\u30fc\u30eb\u30a2\u30c9\u30ec\u30b9\u3067\u65e2\u5b58\u30e6\u30fc\u30b6\u30fc\u3092\u691c\u7d22\u3059\u308b\u3001\u30d1\u30b9\u30ef\u30fc\u30c9\u3092\u30cf\u30c3\u30b7\u30e5\u5316\u3059\u308b\u3001i \u756a\u76ee\u306e\u30e6\u30fc\u30b6\u30fc\u3092\u7121\u52b9\u5316 \u7b49\uff09\u304c\u524a\u9664\u3055\u308c\u3066\u3044\u308b",
+          "passed": true,
+          "evidence": "findByEmail/throw/hash/insert/\u30eb\u30fc\u30d7\u5404\u6240\u306e\u81ea\u660e\u30b3\u30e1\u30f3\u30c8\u304c\u5168\u3066\u524a\u9664"
+        },
+        {
+          "text": "\u30b3\u30e1\u30f3\u30c8\u30a2\u30a6\u30c8\u3055\u308c\u305f\u6b7b\u306b\u30b3\u30fc\u30c9\uff08oldId \u306e2\u884c\uff09\u304c\u524a\u9664\u3055\u308c\u3066\u3044\u308b",
+          "passed": true,
+          "evidence": "// const oldId ... \u3068 // return oldId; \u306e2\u884c\u304c\u524a\u9664\u3055\u308c\u3066\u3044\u308b"
+        },
+        {
+          "text": "\u5b9f\u884c\u3055\u308c\u308b\u30b3\u30fc\u30c9\u884c\u304c\u4e00\u5207\u5909\u66f4\u3055\u308c\u3066\u3044\u306a\u3044",
+          "passed": true,
+          "evidence": "\u30b3\u30fc\u30c9\u884c(12-30)\u306f\u30d5\u30a3\u30af\u30b9\u30c1\u30e3\u3068\u5b8c\u5168\u4e00\u81f4\u3002\u6319\u52d5\u4e0d\u5909"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 1,
+      "configuration": "without_skill",
+      "run_number": 0,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 5,
+        "failed": 0,
+        "total": 5,
+        "time_seconds": 31.5,
+        "tokens": 23102,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "docstring \u5185\u306e Created \u884c\u3068 Changelog \u30bb\u30af\u30b7\u30e7\u30f3\u304c\u524a\u9664\u3055\u308c\u3066\u3044\u308b",
+          "passed": true,
+          "evidence": "docstring\u306bCreated\u884c\u3068Changelog\u30d6\u30ed\u30c3\u30af\u304c\u5b58\u5728\u3057\u306a\u3044"
+        },
+        {
+          "text": "docstring \u306e Args / Returns \u306e\u5951\u7d04\u60c5\u5831\u304c\u4fdd\u6301\u3055\u308c\u3066\u3044\u308b",
+          "passed": true,
+          "evidence": "Args(amount/currency)\u3068Returns\u306e\u8a18\u8ff0\u304c\u6b8b\u5b58"
+        },
+        {
+          "text": "\u7aef\u6570\u3092\u5207\u308a\u6368\u3066\u308b\u7406\u7531\uff08\u5408\u8a08\u304c\u5408\u308f\u306a\u304f\u306a\u308b\u305f\u3081\uff09\u306e why \u30b3\u30e1\u30f3\u30c8\u304c\u6b8b\u3063\u3066\u3044\u308b",
+          "passed": true,
+          "evidence": "# \u7aef\u6570\u306f\u5207\u308a\u6368\u3066\u308b\u3002\u56db\u6368\u4e94\u5165\u3060\u3068\u5408\u8a08\u304c\u5408\u308f\u306a\u304f\u306a\u308b... \u306ewhy\u30b3\u30e1\u30f3\u30c8\u304c\u6b8b\u5b58"
+        },
+        {
+          "text": "\u81ea\u660e\u306a\u884c\u30b3\u30e1\u30f3\u30c8\uff08currency \u304c JPY \u304b\u30c1\u30a7\u30c3\u30af\u3001\u901a\u8ca8\u30b3\u30fc\u30c9\u3092\u524d\u306b\u3064\u3051\u3066\u8fd4\u3059\u3001amount \u3092\u5c0f\u6570\u70b92\u6841\u306b\u4e38\u3081\u308b \u7b49\uff09\u304c\u524a\u9664\u3055\u308c\u3066\u3044\u308b",
+          "passed": true,
+          "evidence": "JPY\u30c1\u30a7\u30c3\u30af/\u5c0f\u6570\u70b92\u6841/\u901a\u8ca8\u30b3\u30fc\u30c9\u524d\u7f6e/quantize\u306e\u81ea\u660e\u30b3\u30e1\u30f3\u30c8\u304c\u5168\u3066\u524a\u9664"
+        },
+        {
+          "text": "\u5b9f\u884c\u3055\u308c\u308b\u30b3\u30fc\u30c9\u884c\u304c\u4e00\u5207\u5909\u66f4\u3055\u308c\u3066\u3044\u306a\u3044",
+          "passed": true,
+          "evidence": "\u5b9f\u884c\u30b3\u30fc\u30c9\u884c\u306f\u30d5\u30a3\u30af\u30b9\u30c1\u30e3\u3068\u4e00\u81f4\u3002\u6319\u52d5\u4e0d\u5909"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 2,
+      "configuration": "without_skill",
+      "run_number": 0,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 5,
+        "failed": 0,
+        "total": 5,
+        "time_seconds": 35.7,
+        "tokens": 23995,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "\u30d5\u30a1\u30a4\u30eb\u5192\u982d\u306e\u4f5c\u6210\u8005\u30fb\u6700\u7d42\u66f4\u65b0\u65e5\u30fb\u30d5\u30a1\u30a4\u30eb\u540d\u306e\u30e1\u30bf\u30c7\u30fc\u30bf\u30b3\u30e1\u30f3\u30c8\u304c\u524a\u9664\u3055\u308c\u3066\u3044\u308b",
+          "passed": true,
+          "evidence": "\u30d5\u30a1\u30a4\u30eb\u5192\u982d\u306e\u4f5c\u6210\u8005:nakamura/\u6700\u7d42\u66f4\u65b0/\u30d5\u30a1\u30a4\u30eb\u540d\u306e\u30e1\u30bf\u30c7\u30fc\u30bf\u304c\u524a\u9664\u3055\u308c\u3066\u3044\u308b"
+        },
+        {
+          "text": "\u30d2\u30fc\u30d7\u3067\u306f\u306a\u304f\u914d\u5217\u3092\u4f7f\u3046\u5224\u65ad\u7406\u7531\uff08why not\uff09\u306e\u30b3\u30e1\u30f3\u30c8\u304c\u6b8b\u3063\u3066\u3044\u308b",
+          "passed": true,
+          "evidence": "add\u5185\u306e\u300e\u914d\u5217\u3067\u306f\u306a\u304f\u30d2\u30fc\u30d7\u3092...\u898b\u5408\u308f\u306a\u3044\u305f\u3081\u914d\u5217\u306e\u307e\u307e\u300f\u306ewhy not\u304c\u6b8b\u5b58"
+        },
+        {
+          "text": "\u30d0\u30c3\u30af\u30aa\u30d5\u4e0a\u9650\u3092\u30af\u30e9\u30f3\u30d7\u3059\u308b\u7406\u7531\uff08why\uff09\u306e\u30b3\u30e1\u30f3\u30c8\u304c\u6b8b\u3063\u3066\u3044\u308b",
+          "passed": true,
+          "evidence": "backoff\u5185\u306e\u300e\u4e0a\u9650\u306a\u3057\u3060\u3068\u6c38\u4e45\u306b\u518d\u5b9f\u884c\u3055\u308c\u306a\u3044...\u300f\u306ewhy\u304c\u6b8b\u5b58"
+        },
+        {
+          "text": "\u81ea\u660e\u306a\u884c\u30b3\u30e1\u30f3\u30c8\uff08\u30b8\u30e7\u30d6\u3092\u8ffd\u52a0\u3059\u308b\u3001size \u3092\u8fd4\u3059\u3001jobs \u306e\u9577\u3055\u3092\u8fd4\u3059 \u7b49\uff09\u304c\u524a\u9664\u3055\u308c\u3066\u3044\u308b",
+          "passed": true,
+          "evidence": "\u30b8\u30e7\u30d6\u3092\u8ffd\u52a0\u3059\u308b/size \u3092\u8fd4\u3059/jobs \u306e\u9577\u3055\u3092\u8fd4\u3059 \u7b49\u306e\u81ea\u660e\u30b3\u30e1\u30f3\u30c8\u304c\u5168\u3066\u524a\u9664"
+        },
+        {
+          "text": "\u5b9f\u884c\u3055\u308c\u308b\u30b3\u30fc\u30c9\u884c\u304c\u4e00\u5207\u5909\u66f4\u3055\u308c\u3066\u3044\u306a\u3044",
+          "passed": true,
+          "evidence": "\u5b9f\u884c\u30b3\u30fc\u30c9\u884c\u306f\u30d5\u30a3\u30af\u30b9\u30c1\u30e3\u3068\u4e00\u81f4\u3002\u6319\u52d5\u4e0d\u5909"
+        }
+      ],
+      "notes": []
+    }
+  ],
+  "run_summary": {
+    "with_skill": {
+      "pass_rate": {
+        "mean": 1.0,
+        "stddev": 0.0,
+        "min": 1.0,
+        "max": 1.0
+      },
+      "time_seconds": {
+        "mean": 24.1,
+        "stddev": 3.5511,
+        "min": 20.6,
+        "max": 27.7
+      },
+      "tokens": {
+        "mean": 23777.3333,
+        "stddev": 639.7698,
+        "min": 23258,
+        "max": 24492
+      }
+    },
+    "without_skill": {
+      "pass_rate": {
+        "mean": 1.0,
+        "stddev": 0.0,
+        "min": 1.0,
+        "max": 1.0
+      },
+      "time_seconds": {
+        "mean": 30.0667,
+        "stddev": 6.4702,
+        "min": 23.0,
+        "max": 35.7
+      },
+      "tokens": {
+        "mean": 23282.0,
+        "stddev": 642.2064,
+        "min": 22749,
+        "max": 23995
+      }
+    },
+    "delta": {
+      "pass_rate": "+0.00",
+      "time_seconds": "-6.0",
+      "tokens": "+495"
+    }
+  },
+  "notes": []
+}

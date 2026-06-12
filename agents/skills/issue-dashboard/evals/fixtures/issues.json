@@ -1,0 +1,122 @@
+[
+  {
+    "number": 101,
+    "title": "DBスキーマとマイグレーション基盤の整備",
+    "url": "https://github.com/acme/taskapp/issues/101",
+    "labels": [{"name": "backend"}, {"name": "infra"}],
+    "milestone": {"title": "v1.0"},
+    "assignees": [],
+    "createdAt": "2026-04-01T00:00:00Z",
+    "body": "全機能の土台となるDBスキーマを設計し、マイグレーションの仕組みを整える。users, projects, tasks テーブルを定義する。これが無いと他のバックエンド機能は作れない。"
+  },
+  {
+    "number": 102,
+    "title": "ユーザー認証API（サインアップ・ログイン）",
+    "url": "https://github.com/acme/taskapp/issues/102",
+    "labels": [{"name": "backend"}, {"name": "priority:high"}],
+    "milestone": {"title": "v1.0"},
+    "assignees": [{"login": "alice"}],
+    "createdAt": "2026-04-02T00:00:00Z",
+    "body": "JWTベースの認証APIを実装する。users テーブルが必要なので #101 の後。サインアップ、ログイン、トークンリフレッシュのエンドポイントを用意する。"
+  },
+  {
+    "number": 103,
+    "title": "プロジェクトCRUD API",
+    "url": "https://github.com/acme/taskapp/issues/103",
+    "labels": [{"name": "backend"}],
+    "milestone": {"title": "v1.0"},
+    "assignees": [],
+    "createdAt": "2026-04-03T00:00:00Z",
+    "body": "プロジェクトの作成・取得・更新・削除API。認証必須なので #102 が前提。projects テーブルを使う。"
+  },
+  {
+    "number": 104,
+    "title": "タスクCRUD API",
+    "url": "https://github.com/acme/taskapp/issues/104",
+    "labels": [{"name": "backend"}],
+    "milestone": {"title": "v1.0"},
+    "assignees": [],
+    "createdAt": "2026-04-03T00:00:00Z",
+    "body": "タスクの作成・取得・更新・削除API。プロジェクトに紐づくので #103 が前提。tasks テーブルを使う。"
+  },
+  {
+    "number": 105,
+    "title": "ログイン画面のUI",
+    "url": "https://github.com/acme/taskapp/issues/105",
+    "labels": [{"name": "frontend"}],
+    "milestone": {"title": "v1.0"},
+    "assignees": [],
+    "createdAt": "2026-04-04T00:00:00Z",
+    "body": "ログイン・サインアップ画面のフロントエンド。認証API #102 を呼ぶ。共通のフォームコンポーネントを作る。"
+  },
+  {
+    "number": 106,
+    "title": "プロジェクト一覧・詳細画面",
+    "url": "https://github.com/acme/taskapp/issues/106",
+    "labels": [{"name": "frontend"}],
+    "milestone": {"title": "v1.0"},
+    "assignees": [],
+    "createdAt": "2026-04-05T00:00:00Z",
+    "body": "プロジェクトの一覧と詳細を表示する画面。#103 のAPIと、#105 で作る共通レイアウト・認証状態が前提。"
+  },
+  {
+    "number": 107,
+    "title": "タスクボード画面（カンバン）",
+    "url": "https://github.com/acme/taskapp/issues/107",
+    "labels": [{"name": "frontend"}, {"name": "priority:high"}],
+    "milestone": {"title": "v1.0"},
+    "assignees": [],
+    "createdAt": "2026-04-06T00:00:00Z",
+    "body": "タスクをカンバン形式で表示・ドラッグ移動できる画面。#104 のタスクAPIと #106 のプロジェクト詳細画面が前提。本機能の目玉。"
+  },
+  {
+    "number": 108,
+    "title": "READMEのセットアップ手順を更新",
+    "url": "https://github.com/acme/taskapp/issues/108",
+    "labels": [{"name": "docs"}],
+    "milestone": {},
+    "assignees": [],
+    "createdAt": "2026-04-07T00:00:00Z",
+    "body": "READMEの開発環境セットアップ手順が古いので更新する。他の作業とは独立。"
+  },
+  {
+    "number": 109,
+    "title": "アプリのロゴとファビコンを差し替え",
+    "url": "https://github.com/acme/taskapp/issues/109",
+    "labels": [{"name": "design"}],
+    "milestone": {},
+    "assignees": [],
+    "createdAt": "2026-04-08T00:00:00Z",
+    "body": "新しいブランドロゴとファビコンに差し替える。独立した軽微なタスク。"
+  },
+  {
+    "number": 110,
+    "title": "本番環境へのCI/CDパイプライン構築",
+    "url": "https://github.com/acme/taskapp/issues/110",
+    "labels": [{"name": "infra"}, {"name": "priority:high"}],
+    "milestone": {"title": "v1.0"},
+    "assignees": [],
+    "createdAt": "2026-04-09T00:00:00Z",
+    "body": "GitHub Actionsでテスト・ビルド・デプロイを自動化する。アプリの主要機能（#107 まで）が揃ってからリリースしたいので最後に近い。DBマイグレーション #101 の仕組みにも依存する。"
+  },
+  {
+    "number": 111,
+    "title": "タスクへのコメント機能",
+    "url": "https://github.com/acme/taskapp/issues/111",
+    "labels": [{"name": "backend"}, {"name": "frontend"}],
+    "milestone": {"title": "v1.1"},
+    "assignees": [],
+    "createdAt": "2026-04-10T00:00:00Z",
+    "body": "タスク詳細にコメントを付けられるようにする。tasks テーブルとタスクAPI #104、タスクボード #107 が前提。comments テーブルの追加が必要。"
+  },
+  {
+    "number": 112,
+    "title": "タスク詳細モーダルのデザイン改善",
+    "url": "https://github.com/acme/taskapp/issues/112",
+    "labels": [{"name": "frontend"}, {"name": "design"}],
+    "milestone": {"title": "v1.1"},
+    "assignees": [],
+    "createdAt": "2026-04-11T00:00:00Z",
+    "body": "タスクボード #107 のタスク詳細モーダルの見た目を改善する。同じコンポーネントを #111 のコメント機能も触るので並行注意。"
+  }
+]
