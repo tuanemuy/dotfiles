@@ -1,5 +1,6 @@
 local function open_pr_diff()
-	local result = vim.system({ "gh", "pr", "view", "--json", "baseRefName", "--jq", ".baseRefName" }, { text = true }):wait()
+	local result = vim.system({ "gh", "pr", "view", "--json", "baseRefName", "--jq", ".baseRefName" }, { text = true })
+		:wait()
 
 	if result.code ~= 0 then
 		vim.notify("Could not resolve PR base branch for current branch", vim.log.levels.ERROR)
@@ -23,6 +24,7 @@ return {
 		{ "<leader>gp", open_pr_diff, desc = "Pull Request Diff" },
 		{ "<leader>gh", "<cmd>DiffviewFileHistory %<cr>", desc = "File History (current)" },
 		{ "<leader>gH", "<cmd>DiffviewFileHistory<cr>", desc = "File History (all)" },
+		{ "<leader>hd", "<cmd>DiffviewOpen HEAD~1<CR>", desc = "Diff with previous commit" },
 	},
 	opts = {
 		view = {

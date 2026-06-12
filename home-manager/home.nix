@@ -40,6 +40,8 @@ in
     "biome.json".source = mkOutOfStoreSymlink "${gitDirectory}/dotfiles/biome.json";
     ".claude/settings.json".source =
       mkOutOfStoreSymlink "${gitDirectory}/dotfiles/config/claude/settings.json";
+    ".claude/statusline-command.sh".source =
+      mkOutOfStoreSymlink "${gitDirectory}/dotfiles/config/claude/statusline-command.sh";
     ".claude/skills".source = mkOutOfStoreSymlink "${gitDirectory}/dotfiles/config/claude/skills";
     ".aerospace.toml".source = mkOutOfStoreSymlink "${gitDirectory}/dotfiles/config/aerospace.toml";
   }

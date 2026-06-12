@@ -115,14 +115,6 @@ return {
 			end,
 			desc = "Recent",
 		},
-		-- git
-		{
-			"<leader>gb",
-			function()
-				Snacks.picker.git_branches()
-			end,
-			desc = "Git Branches",
-		},
 		-- LSP
 		{
 			"gd",
