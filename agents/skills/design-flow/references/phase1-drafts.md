@@ -7,16 +7,13 @@
 
 ## Step 1: 方向性の設計
 
-5案の方向性を決める。各案は以下の軸で明確に差別化する:
+このプロダクトに本当に効く、強い方向性を5案考える。`spec/idea.md` の目的・ターゲットと `spec/scenario/` の体験を踏まえ、それぞれが「この方向で全画面を作っても十分いける」と思える完成度と、明確な意図を持った提案にする。
 
-- **トーン**: ミニマル vs マキシマリスト、フォーマル vs カジュアル、など
-- **カラー**: ダーク系 vs ライト系、モノクロ vs カラフル、暖色系 vs 寒色系、など
-- **タイポグラフィ**: セリフ vs サンセリフ、大胆 vs 繊細、など
-- **レイアウト**: 対称 vs 非対称、密 vs 疎、カード型 vs リスト型、など
+狙いはユーザーに**意味のある選択肢**を見せること。似た5案からは何も選べない。各案はひとつの一貫したデザインの観点（このプロダクトをどう見せたいか）を持ち、互いにはっきり別物にする。どこをどう振るかは決め打ちせず、最も差と魅力が出る攻め方を自分の判断で選んでほしい。トーン・カラー・タイポグラフィ・レイアウト・情報密度などは振り幅の大きいレバーになりやすいが、ここから選ぶ必要はなく、良い案を最優先する。
 
-各案に簡潔な名前をつける（例: 「Clean Editorial」「Bold Geometric」「Warm Organic」）。
+各案には性格を表す簡潔な名前をつける（例: 「Clean Editorial」「Bold Geometric」「Warm Organic」）。
 
-ユーザーから参考サイトやイメージの指定があれば、それをベースに方向性を展開する。
+ユーザーから参考サイトやイメージの指定があれば、それを出発点にする。
 
 ## Step 2: HTMLドラフトの作成
 
@@ -46,42 +43,19 @@ Skill ツールで `/frontend-design` を呼び出す。
 - 各案の方向性の違いが一目でわかるようにする
 - `<meta name="viewport" content="width=device-width, initial-scale=1">` を必ず含める
 
-## Step 3: スクリーンショットの取得
+## Step 3: ユーザーへの提示
 
-作成したHTMLドラフトをagent-browserで開き、デスクトップとモバイルの両方でスクリーンショットを取得する。
-ユーザーが視覚的にドラフトを比較でき、かつレスポンシブ挙動も確認できるようにする。
+**このフェーズではスクリーンショットを撮らない。** 方向性を判断するのはユーザーなので、各ドラフトのHTMLをブラウザで直接開いて見比べてもらうのが手早く正確（必要ならその場で幅を変えてレスポンシブ挙動も確認できる）。
 
-各ドラフトについて、デスクトップ（1280×800、`xl` ブレークポイント）とモバイル（375×667、`sm` 未満のモバイル幅）の2サイズを取得する:
-
-```bash
-# HTMLファイルをブラウザで開く
-agent-browser --session design-draft open file:///absolute/path/to/spec/design/drafts/draft-1-clean-editorial.html
-
-# デスクトップ表示でスクリーンショット（xl: 1280px）
-agent-browser --session design-draft viewport 1280 800
-agent-browser --session design-draft screenshot /tmp/design-screenshots/drafts/draft-1-clean-editorial-desktop.png
-
-# モバイル表示でスクリーンショット（sm 未満: 375px）
-agent-browser --session design-draft viewport 375 667
-agent-browser --session design-draft screenshot /tmp/design-screenshots/drafts/draft-1-clean-editorial-mobile.png
-
-# セッションを閉じる（次のドラフトに進む前に）
-agent-browser --session design-draft close
-```
-
-スクリーンショットの保存先: `/tmp/design-screenshots/drafts/`
-命名規則: `{ドラフト名}-desktop.png`, `{ドラフト名}-mobile.png`
-
-agent-browser に `viewport` サブコマンドが無い場合は、CLIヘルプで該当する画面サイズ指定オプション（`--width`/`--height`、`--device` など）を確認して同等のことを行う。
-
-ドラフトが複数ある場合、サブエージェントに委譲して並列でスクリーンショットを取得してもよい（最大3並列）。
-その場合はセッション名を `design-draft-1`, `design-draft-2` のように分離する。
-
-## Step 4: ユーザーへの提示
-
-スクリーンショットを Read ツールで表示しながら、各ドラフトについて以下を簡潔に説明する:
+各ドラフトのパスを提示し、各案について以下を簡潔に説明する:
 - 方向性の名前と意図
 - 特徴的なデザイン要素
+
+ユーザーの手元のブラウザで開いて確認してもらう（macOS なら下記で既定ブラウザに一括で開ける）:
+
+```bash
+open spec/design/drafts/*.html
+```
 
 ユーザーに選択を求める。「A案ベースで、B案のカラーを取り入れて」のような組み合わせの要望も受け付ける。
 

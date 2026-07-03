@@ -2,9 +2,12 @@
 input=$(cat)
 
 model=$(echo "$input" | jq -r '.model.display_name // ""')
+effort=$(echo "$input" | jq -r '.effort.level // empty')
 used_pct=$(echo "$input" | jq -r '.context_window.used_percentage // empty')
 five_pct=$(echo "$input" | jq -r '.rate_limits.five_hour.used_percentage // empty')
+five_reset=$(echo "$input" | jq -r '.rate_limits.five_hour.resets_at // empty')
 week_pct=$(echo "$input" | jq -r '.rate_limits.seven_day.used_percentage // empty')
+week_reset=$(echo "$input" | jq -r '.rate_limits.seven_day.resets_at // empty')
 cwd=$(echo "$input" | jq -r '.workspace.current_dir // .cwd // ""')
 
 # Build a progress bar: $1=percentage(0-100), $2=width
@@ -42,6 +45,45 @@ pct_color() {
   fi
 }
 
+# Time remaining until a rate limit resets: $1=reset epoch (Unix seconds)
+# Outputs a compact countdown like "2h13m", "3d4h", or "5m"
+fmt_reset() {
+  local epoch=$1
+  local now diff d h m
+  now=$(date +%s)
+  diff=$(( epoch - now ))
+  [ "$diff" -lt 0 ] && diff=0
+  d=$(( diff / 86400 ))
+  h=$(( (diff % 86400) / 3600 ))
+  m=$(( (diff % 3600) / 60 ))
+  if [ "$d" -gt 0 ]; then
+    printf '%dd%dh' "$d" "$h"
+  elif [ "$h" -gt 0 ]; then
+    printf '%dh%dm' "$h" "$m"
+  else
+    printf '%dm' "$m"
+  fi
+}
+
+# gruvbox accent colors for the effort level, matching the active terminal theme
+# (palette values mirror starship's gruvbox-dark / gruvbox-light definitions)
+if [ "${CURRENT_THEME:-light}" = "dark" ]; then
+  gb_aqua='142;192;124'; gb_green='184;187;38'; gb_orange='254;128;25'; gb_red='251;73;52'
+else
+  gb_aqua='66;123;88'; gb_green='121;116;14'; gb_orange='175;58;3'; gb_red='157;0;6'
+fi
+
+# Truecolor escape for a reasoning effort level (falls back to dim for unknowns)
+effort_color() {
+  case "$1" in
+    low)       printf '\033[38;2;%sm' "$gb_aqua" ;;
+    medium)    printf '\033[38;2;%sm' "$gb_green" ;;
+    high)      printf '\033[38;2;%sm' "$gb_orange" ;;
+    xhigh|max) printf '\033[38;2;%sm' "$gb_red" ;;
+    *)         printf '\033[2m' ;;
+  esac
+}
+
 line1=""
 
 # Context usage bar
@@ -49,7 +91,7 @@ if [ -n "$used_pct" ]; then
   used_int=$(printf '%.0f' "$used_pct")
   bar=$(make_bar "$used_int" 10)
   color=$(pct_color "$used_int")
-  line1="${line1}$(printf "${color}ctx [%s] %3d%%\033[0m" "$bar" "$used_int")"
+  line1="${line1}$(printf "${color}ctx [%s] %d%%\033[0m" "$bar" "$used_int")"
 fi
 
 # 5h rate limit bar
@@ -58,7 +100,10 @@ if [ -n "$five_pct" ]; then
   bar=$(make_bar "$five_int" 8)
   color=$(pct_color "$five_int")
   [ -n "$line1" ] && line1="${line1}  "
-  line1="${line1}$(printf "${color}5h [%s] %3d%%\033[0m" "$bar" "$five_int")"
+  line1="${line1}$(printf "${color}5h [%s] %d%%\033[0m" "$bar" "$five_int")"
+  if [ -n "$five_reset" ]; then
+    line1="${line1}$(printf "\033[2m (%s)\033[0m" "$(fmt_reset "$five_reset")")"
+  fi
 fi
 
 # 7-day rate limit bar
@@ -67,15 +112,21 @@ if [ -n "$week_pct" ]; then
   bar=$(make_bar "$week_int" 8)
   color=$(pct_color "$week_int")
   [ -n "$line1" ] && line1="${line1}  "
-  line1="${line1}$(printf "${color}7d [%s] %3d%%\033[0m" "$bar" "$week_int")"
+  line1="${line1}$(printf "${color}7d [%s] %d%%\033[0m" "$bar" "$week_int")"
+  if [ -n "$week_reset" ]; then
+    line1="${line1}$(printf "\033[2m (%s)\033[0m" "$(fmt_reset "$week_reset")")"
+  fi
 fi
 
 # --- Line 2: model + git file changes ---
 line2=""
 
-# Model name
+# Model name (+ reasoning effort level if available)
 if [ -n "$model" ]; then
   line2="$(printf '\033[35m%s\033[0m' "$model")"
+  if [ -n "$effort" ]; then
+    line2="${line2}$(printf ' %s%s\033[0m' "$(effort_color "$effort")" "$effort")"
+  fi
 fi
 
 # Git file change summary (staged + unstaged counts)

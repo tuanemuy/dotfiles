@@ -314,8 +314,8 @@
   "language": "ギャル",
   "alwaysThinkingEnabled": true,
   "effortLevel": "high",
+  "tui": "fullscreen",
   "skipDangerousModePermissionPrompt": true,
   "theme": "dark-ansi",
-  "editorMode": "vim",
-  "model": "sonnet"
+  "editorMode": "vim"
 }

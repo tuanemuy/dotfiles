@@ -6,6 +6,8 @@ source "$SCRIPT_DIR/config.sh"
 theme_name="${DARK_THEME}"
 if [ "$1" = "light" ]; then
     theme_name="${LIGHT_THEME}"
+elif [ "$1" = "dark" ]; then
+    theme_name="${DARK_THEME}"
 elif [ "$1" = "auto" ]; then
     if [ "$(uname)" = "Darwin" ]; then
         if ! defaults read -g AppleInterfaceStyle &>/dev/null; then

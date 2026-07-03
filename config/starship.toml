@@ -46,7 +46,7 @@ $direnv\
 $line_break\
 $character"""
 
-palette = 'gruvbox-light'
+palette = 'gruvbox-dark'
 
 [cmd_duration]
 format = "[ $duration ]()"
