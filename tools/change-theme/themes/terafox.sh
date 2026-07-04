@@ -5,6 +5,9 @@ BACKGROUND="dark"
 WEZTERM_COLOR_SCHEME="terafox"
 GHOSTTY_THEME="Terafox"
 
+# Herdr (no built-in match; follow the host terminal ANSI palette)
+HERDR_THEME="terminal"
+
 # Palette colors (starship, tmux, etc.)
 COLOR_FG0="#e6eaea"
 COLOR_BG1="#254147"

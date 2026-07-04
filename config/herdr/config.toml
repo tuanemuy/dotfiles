@@ -1,0 +1,78 @@
+# herdr config
+# https://herdr.dev/docs/configuration/
+#
+# NOTE: [theme].name is rewritten by tools/change-theme/run.sh to follow the
+# system light/dark appearance, mirroring wezterm / ghostty / tmux / starship.
+
+onboarding = false
+
+[terminal]
+# Follow the source pane's cwd for new panes/tabs/workspaces (tmux-like).
+new_cwd = "follow"
+# Start login shells on macOS so PATH setup runs in new panes.
+shell_mode = "auto"
+
+# Keybindings tuned to match the tmux config in config/tmux.
+# Prefix stays ctrl+b (tmux default) and pane focus uses hjkl.
+[keys]
+prefix = "ctrl+b"
+
+# tmux muscle memory: prefix+d detaches (herdr's own default is prefix+q; keep both)
+detach = ["prefix+d", "prefix+q"]
+
+new_tab = "prefix+c"
+next_tab = "prefix+n"
+previous_tab = "prefix+p"
+
+# tmux: `bind v split-window -h` (side by side) / `bind s split-window -v` (stacked)
+split_vertical = "prefix+v"
+split_horizontal = "prefix+s"
+# prefix+s is herdr's default `settings` key; move it so the tmux split binding wins.
+settings = "prefix+shift+s"
+
+# tmux customPaneNavigationAndResize: hjkl to move between panes
+focus_pane_left = "prefix+h"
+focus_pane_down = "prefix+j"
+focus_pane_up = "prefix+k"
+focus_pane_right = "prefix+l"
+
+# tmux prefix+z zoom / prefix+r resize.
+# NOTE: herdr 0.7.1 has no `copy_mode`; scrollback is prefix+e (edit_scrollback, opens $EDITOR).
+zoom = "prefix+z"
+resize_mode = "prefix+r"
+
+# gruvbox to match wezterm / ghostty / tmux / starship.
+# tools/change-theme/run.sh rewrites `name` between gruvbox and gruvbox-light.
+[theme]
+name = "gruvbox-light"
+auto_switch = false
+light_name = "gruvbox-light"
+dark_name = "gruvbox"
+
+# Minimal, tmux-like chrome: hide the sidebar fully when collapsed, drop the tab
+# bar for single-tab workspaces, and skip the new-tab name prompt. Colors stay on
+# the built-in gruvbox / gruvbox-light themes above.
+# Panes: borders on + gaps off = shared divider line between panes (tmux-like thin
+# border). Borders also frame the outer edge, which is accepted here in exchange
+# for a real line divider rather than a blank-gap divider.
+[ui]
+sidebar_collapsed_mode = "hidden"
+hide_tab_bar_when_single_tab = true
+pane_borders = true
+pane_gaps = false
+prompt_new_tab_name = false
+
+# Notify when an agent finishes or needs input. `terminal` delivery works both
+# locally and over SSH/ET because the displaying terminal (Ghostty/WezTerm) owns
+# the notification. Switch to `system` for macOS-native local notifications.
+[ui.toast]
+delivery = "terminal"
+delay_seconds = 1
+
+# macOS + agent TUIs (Claude Code / codex paint their own cursor):
+# keep the Japanese IME candidate window anchored to the real cursor, and use
+# an ASCII input source while prefix mode is active so C-b commands still fire.
+[experimental]
+reveal_hidden_cursor_for_cjk_ime = true
+cjk_ime_agents = ["claude", "codex"]
+switch_ascii_input_source_in_prefix = true

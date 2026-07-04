@@ -22,6 +22,7 @@ in
     pm2
     ripgrep
     nodejs_24
+    inputs.herdr.packages.${pkgs.system}.default
   ];
 
   imports = [
@@ -35,6 +36,8 @@ in
     ".wezterm.lua".source = mkOutOfStoreSymlink "${gitDirectory}/dotfiles/config/wezterm.lua";
     ".config/ghostty/config".source =
       mkOutOfStoreSymlink "${gitDirectory}/dotfiles/config/ghostty.config";
+    ".config/herdr/config.toml".source =
+      mkOutOfStoreSymlink "${gitDirectory}/dotfiles/config/herdr/config.toml";
     ".config/.markdownlint-cli2.jsonc".source =
       mkOutOfStoreSymlink "${gitDirectory}/dotfiles/config/markdownlint-cli2.jsonc";
     "biome.json".source = mkOutOfStoreSymlink "${gitDirectory}/dotfiles/biome.json";
