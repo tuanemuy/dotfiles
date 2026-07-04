@@ -82,6 +82,13 @@ TMUX
 tmux source-file "$tmuxDir/theme.conf" 2>/dev/null || true
 tmux list-clients -F '#{client_name}' 2>/dev/null | xargs -I{} tmux refresh-client -t {} -S 2>/dev/null || true
 
+# Herdr - rewrite theme name in config and reload any running server
+herdrConfig="$GIT_DIRECTORY/dotfiles/config/herdr/config.toml"
+if [ -n "$HERDR_THEME" ] && [ -f "$herdrConfig" ]; then
+  sed -i.bak "s/^name = .*/name = \"${HERDR_THEME}\"/" "$herdrConfig" && rm -f "$herdrConfig.bak"
+  command -v herdr >/dev/null 2>&1 && herdr server reload-config >/dev/null 2>&1 || true
+fi
+
 # Neovim - update colorscheme in all running instances
 find "${TMPDIR}nvim.${USER}" -type s 2>/dev/null | while read -r socket; do
   nvim --server "$socket" --remote-send ":silent! set background=${BACKGROUND}<CR>:silent! colorscheme gruvbox-material<CR>" 2>/dev/null &

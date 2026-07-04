@@ -1,5 +1,9 @@
 {
   "cleanupPeriodDays": 15,
+  "env": {
+    "CLAUDE_AFK_TIMEOUT_MS": "2147483647",
+    "CLAUDE_CODE_USER_DIALOG_TIMEOUT_MS": "0"
+  },
   "permissions": {
     "allow": [
       "Bash(npm:*)",
@@ -296,6 +300,20 @@
     ],
     "defaultMode": "default"
   },
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash '/Users/hikaru/.claude/hooks/herdr-agent-state.sh' session",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  },
   "statusLine": {
     "type": "command",
     "command": "bash /Users/hikaru/.claude/statusline-command.sh"
@@ -317,5 +335,6 @@
   "tui": "fullscreen",
   "skipDangerousModePermissionPrompt": true,
   "theme": "dark-ansi",
-  "editorMode": "vim"
+  "editorMode": "vim",
+  "model": "claude-fable-5[1m]"
 }

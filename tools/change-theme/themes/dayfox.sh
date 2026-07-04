@@ -5,6 +5,9 @@ BACKGROUND="light"
 WEZTERM_COLOR_SCHEME="dayfox"
 GHOSTTY_THEME="Dayfox"
 
+# Herdr (no built-in match; follow the host terminal ANSI palette)
+HERDR_THEME="terminal"
+
 # Palette colors (starship, tmux, etc.)
 COLOR_FG0="#3d2b5a"
 COLOR_BG1="#d3c7bb"
