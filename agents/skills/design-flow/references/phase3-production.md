@@ -15,6 +15,7 @@ Phase 0 で整理した画面一覧の各画面について、Skill ツールで
 - **ユーザーシナリオ**: `spec/scenario/` からこの画面に関連するシナリオの要約
 - **デザイントークン**: `spec/design/tokens.md` の内容（CSS カスタムプロパティの命名規則を含む）
 - **デザイン方針**: `spec/design/index.md` の内容
+- **デザイン原則**: SKILL.md のデザイン原則（全文をそのまま伝える）
 - **出力先パス**: 上記の出力先
 - **作成条件**: 下記の条件をすべて伝える
 
@@ -37,8 +38,7 @@ HTMLの `<style>` セクションで CSS カスタムプロパティとしてト
     /* spec/design/tokens.md から転記 */
     --color-primary: oklch(...);
     --color-accent: oklch(...);
-    --font-heading: 'フォント名', serif;
-    --font-body: 'フォント名', sans-serif;
+    --font-base: 'フォント名', 'Noto Sans JP', sans-serif;
     --space-md: ...;
     /* ... */
   }
