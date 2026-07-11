@@ -1,7 +1,7 @@
 { inputs, pkgs, ... }:
 {
   enable = true;
-  package = inputs.neovim-overlay.packages.${pkgs.stdenv.hostPlatform.system}.default;
+  package = pkgs.neovim-unwrapped;
   extraPackages = with pkgs; [
     tree-sitter
     biome
