@@ -74,40 +74,9 @@ Phase 1.5 でデザインモック（`spec/design/pages/*.html`）を作成し�
 
 該当なしの場合は progress.md を作成しない。
 
-## Step 3: 検証環境確認とブラウザ検証
+## Step 3: コミットとPR作成
 
-### 検証環境確認
-
-ブラウザ検証の前に、testing.md の「検証環境の起動」に記載されたコマンドでサーバーが正常に起動できることを確認する。ステージング・本番環境へのデプロイは行わない。
-
-```bash
-# testing.md に記載された手順に従う（例）
-pnpm dev     # 開発サーバーが起動するか確認
-```
-
-起動でエラーが発生した場合は、ブラウザ検証前に修正する。
-
-### ブラウザ検証
-
-`../manual-test/SKILL.md` の手順に従ってブラウザ検証を実行する。シードデータの準備も manual-test に委ねる。
-
-manual-test に渡す情報:
-
-- テストソース: `.issue/{Issue番号}/testing.md`
-- 成果物ディレクトリ: `.issue/{Issue番号}/manual-test/`
-- Issue番号: #{Issue番号}
-
-**スキップは原則しない。** 以下のいずれかを実際に確認した場合のみスキップ可:
-
-- Web UIなし（`package.json` の dev/start 系欠如、UIファイル不在を確認）
-- testing.md に画面操作項目が1件もない（実際に読んで確認）
-- `agent-browser --version` がエラー
-
-スキップする場合は PR の Test plan に「スキップ理由: {確認した内容}」を一行で記載する。「該当しそう」での自己判断は不可。
-
-ブラウザ検証で失敗が出たら、変更箇所起因かつ即時修正可能なら Phase 2 に戻って修正・再検証。それ以外は manual-test がIssue起票する。
-
-## Step 4: コミットとPR作成
+ブラウザ検証はこのフェーズでは行わない。Phase 3 のレビュー・修正が完了した後、Phase 4 でレビュー済みのコードに対して実行する（`../SKILL.md` Phase 4 参照）。
 
 1. 変更をステージング＆コミット
 
@@ -147,10 +116,6 @@ Based on `.issue/{Issue番号}/plan.md`
 
 ### 確認項目
 - {testing.md からの主要確認項目}
-
-## Browser Verification
-- {ブラウザ検証の実行結果サマリー — 全PASS / 一部FAIL等 / スキップ}
-- {FAILがあれば起票したIssue番号と理由}
 
 🤖 Generated with [Claude Code](https://claude.com/claude-code)
 EOF

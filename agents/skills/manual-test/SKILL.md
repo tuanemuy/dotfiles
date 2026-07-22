@@ -1,19 +1,6 @@
 ---
 name: manual-test
-description: >
-  testing.md や spec/manual-tests/ のテスト手順書を agent-browser で自動実行し、
-  実装の動作をブラウザ上で検証するスキル。
-  Webサーバーの起動（空きポート自動検出）→ シードデータ整備 → テストケース実行 →
-  結果レポート → 失敗時は原因分析してGitHub Issueを起票する。
-  issue-implement の Phase 2 完了後や implement の Phase 7 完了後に呼ばれることを想定するが、
-  単体でも使える。
-  ユーザーが「ブラウザで動作確認して」「testing.md を実行して」「マニュアルテスト自動実行して」
-  「ブラウザテストして」「画面確認して」「browser verify」「動作検証して」
-  「手動テスト自動化して」「テスト手順を実行して」「実装の動作を確認して」
-  「agent-browserでテストして」「E2Eで画面確認して」
-  などと言ったときにトリガーする。
-  testing.md や spec/manual-tests/ が存在する状態で動作確認を求められたら積極的にこのスキルを使うこと。
-  issue-implement や implement からの呼び出しにも対応する。
+description: testing.md や spec/manual-tests/ のテスト手順書を agent-browser で自動実行し、実装の動作をブラウザ上で検証するスキル。失敗時は原因分析して GitHub Issue を起票する。ユーザーが「ブラウザで動作確認して」「testing.md を実行して」「browser verify」などと言ったとき、または testing.md / spec/manual-tests/ がある状態で動作確認を求められたとき（issue-implement / implement からの呼び出しを含む）にトリガーする。手順書のない探索的テストは manual-test-dashboard を使う。
 ---
 
 # Browser Verify — agent-browser によるテスト手順の自動実行＋修正ループ
@@ -507,7 +494,7 @@ agent-browser --session {s} reload
 # 調査
 agent-browser --session {s} snapshot --max-output 8000
 agent-browser --session {s} snapshot --ref @e3
-agent-browser --session {s} screenshot /tmp/check.png   # 確認用のみ。成果物として保存・添付しない
+agent-browser --session {s} screenshot /tmp/check.png   # 確認用のみ。成果物として保存・添付しない。スクリーンショット・録画は実 Chrome でないと動かない
 agent-browser --session {s} get text --ref @e5
 agent-browser --session {s} get url
 agent-browser --session {s} get title
@@ -568,7 +555,7 @@ agent-browser --session {s} wait --text "ダッシュボード"
 ## 原則
 
 - **テストソースに忠実に実行する** — 手順を勝手に変えたり省略したりしない
-- **スクリーンショットは成果物にしない** — 検証中に視覚的な確認が必要なら撮ってよいが、全ステップでの撮影・レポートへの保存/添付はしない。証跡は実行ログと失敗時の snapshot（テキスト）で残す
+- **スクリーンショットは成果物にしない** — 検証中に視覚的な確認が必要なら撮ってよいが、全ステップでの撮影・レポートへの保存/添付はしない。証跡は実行ログと失敗時の snapshot（テキスト）で残す。なお、スクリーンショット・録画は実 Chrome でないと動かない
 - **サーバーは必ず停止する** — テスト終了後（成功・失敗問わず）サーバーを停止し、ポートを解放する
 - **コードは修正しない** — 失敗を検出したら原因分析とIssue起票に留め、修正は別のIssue対応フローに委ねる
 - **Issue は重複起票しない** — 起票前に既存 Issue を検索し、同じ原因の失敗はまとめて1つのIssueにする

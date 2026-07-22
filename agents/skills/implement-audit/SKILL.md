@@ -1,24 +1,6 @@
 ---
 name: implement-audit
-description: >
-  implement スキルファミリー（implement, implement-domain, implement-adapter,
-  implement-usecase, implement-test, implement-frontend, issue-implement）の
-  実装後に、TODO・FIXME・仮実装・省略箇所・未完成コードを隈なく検出し、
-  spec/ との照合で実装漏れも特定して、構造化レポートとして記録する監査専門スキル。
-  パターンマッチング＋コード意味分析＋設計照合の三段構えで検出精度を高める。
-  diff に依存せずプロジェクト全体を隈なく探査する。
-  implement-audit は「コードの完全性」を、spec-sync は「ドキュメントの正確性」を、
-  architecture-audit は「実装の構造的健全性（設計原則への適合）」を見る。三者は補完関係。
-  検出・レポートに特化し、修正は行わない。修正が必要な場合は implement スキルで
-  該当レイヤー・フェーズを再実行する。
-  ユーザーが「TODO探して」「仮実装ない？」「実装の抜け漏れチェックして」
-  「省略されてる箇所ある？」「completeness audit」「実装漏れ」「未実装チェック」
-  「手抜きないか見て」「完成度チェック」「実装の完全性を確認して」
-  「コードに TODO 残ってない？」「仮実装を探して」「placeholder 探して」
-  「implement audit」「実装監査」
-  などと言ったときにトリガーする。
-  implement スキル完了後のフォローアップや、PR作成前の最終チェックにも使える。
-  実装の品質や完全性に不安がある場面では積極的にこのスキルを使うこと。
+description: TODO・FIXME・仮実装・省略箇所と、spec/ 照合による実装漏れを検出して構造化レポートに記録する監査専門スキル。diff に依存せずプロジェクト全体を隈なく探査し、検出・レポートに特化して修正は行わない。ユーザーが「TODO探して」「仮実装ない？」「実装の抜け漏れチェックして」「完成度チェック」「implement audit」などと言ったとき、または implement スキル完了後のフォローアップや PR作成前の最終チェックとしてトリガーする。implement-audit は「コードの完全性」、spec-sync は「ドキュメントの正確性」、architecture-audit は「構造的健全性」を見る補完関係。
 ---
 
 # Implement Audit — 実装完全性の監査レポート

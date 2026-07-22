@@ -1,11 +1,7 @@
 ---
 name: agent-browser-cleanup
 model: haiku
-description: >
-  agent-browser を使うスキルが開始前または終了時に呼び出すクリーンアップユーティリティ。
-  別のセッション（tmuxペイン・Claudeセッション等）で agent-browser が使用中でなければ、
-  残存プロセスをすべて終了してクリーンな状態にする。
-  他のスキルから「agent-browser を使う前後に呼ぶ」用途専用。
+description: agent-browser を使うスキルが開始前または終了時に呼び出すクリーンアップユーティリティ。別のセッション（tmuxペイン・Claudeセッション等）で agent-browser が使用中でなければ、残存プロセスをすべて終了してクリーンな状態にする。他のスキルから「agent-browser を使う前後に呼ぶ」用途専用。
 ---
 
 # agent-browser-cleanup
