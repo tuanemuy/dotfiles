@@ -133,21 +133,20 @@ gh issue create --title "Review Dashboard" --body-file <一時ファイル>
 
 ### 検証用ブランチの準備
 
-レビューは最新の `origin/main` の内容に対して行う。実行時の作業ツリーの状態（未コミット変更・チェックアウト中のブランチ）に依存しないよう、origin/main からブランチを切った worktree を作成し、以降の読み取りはすべてその配下で行う。
+レビューは最新の `origin/main` の内容に対して行う。origin/main からブランチを切ってチェックアウトし、以降の読み取りはすべてその状態で行う。
 
 ```bash
+ORIG_BRANCH=$(git branch --show-current)
 git fetch origin
-REPO=$(basename "$(git rev-parse --show-toplevel)")
-WORKTREE="../${REPO}-review-dashboard-$(date +%Y%m%d)"
-git worktree add -b "review-dashboard/$(date +%Y%m%d)" "$WORKTREE" origin/main
+git switch -c "review-dashboard/$(date +%Y%m%d)" origin/main
 ```
 
-- サブエージェントに渡すスコープのパスは worktree 配下の絶対パスにする
-- `origin/main` が存在しない場合（リモート未設定等）は、現在の作業ツリーのままレビューする旨を完了報告に明記して続行する
-- レビュー完了後（Step 6 まで終えたら）、worktree とブランチを削除する:
+- 作業ツリーに未コミット変更がある場合はブランチを切り替えず、その旨を報告して中断する（変更の退避はユーザーに委ねる）
+- `origin/main` が存在しない場合（リモート未設定等）は、現在のブランチのままレビューする旨を完了報告に明記して続行する
+- レビュー完了後（Step 6 まで終えたら）、元のブランチに戻して検証用ブランチを削除する:
 
 ```bash
-git worktree remove --force "$WORKTREE"
+git switch "$ORIG_BRANCH"
 git branch -D "review-dashboard/$(date +%Y%m%d)"
 ```
 
@@ -248,7 +247,7 @@ gh issue edit <ダッシュボード番号> --body-file <一時ファイル>
 ## 原則
 
 - **1回の実行で1区分だけ** — 狭く深く。全体は周回で覆う。複数区分をまとめてレビューしない
-- **origin/main を基準にレビューする** — origin/main からブランチを切った worktree 上で確認し、実行時の作業ツリーの状態に依存しない。終了時に worktree とブランチを削除する
+- **origin/main を基準にレビューする** — origin/main からブランチを切って確認し、実行時のブランチの状態に依存しない。終了時に元のブランチへ戻して検証用ブランチを削除する
 - **スコープ内は隈なく読む** — diff や変更履歴に依存せず、区分スコープの全対象を読む。深掘りこそが全体監査系スキルとの差分
 - **コードは修正しない** — 検出・起票・ダッシュボード更新まで。修正は issue-implement 等に委ねる
 - **判定基準はプロジェクトから読み取る** — CLAUDE.md / spec/ の規約に照らして判定し、一般論のベストプラクティスを押し付けない。規約に明記がない事項は「正しさ」など規約に依存しない観点でのみ判定する

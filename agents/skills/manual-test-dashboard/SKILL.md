@@ -147,19 +147,18 @@ gh issue create --title "Manual Test Dashboard" --body-file <一時ファイル>
 
 ### 検証用ブランチの準備
 
-探索は最新の `origin/main` の内容に対して行う。実行時の作業ツリーの状態（未コミット変更・チェックアウト中のブランチ）に依存しないよう、origin/main からブランチを切った worktree を作成し、以降のサーバー起動・シード整備・コード参照はすべてその配下で行う。
+探索は最新の `origin/main` の内容に対して行う。origin/main からブランチを切ってチェックアウトし、以降のサーバー起動・シード整備・コード参照はすべてその状態で行う。
 
 ```bash
+ORIG_BRANCH=$(git branch --show-current)
 git fetch origin
-REPO=$(basename "$(git rev-parse --show-toplevel)")
-WORKTREE="../${REPO}-manual-test-dashboard-$(date +%Y%m%d)"
-git worktree add -b "manual-test-dashboard/$(date +%Y%m%d)" "$WORKTREE" origin/main
+git switch -c "manual-test-dashboard/$(date +%Y%m%d)" origin/main
 ```
 
-- worktree は依存物（node_modules 等）が未インストールの状態なので、サーバー起動前にプロジェクトの手順に従って依存をインストールする
-- `.env` 等の gitignore された設定ファイルがサーバー起動に必要な場合は、元の作業ツリーからコピーする
-- `origin/main` が存在しない場合（リモート未設定等）は、現在の作業ツリーのまま探索する旨を完了報告に明記して続行する
-- worktree とブランチの削除は Step 9 のクリーンアップで行う
+- 作業ツリーに未コミット変更がある場合はブランチを切り替えず、その旨を報告して中断する（変更の退避はユーザーに委ねる）
+- 切り替えで依存関係（ロックファイル等）が変わっている場合は、サーバー起動前にプロジェクトの手順に従って依存をインストールし直す
+- `origin/main` が存在しない場合（リモート未設定等）は、現在のブランチのまま探索する旨を完了報告に明記して続行する
+- 元のブランチへの復帰と検証用ブランチの削除は Step 9 のクリーンアップで行う
 
 ### 成果物ディレクトリ
 
@@ -364,7 +363,7 @@ agent-browser close --all 2>/dev/null
 kill $(cat /tmp/manual-test-dashboard-server.pid) 2>/dev/null
 rm /tmp/manual-test-dashboard-server.pid /tmp/manual-test-dashboard-server.log 2>/dev/null
 
-git worktree remove --force "$WORKTREE"
+git switch "$ORIG_BRANCH"
 git branch -D "manual-test-dashboard/$(date +%Y%m%d)"
 ```
 
@@ -390,7 +389,7 @@ git branch -D "manual-test-dashboard/$(date +%Y%m%d)"
 ## 原則
 
 - **1回の実行で1区分だけ** — 狭く深く。全体は周回で覆う。複数区分をまとめて探索しない
-- **origin/main を基準に探索する** — origin/main からブランチを切った worktree でサーバーを起動して確認し、実行時の作業ツリーの状態に依存しない。終了時に worktree とブランチを削除する
+- **origin/main を基準に探索する** — origin/main からブランチを切ってサーバーを起動して確認し、実行時のブランチの状態に依存しない。終了時に元のブランチへ戻して検証用ブランチを削除する
 - **手順書に縛られず、スコープには縛られる** — 探索の中身はチャーターに従って自由に。ただしスコープ外の画面には踏み込まない（それは別の区分の番）
 - **コードは修正しない** — 発見・起票・ダッシュボード更新まで。修正は issue-implement 等に委ねる
 - **期待動作の根拠を持つ** — spec/ / CLAUDE.md / 画面自身の表示から期待を導く。根拠のない「こうあるべき」で断定せず、迷うものは Info
