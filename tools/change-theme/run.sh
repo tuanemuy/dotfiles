@@ -8,12 +8,6 @@ if [ "$1" = "light" ]; then
     theme_name="${LIGHT_THEME}"
 elif [ "$1" = "dark" ]; then
     theme_name="${DARK_THEME}"
-elif [ "$1" = "auto" ]; then
-    if [ "$(uname)" = "Darwin" ]; then
-        if ! defaults read -g AppleInterfaceStyle &>/dev/null; then
-            theme_name="${LIGHT_THEME}"
-        fi
-    fi
 elif [ -n "$1" ]; then
     theme_name="$1"
 fi
@@ -101,5 +95,13 @@ if pgrep -qi "ghostty" >/dev/null 2>&1; then
     -e 'tell application "System Events" to tell process "Ghostty" to keystroke "," using {command down, shift down}' \
     -e 'end timeout' 2>/dev/null &
 fi
+
+# Persist the selection so new shells restore it instead of guessing from the OS
+stateDir="${XDG_STATE_HOME:-$HOME/.local/state}/change-theme"
+mkdir -p "$stateDir"
+cat > "$stateDir/current" <<STATE
+CURRENT_THEME=${BACKGROUND}
+CURRENT_THEME_NAME=${theme_name}
+STATE
 
 echo "$BACKGROUND"
