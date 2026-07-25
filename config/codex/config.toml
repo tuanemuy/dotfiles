@@ -1,0 +1,20 @@
+model = "gpt-5.6-sol"
+model_reasoning_effort = "high"
+approvals_reviewer = "user"
+
+[tui]
+theme = "gruvbox-light"
+# Match the Claude statusline: metrics first (context, 5h, weekly), model last.
+status_line = ["context-used", "five-hour-limit", "weekly-limit", "model-with-reasoning"]
+
+[notice]
+hide_full_access_warning = true
+
+[features]
+hooks = true
+
+# NOTE: Codex rewrites this file at runtime to persist per-project trust
+# ([projects.*]), NUX counters ([tui.model_availability_nux]), and hook hashes
+# ([hooks.state.*]). Those entries are intentionally kept out of the repo because
+# this is a public repository and they leak private project paths. Do not commit
+# them when they reappear here.

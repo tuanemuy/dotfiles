@@ -17,6 +17,7 @@ in
     eternal-terminal
     eza
     fd
+    ffmpeg
     gh
     imagemagick
     pm2
@@ -45,9 +46,13 @@ in
       mkOutOfStoreSymlink "${gitDirectory}/dotfiles/config/claude/settings.json";
     ".claude/statusline-command.sh".source =
       mkOutOfStoreSymlink "${gitDirectory}/dotfiles/config/claude/statusline-command.sh";
+    ".codex/config.toml".source =
+      mkOutOfStoreSymlink "${gitDirectory}/dotfiles/config/codex/config.toml";
     ".claude/skills".source = mkOutOfStoreSymlink "${gitDirectory}/dotfiles/agents/skills";
     ".agents/skills".source = mkOutOfStoreSymlink "${gitDirectory}/dotfiles/agents/skills";
     ".aerospace.toml".source = mkOutOfStoreSymlink "${gitDirectory}/dotfiles/config/aerospace.toml";
+    ".agent-browser/config.json".source =
+      mkOutOfStoreSymlink "${gitDirectory}/dotfiles/config/agent-browser.json";
   };
 
   home.sessionVariables = {
