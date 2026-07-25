@@ -54,12 +54,10 @@ in
       mkOutOfStoreSymlink "${gitDirectory}/dotfiles/config/agent-browser.json";
   };
 
-  # Codex rewrites ~/.codex/config.toml at runtime to persist per-project trust,
-  # NUX counters, and hook hashes, and it offers no include/layering mechanism to
-  # keep that state out of the file. Symlinking would push those writes into this
-  # public repo, so copy the static config in as a real file instead and let the
-  # runtime state accumulate only in $HOME. The hash stamp keeps a routine switch
-  # from wiping that state — the copy happens only when the static config changes.
+  # Copied, not symlinked: Codex rewrites its config at runtime to persist
+  # per-project trust and offers no way to keep that state elsewhere, so a
+  # symlink would leak private paths into this public repo. Gate on the hash so a
+  # routine switch does not wipe the state accumulated in $HOME.
   home.activation.codexConfig = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
     src="${gitDirectory}/dotfiles/config/codex/config.toml"
     dst="$HOME/.codex/config.toml"

@@ -13,14 +13,6 @@ hide_full_access_warning = true
 [features]
 hooks = true
 
-# NOTE: This file is the static config only. It is NOT symlinked — home.nix
-# copies it to ~/.codex/config.toml as a real file, because Codex rewrites its
-# config at runtime to persist per-project trust ([projects.*]), NUX counters
-# ([tui.model_availability_nux]), and hook hashes ([hooks.state.*]), and those
-# entries would leak private project paths into this public repository.
-#
-# Consequences of the copy:
-# - Edits to ~/.codex/config.toml (by hand or by Codex) are NOT tracked here, and
-#   are discarded the next time this file changes. Edit this file, then switch.
-# - The copy only runs when this file's hash changes, so a routine switch leaves
-#   the accumulated runtime state in $HOME intact.
+# home.nix copies this to ~/.codex/config.toml rather than symlinking it, so
+# edits made over there are untracked and are discarded whenever this file
+# changes. Edit here, then switch.
