@@ -182,6 +182,8 @@ spec-manual-test がシナリオ・ページ・ユースケース・テストケ
 - spec/adr/ (x{数} 件)
 ```
 
+実装に進む場合の次のステップも添える: 小規模なら implement で一括実装、それ以上なら spec-to-issues で縦スライス Issue 化 → issue-implement で 1 Issue ずつ実装（使い分けの目安は implement スキル参照）。
+
 ---
 
 ## 原則

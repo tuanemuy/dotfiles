@@ -34,6 +34,9 @@ Phase 6: コメント整理
 
 Phase 7: ダッシュボード更新
   → ダッシュボード Issue があれば該当行だけ差分更新（この Issue の (In Progress) と新規起票の挿入のみ）
+
+Phase 8: レビューファイルの削除
+  → APPROVED で完了していれば .issue/{Issue番号}/review/ を削除（plan.md・adr.md 等は残す）
 ```
 
 ## Phase 1: 計画
@@ -71,7 +74,7 @@ Issue が**ユーザーに見える UI 画面を新設・変更する**場合だ
 
 `references/review-guide.md` を読み、その手順に従ってレビュー・修正を行う。
 
-レビューの成果物は `.issue/{Issue番号}/review/` に保存し、ADR は `.issue/{Issue番号}/adr.md` に追記する。
+レビューの成果物は `.issue/{Issue番号}/review/` に保存し、ADR は `.issue/{Issue番号}/adr.md` に追記する。レビューファイルはこの時点では削除しない — Phase 4 のブラウザ検証からこのループに戻る可能性があるため、片付けは Phase 8 でまとめて行う。
 
 APPROVED になっても PR は Draft のまま維持し、Phase 4 のブラウザ検証に進む。Ready for review への切り替えは Phase 4 の通過後に行う。10ラウンドに達して APPROVED に至らなかった場合は Draft のまま残してユーザーに判断を委ね、Phase 4 には進まず Phase 5 へ進む。
 
@@ -147,6 +150,19 @@ manual-test に渡す情報:
 - 編集後の本文を一時ファイルに書き出し、`gh issue edit <ダッシュボード番号> --body-file <一時ファイル>` で反映する。
 - 更新対象はダッシュボード Issue 本文だけで、実装ブランチや PR には一切影響しない。
 
+## Phase 8: レビューファイルの削除
+
+Phase 3 のレビューが APPROVED で完了していれば、レビューの中間成果物を片付ける。指摘はすべてコードに反映済みか台帳の判定として決着しているため、レビューファイルを残す必要はない。
+
+```bash
+rm -rf .issue/{Issue番号}/review/
+```
+
+- **削除するのは `review/` ディレクトリだけ。** `plan.md` / `testing.md` / `adr.md` / `progress.md` / `manual-test/` は残す。
+- **APPROVED に至らずに終わった場合は削除しない。** レビュー10ラウンド到達、または検証サイクル3周到達で PR が Draft のまま残っている場合は、ユーザーが残った指摘を確認する必要があるため、レビューファイルと台帳をそのまま残す。
+- 削除前に、defer で起票した Issue 番号がすべて完了報告に載っていることを確認する（台帳が消えても追跡先が残るように）。
+- レビューディレクトリが VCS 管理下にある場合（`.issue/` を commit している運用）は、削除もコミットして push する。管理外（`.gitignore` 済み）ならファイルを消すだけでよい。
+
 ## 完了報告
 
 すべてのフェーズが完了したら、サマリーを出す。
@@ -174,7 +190,8 @@ Issue #{Issue番号} の実装が完了しました！
 - 初回ブロッカー: {数}件
 - 修正済み: {数}件
 - 最終ステータス: APPROVED
-- レビューファイル: .issue/{Issue番号}/review/review-001.md 〜 review-{NNN}.md
+- 見送り: wont-fix {数}件 / defer {数}件（起票したIssue: {番号一覧、またはなし}）
+- レビューファイル: 削除済み（.issue/{Issue番号}/review/）
 
 ## ブラウザ検証
 - 成果物: .issue/{Issue番号}/manual-test/（またはスキップ）
@@ -193,6 +210,10 @@ Issue #{Issue番号} の実装が完了しました！
 ## ダッシュボード
 - 更新: {ダッシュボード Issue の URL / ダッシュボード未運用のためスキップ}
 - この Issue の表示: {(In Progress) として反映 / 未運用のためなし}
+
+## 片付け
+- レビューファイル: {削除済み / APPROVED 未達のため保持（.issue/{Issue番号}/review/）}
+- 残した成果物: plan.md / testing.md / adr.md / progress.md / manual-test/
 ```
 
 ## 原則
