@@ -35,7 +35,7 @@ description: 体験側の設計（要件定義・シナリオ・ページ構成�
 
 ## ADR（Architecture Decision Records）
 
-設計中に非自明な判断を下したら `spec/adr/NNN-title.md` に記録する。記載項目と書くべき判断の例は `../_shared/references/adr-guide.md` を参照。
+設計中に非自明な判断を下したら、プロジェクトルートの `.adr/NNN-title.md` に記録する。記録基準・記載項目・supersede の扱いは `../_shared/references/adr-guide.md` を参照。
 
 ## Phase 0: 前提確認
 
@@ -76,7 +76,7 @@ Phase 5: クロスフェーズ検証
   → トレーサビリティ・動的フロー・アーキテクチャ適合性・実装可能性
   → spec/index.md 更新
 
-※ ADR は全フェーズを通じて随時作成 → spec/adr/
+※ ADR は全フェーズを通じて随時作成 → .adr/
 ```
 
 途中のフェーズから再開する場合は、既存の成果物を確認して該当フェーズから開始する。
@@ -235,7 +235,7 @@ spec スキルの Phase 3 として呼び出されている場合は、この単
 - spec/testcases/${domain}/${usecase}.md (x{数} ファイル)
 
 ### ADR
-- spec/adr/ (x{数} 件)
+- .adr/ (x{数} 件)
 
 ### クロスフェーズ検証
 - {数}ラウンドで収束（レビュー記録は削除済み。未収束の場合のみ spec/review/cross-phase/ を参照）

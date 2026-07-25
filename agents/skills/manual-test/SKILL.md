@@ -58,7 +58,7 @@ Phase 6: レポート＆クリーンアップ
 以下の優先順で検索し、テストケースのソースを決定する:
 
 1. ユーザーが明示的に指定したファイル
-2. `.issue/{Issue番号}/testing.md` — issue-implement から呼ばれた場合
+2. `.thread/{Issue番号}/testing.md` — issue-implement から呼ばれた場合
 3. `spec/manual-tests/` — implement / manual-test から呼ばれた場合
 4. プロジェクトルート直下や docs/ の testing 関連ファイル
 
@@ -111,7 +111,7 @@ export AGENT_BROWSER_IDLE_TIMEOUT_MS=120000  # daemon無操作: 2分で自動終
 TEST_DATE=$(date +%Y-%m-%d)
 ```
 
-- issue-implement から: `.issue/{Issue番号}/.manual-test/` （日付のサブディレクトリは不要）
+- issue-implement から: `.thread/{Issue番号}/.manual-test/` （日付のサブディレクトリは不要）
 - implement から: `.manual-test/{YYYY-MM-DD}/`
 - 単体実行: `.manual-test/{YYYY-MM-DD}/`
 

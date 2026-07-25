@@ -25,7 +25,7 @@ description: 要件定義から設計までを一気通貫で行うスキル。s
 
 ## ADR（Architecture Decision Records）
 
-設計中に非自明な判断を下したら `spec/adr/NNN-title.md` に記録する。記載項目と書くべき判断の例は `../_shared/references/adr-guide.md` を参照。
+設計中に非自明な判断を下したら、プロジェクトルートの `.adr/NNN-title.md` に記録する。記録基準・記載項目・supersede の扱いは `../_shared/references/adr-guide.md` を参照。
 
 ## Phase 0: 準備
 
@@ -72,7 +72,7 @@ Phase 3: 技術設計（spec-domain スキルに委譲）
 Phase 4: マニュアルテストドキュメント生成（spec-manual-test スキルに委譲）
   spec/ の成果物からシナリオ単位のテスト手順書を生成 → spec/manual-tests/
 
-※ ADR は全フェーズを通じて随時作成 → spec/adr/
+※ ADR は全フェーズを通じて随時作成 → .adr/
 ```
 
 途中のフェーズから再開する場合は、既存の成果物を確認して該当フェーズから開始する。
@@ -185,7 +185,7 @@ spec-manual-test がシナリオ・ページ・ユースケース・テストケ
 - spec/manual-tests/${category}.md (x{数})
 
 ### ADR
-- spec/adr/ (x{数} 件)
+- .adr/ (x{数} 件)
 ```
 
 実装に進む場合の次のステップも添える: 小規模なら implement で一括実装、それ以上なら spec-to-issues で縦スライス Issue 化 → issue-implement で 1 Issue ずつ実装（使い分けの目安は implement スキル参照）。

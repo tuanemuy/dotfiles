@@ -28,15 +28,15 @@ Phase 1.5 でデザインモック（`spec/design/pages/*.html`）を作成し�
 
 ## 対象Issue
 - Issue番号: #{Issue番号}
-- 計画ファイル: .issue/{Issue番号}/plan.md
+- 計画ファイル: .thread/{Issue番号}/plan.md
 - デザインモック: spec/design/pages/{画面名}.html（Phase 1.5 で作成した場合のみ。完成イメージとして参照し、既存コンポーネントを使った実コードに落とし込む）
 
 ## やること
-1. .issue/{Issue番号}/plan.md を読む（デザインモックがあれば併せて確認する）
+1. .thread/{Issue番号}/plan.md を読む（デザインモックがあれば併せて確認する）
 2. 各実装ステップについて、対象ファイルを読んで現状を把握する
 3. 計画の指示に従って変更を適用する（UI はデザインモックの完成イメージに沿わせる）
 4. CLAUDE.md や README.md にテスト・lint・型チェックの実行方法が記載されていれば、それに従って確認する
-5. 実装中に非自明な設計判断を下した場合は、.issue/{Issue番号}/adr.md に追記する
+5. 実装中に非自明な設計判断を下した場合は、.thread/{Issue番号}/adr.md に追記する
    - 既に adr.md がある場合は末尾に追記、なければ新規作成
    - 形式: 各決定ごとに「## 決定タイトル」「コンテキスト」「決定内容」「理由」を記載
 
@@ -63,7 +63,7 @@ Phase 1.5 でデザインモック（`spec/design/pages/*.html`）を作成し�
 
 ### 残存課題の記録
 
-実装結果を確認した後、以下のいずれかに該当する項目があれば `.issue/{Issue番号}/progress.md` に記録する:
+実装結果を確認した後、以下のいずれかに該当する項目があれば `.thread/{Issue番号}/progress.md` に記録する:
 
 - plan.md の項目のうち、完全には実装できなかったもの
 - 既知の制限事項やエッジケース
@@ -107,7 +107,7 @@ gh pr create --draft --title "{PRタイトル}" --body "$(cat <<'EOF'
 Closes #{Issue番号}
 
 ## Implementation Plan
-Based on `.issue/{Issue番号}/plan.md`
+Based on `.thread/{Issue番号}/plan.md`
 
 ## Test plan
 

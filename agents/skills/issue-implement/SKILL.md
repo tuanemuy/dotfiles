@@ -9,7 +9,7 @@ description: "Issueの計画立案 → 実装 → PRレビュー・修正 → �
 
 ```text
 Phase 1: 計画（issue-plannerに委譲）
-  → .issue/{Issue番号}/plan.md, testing.md, (adr.md) を作成
+  → .thread/{Issue番号}/plan.md, testing.md, (adr.md) を作成
 
 Phase 1.5: デザイン作成（条件付き — フロントエンドのUI画面を新設・変更する場合のみ）
   plan.md から gate 判定 → 既存コードからデザイン言語を抽出（ドラフト提案なし）
@@ -35,8 +35,9 @@ Phase 6: コメント整理
 Phase 7: ダッシュボード更新
   → ダッシュボード Issue があれば該当行だけ差分更新（この Issue の (In Progress) と新規起票の挿入のみ）
 
-Phase 8: レビューファイルの削除
-  → APPROVED で完了していれば .issue/{Issue番号}/review/ を削除（plan.md・adr.md 等は残す）
+Phase 8: ADR の昇格とレビューファイルの削除
+  → adr.md の各エントリを記録基準にかけ、満たすものを .adr/ に昇格
+  → APPROVED で完了していれば .thread/{Issue番号}/review/ を削除（plan.md・adr.md 等は残す）
 ```
 
 ## Phase 1: 計画
@@ -59,7 +60,7 @@ Issue が**ユーザーに見える UI 画面を新設・変更する**場合だ
 
 `references/design-guide.md` を読み、その手順に従う。要点:
 
-- まず `.issue/{Issue番号}/plan.md` から gate 判定する。新規UI画面の追加・既存画面のレイアウト変更がなければ（バックエンド/API/ロジックのみ、軽微な調整など）、判定理由を一言ログに残してそのまま Phase 2 へスキップする。
+- まず `.thread/{Issue番号}/plan.md` から gate 判定する。新規UI画面の追加・既存画面のレイアウト変更がなければ（バックエンド/API/ロジックのみ、軽微な調整など）、判定理由を一言ログに残してそのまま Phase 2 へスキップする。
 - 実行する場合、デザインの方向性は**既存実装から抽出する**（ドラフト提案・新規トークン定義はしない）。新規画面が出荷済みのアプリに自然に馴染むことがゴール。
 - 成果物は `spec/design/` 配下に出力し、Phase 2 のコミットに含めて実装と一緒に PR へ載せる。
 
@@ -67,14 +68,14 @@ Issue が**ユーザーに見える UI 画面を新設・変更する**場合だ
 
 `references/implementation-guide.md` を読み、その手順に従って実装する。
 
-実装中に下した非自明な設計判断は `.issue/{Issue番号}/adr.md` に追記する。
-実装完了後、残存課題があれば `.issue/{Issue番号}/progress.md` に詳細を記録する。
+実装中に下した非自明な設計判断は `.thread/{Issue番号}/adr.md` に追記する。
+実装完了後、残存課題があれば `.thread/{Issue番号}/progress.md` に詳細を記録する。
 
 ## Phase 3: レビュー・修正
 
 `references/review-guide.md` を読み、その手順に従ってレビュー・修正を行う。
 
-レビューの成果物は `.issue/{Issue番号}/review/` に保存し、ADR は `.issue/{Issue番号}/adr.md` に追記する。レビューファイルはこの時点では削除しない — Phase 4 のブラウザ検証からこのループに戻る可能性があるため、片付けは Phase 8 でまとめて行う。
+レビューの成果物は `.thread/{Issue番号}/review/` に保存し、ADR は `.thread/{Issue番号}/adr.md` に追記する。レビューファイルはこの時点では削除しない — Phase 4 のブラウザ検証からこのループに戻る可能性があるため、片付けは Phase 8 でまとめて行う。
 
 APPROVED になっても PR は Draft のまま維持し、Phase 4 のブラウザ検証に進む。Ready for review への切り替えは Phase 4 の通過後に行う。10ラウンドに達して APPROVED に至らなかった場合は Draft のまま残してユーザーに判断を委ね、Phase 4 には進まず Phase 5 へ進む。
 
@@ -84,8 +85,8 @@ APPROVED になっても PR は Draft のまま維持し、Phase 4 のブラウ�
 
 manual-test に渡す情報:
 
-- テストソース: `.issue/{Issue番号}/testing.md`
-- 成果物ディレクトリ: `.issue/{Issue番号}/manual-test/`
+- テストソース: `.thread/{Issue番号}/testing.md`
+- 成果物ディレクトリ: `.thread/{Issue番号}/manual-test/`
 - Issue番号: #{Issue番号}
 
 **スキップは原則しない。** 以下のいずれかを実際に確認した場合のみスキップ可:
@@ -150,18 +151,25 @@ manual-test に渡す情報:
 - 編集後の本文を一時ファイルに書き出し、`gh issue edit <ダッシュボード番号> --body-file <一時ファイル>` で反映する。
 - 更新対象はダッシュボード Issue 本文だけで、実装ブランチや PR には一切影響しない。
 
-## Phase 8: レビューファイルの削除
+## Phase 8: ADR の昇格とレビューファイルの削除
+
+### ADR の昇格
+
+`.thread/{Issue番号}/adr.md` が存在すれば、各エントリを `../_shared/references/adr-guide.md` の記録基準（寿命テスト・波及テスト）にかけ、満たすものだけをプロジェクトルートの `.adr/NNN-title.md` に転記する（既存の連番の続き。ディレクトリがなければ新設する）。転記したエントリには adr.md 側に「→ `.adr/NNN` に昇格」と一行追記する。基準を満たさないエントリは作業履歴としてそのまま残す — adr.md 自体は削除しない。
+
+### レビューファイルの削除
 
 Phase 3 のレビューが APPROVED で完了していれば、レビューの中間成果物を片付ける。指摘はすべてコードに反映済みか台帳の判定として決着しているため、レビューファイルを残す必要はない。
 
 ```bash
-rm -rf .issue/{Issue番号}/review/
+rm -rf .thread/{Issue番号}/review/
 ```
 
 - **削除するのは `review/` ディレクトリだけ。** `plan.md` / `testing.md` / `adr.md` / `progress.md` / `manual-test/` は残す。
 - **APPROVED に至らずに終わった場合は削除しない。** レビュー10ラウンド到達、または検証サイクル3周到達で PR が Draft のまま残っている場合は、ユーザーが残った指摘を確認する必要があるため、レビューファイルと台帳をそのまま残す。
 - 削除前に、defer で起票した Issue 番号がすべて完了報告に載っていることを確認する（台帳が消えても追跡先が残るように）。
-- レビューディレクトリが VCS 管理下にある場合（`.issue/` を commit している運用）は、削除もコミットして push する。管理外（`.gitignore` 済み）ならファイルを消すだけでよい。
+- 削除前に台帳の `wont-fix` 行を確認し、「指摘は正しいが意図的に逸脱している」ものは現場の why not コメントか ADR に転記する（`../_shared/references/review-loop.md` の後片付けに従う）。
+- レビューディレクトリが VCS 管理下にある場合（`.thread/` を commit している運用）は、削除もコミットして push する。管理外（`.gitignore` 済み）ならファイルを消すだけでよい。
 
 ## 完了報告
 
@@ -171,10 +179,10 @@ rm -rf .issue/{Issue番号}/review/
 Issue #{Issue番号} の実装が完了しました！
 
 ## 計画
-- 計画ファイル: .issue/{Issue番号}/plan.md
-- 設計判断: .issue/{Issue番号}/adr.md（{あり/なし}）
-- 動作確認計画: .issue/{Issue番号}/testing.md
-- 残存課題: .issue/{Issue番号}/progress.md（{あり/なし}）
+- 計画ファイル: .thread/{Issue番号}/plan.md
+- 設計判断: .thread/{Issue番号}/adr.md（{あり/なし}）
+- 動作確認計画: .thread/{Issue番号}/testing.md
+- 残存課題: .thread/{Issue番号}/progress.md（{あり/なし}）
 
 ## デザイン
 - 実施: {実施（spec/design/pages/ に {数} 画面） / UI画面の新設・変更なしのためスキップ}
@@ -191,10 +199,10 @@ Issue #{Issue番号} の実装が完了しました！
 - 修正済み: {数}件
 - 最終ステータス: APPROVED
 - 見送り: wont-fix {数}件 / defer {数}件（起票したIssue: {番号一覧、またはなし}）
-- レビューファイル: 削除済み（.issue/{Issue番号}/review/）
+- レビューファイル: 削除済み（.thread/{Issue番号}/review/）
 
 ## ブラウザ検証
-- 成果物: .issue/{Issue番号}/manual-test/（またはスキップ）
+- 成果物: .thread/{Issue番号}/manual-test/（またはスキップ）
 - テストケース: {数}件（PASS: {数} / FAIL: {数}）
 - 検証サイクル: {数}周
 - 起票したIssue: {Issue一覧、またはなし}
@@ -212,7 +220,8 @@ Issue #{Issue番号} の実装が完了しました！
 - この Issue の表示: {(In Progress) として反映 / 未運用のためなし}
 
 ## 片付け
-- レビューファイル: {削除済み / APPROVED 未達のため保持（.issue/{Issue番号}/review/）}
+- レビューファイル: {削除済み / APPROVED 未達のため保持（.thread/{Issue番号}/review/）}
+- ADR 昇格: {.adr/NNN-... x{数} / 昇格対象なし}
 - 残した成果物: plan.md / testing.md / adr.md / progress.md / manual-test/
 ```
 
