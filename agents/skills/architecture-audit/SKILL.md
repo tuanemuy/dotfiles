@@ -40,7 +40,8 @@ Phase 3: レポート生成
 Phase 4: Issue 起票
   Critical 違反を Issue として起票（レイヤー別に分割）
 
-Phase 5: 結果報告
+Phase 5: 結果報告・後片付け
+  Warning / Info を報告に転記し、.audit/architecture/ を削除
 ```
 
 ## Phase 1: 規約の確定
@@ -161,7 +162,6 @@ architecture-audit による監査で検出されたアーキテクチャ違反�
 {どのレイヤーをどう修正するか}
 
 ## 参照
-- レポート: .audit/architecture/report.md
 - 規約: {CLAUDE.md / spec の該当箇所}
 EOF
 )" \
@@ -174,7 +174,9 @@ EOF
 gh label create architecture-audit --description "architecture-audit で検出されたアーキテクチャ違反" --color "c2e0c6"
 ```
 
-## Phase 5: 結果報告
+## Phase 5: 結果報告・後片付け
+
+報告の前に `.audit/architecture/` を削除する。Critical は Issue として永続化済み、Warning / Info は下記の報告に転記するため、レポートを残す必要はない。残したままにすると後続セッションの検索に紛れ込んでコンテキストを浪費する。**起票に失敗した Critical がある場合は削除せず**、レポートを残したまま失敗した旨を報告する。
 
 ```text
 アーキテクチャ監査が完了しました！
@@ -188,11 +190,15 @@ gh label create architecture-audit --description "architecture-audit で検出�
 ## 観点別サマリー
 {観点 × 重要度テーブル}
 
-## レポート
-- .audit/architecture/report.md
-
 ## 起票した Issue（Critical のみ）
 - #{番号}: {タイトル}
+
+## Warning / Info（起票していない指摘）
+- [W-001] {概要}（`{パス}:{行}`）
+- [I-001] {概要}（`{パス}:{行}`）
+
+## レポート
+- .audit/architecture/ は削除済み（Critical は Issue に、Warning / Info は上記に転記）
 
 ## 推奨アクション
 {Critical があるレイヤーについて、implement / issue-implement での対応を推奨}
@@ -207,4 +213,5 @@ gh label create architecture-audit --description "architecture-audit で検出�
 - **構造の健全性を見る（完全性・正確性ではない）** — 「実装が存在するか」は implement-audit、「ドキュメントが正しいか」は spec-sync の領分。本スキルは「正しいレイヤーに正しい依存方向で置かれているか」だけを見る
 - **意図的な設計と違反を区別する** — 規約の例外（ADR に記録された設計判断等）は違反ではない。`.adr/` も確認し、判断に迷うものは Info（要確認）に分類する
 - **重要度を正しく付ける** — 偽陽性は Info に落として後で除外できる。根幹を壊す違反だけ Critical にして Issue 化し、ノイズで埋もれさせない
+- **レポートは残さない** — `.audit/` は監査実行中の作業ファイル。Critical を Issue 化し、Warning / Info を結果報告に転記したら削除する。残すのは起票に失敗したときだけ
 - 委譲方式・並列実行・失敗時の扱い・委譲時のコンテキストは `../_shared/references/subagent-policy.md` に従う

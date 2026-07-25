@@ -99,7 +99,7 @@ Phase 3: デザイン作成
 
 Phase 4: レビュー
   agent-browser で視覚的確認 → /critique → 修正 → /polish → /audit（アクセシビリティ）
-  → クリーンになるまで繰り返す
+  → `fix` と仕分けた指摘が0件になるまで繰り返す（最大3ラウンド）
 ```
 
 途中のフェーズから再開する場合は、既存の成果物を確認して該当フェーズから開始する。
@@ -167,7 +167,8 @@ spec スキルの成果物（`spec/index.md`, `spec/pages/index.md`, `spec/scena
 
 - `spec/design/review/` 配下に連番ファイル（`001.md`, `002.md`, ...）で記録する
 - 対応が必要な問題点のみ記載する
-- 問題がなくなるまでレビュー → 修正を繰り返す
+- 指摘の仕分けは `../_shared/references/review-loop.md` の指摘台帳方式に従う。台帳は `spec/design/review/triage.md` に置き、Key が一致する既出指摘は判定を継承して再審議しない
+- **`fix` と仕分けた指摘が0件のラウンドでレビュー完了**（台帳に記録済みの指摘は件数に含めない）。最大3ラウンド。収束しない場合は残った指摘をまとめてユーザーに報告し、判断を委ねる
 
 ---
 
@@ -183,8 +184,9 @@ spec スキルの成果物（`spec/index.md`, `spec/pages/index.md`, `spec/scena
      ```
 
    - その後 Skill ツールで `/agent-browser-cleanup` を呼び出し、別セッションで使用中でなければ残存プロセスをクリーンな状態に戻す。
-2. `spec/index.md` にデザインフェーズの成果物と完了ステータスを追記する
-3. 成果物のサマリーを出す
+2. レビューが完了条件を満たしていれば `spec/design/review/` を削除する（`../_shared/references/review-loop.md` の「後片付け」参照。最大ラウンド到達で収束しなかった場合は残す）
+3. `spec/index.md` にデザインフェーズの成果物と完了ステータスを追記する
+4. 成果物のサマリーを出す
 
 ```
 デザインが完了しました！
@@ -201,6 +203,6 @@ spec スキルの成果物（`spec/index.md`, `spec/pages/index.md`, `spec/scena
 ### デザイン
 - spec/design/pages/ ({実際のファイル数} 画面)
 
-### レビュー記録
-- spec/design/review/ ({実際のファイル数} ラウンド)
+### レビュー
+- {数}ラウンドで収束（レビュー記録は削除済み。未収束の場合のみ spec/design/review/ を参照）
 ```

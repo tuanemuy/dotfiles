@@ -64,7 +64,7 @@ typecheck + lint は正常系だけ実装してエラー分岐・バリデーシ
 
 **`fix` と仕分けた指摘が0件のラウンド**でレビュー完了（指摘台帳の記録済み指摘は除外。`../_shared/references/review-loop.md` 参照）。最大5ラウンド。5ラウンドで収束しない場合はユーザーに報告して判断を委ねる。
 
-レビュー記録は `.review/usecase/review-{連番}.md` に保存する。
+レビュー記録は `.review/usecase/review-{連番}.md` に保存する。レビュー完了後の後片付けは `../_shared/references/review-loop.md` の「後片付け」に従う — スキル単体で呼ばれた場合は Phase 4 で `.review/usecase/` を削除し、implement オーケストレーター経由の場合は削除しない（オーケストレーターの完了フェーズが担う）。
 
 ## Phase 4: 完了
 
