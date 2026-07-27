@@ -1,6 +1,7 @@
 {
   inputs,
   config,
+  lib,
   pkgs,
   gitDirectory,
   ...
@@ -17,6 +18,7 @@ in
     eternal-terminal
     eza
     fd
+    ffmpeg
     gh
     imagemagick
     pm2
@@ -48,7 +50,27 @@ in
     ".claude/skills".source = mkOutOfStoreSymlink "${gitDirectory}/dotfiles/agents/skills";
     ".agents/skills".source = mkOutOfStoreSymlink "${gitDirectory}/dotfiles/agents/skills";
     ".aerospace.toml".source = mkOutOfStoreSymlink "${gitDirectory}/dotfiles/config/aerospace.toml";
+    ".agent-browser/config.json".source =
+      mkOutOfStoreSymlink "${gitDirectory}/dotfiles/config/agent-browser.json";
   };
+
+  # Copied, not symlinked: Codex rewrites its config at runtime to persist
+  # per-project trust and offers no way to keep that state elsewhere, so a
+  # symlink would leak private paths into this public repo. Gate on the hash so a
+  # routine switch does not wipe the state accumulated in $HOME.
+  home.activation.codexConfig = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    src="${gitDirectory}/dotfiles/config/codex/config.toml"
+    dst="$HOME/.codex/config.toml"
+    stamp="$HOME/.codex/.config.toml.hm-hash"
+    hash=$(${pkgs.coreutils}/bin/sha256sum "$src" | ${pkgs.coreutils}/bin/cut -d' ' -f1)
+    if [ ! -e "$dst" ] || [ "$(cat "$stamp" 2>/dev/null)" != "$hash" ]; then
+      $DRY_RUN_CMD ${pkgs.coreutils}/bin/mkdir -p "$HOME/.codex"
+      $DRY_RUN_CMD rm -f "$dst"
+      $DRY_RUN_CMD cp "$src" "$dst"
+      $DRY_RUN_CMD chmod u+w "$dst"
+      $DRY_RUN_CMD ${pkgs.coreutils}/bin/tee "$stamp" <<< "$hash" > /dev/null
+    fi
+  '';
 
   home.sessionVariables = {
   };

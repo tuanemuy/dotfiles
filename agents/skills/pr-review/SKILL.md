@@ -1,12 +1,6 @@
 ---
 name: pr-review
-description: >
-  Structured multi-layer PR review with iterative improvement loop.
-  Use this skill whenever the user asks to review a pull request, do code review,
-  check a PR, or wants feedback on changes in a GitHub PR. Also trigger when the
-  user mentions "PR review", "review this PR", "code review PR #123",
-  or gives a GitHub PR URL. Even casual phrasing like "this PR大丈夫？"
-  or "PRチェックして" should trigger this skill.
+description: "Structured multi-layer PR review with iterative improvement loop. Use this skill whenever the user asks to review a pull request, do code review, check a PR, or wants feedback on changes in a GitHub PR. Also trigger when the user mentions \"PR review\", \"review this PR\", \"code review PR #123\", or gives a GitHub PR URL. Even casual phrasing like \"this PR大丈夫？\" or \"PRチェックして\" should trigger this skill."
 ---
 
 # PR Review Skill
@@ -17,10 +11,13 @@ Structured, multi-layer code review for GitHub Pull Requests. Each review round 
 
 ```
 PR取得 → レイヤー分析 → 並列レビュー → review-NNN.md作成
-  → ブロッカーあり？ → コード修正 → 再レビュー（次の連番ファイル）
-  → 2回連続ブロッカー・ワーニングなし → 完了（最大10ラウンド）
-  → 設計判断があれば ADR に追記
+  → 指摘を台帳（triage.md）で仕分け → fix を修正 → 再レビュー（次の連番ファイル）
+  → fix と仕分けた指摘が0件のラウンドで完了（最大10ラウンド）
+  → 設計判断があれば ADR（.thread/{PR番号}/adr.md）に追記
+  → 記録基準を満たす ADR を .adr/ に昇格 → レビューディレクトリ（.thread/{PR番号}/review/）を削除
 ```
+
+レビューループの共通構造（出力フォーマット・指摘台帳・修正ループ・完了条件）は `_shared/references/review-loop.md` を参照。
 
 ## Step 1: PR の取得と分析
 
@@ -97,7 +94,7 @@ BlockerがなければBlockersセクションに「なし」と書く。
 
 すべてのサブエージェントが完了したら、結果を1つの連番Markdownファイルにまとめる。
 
-ファイルの保存先: `.pr/{PR番号}/review/` ディレクトリに保存する。なければ作成する。
+ファイルの保存先: `.thread/{PR番号}/review/` ディレクトリに保存する。なければ作成する。
 
 ファイル名: `review-NNN.md`（NNNは001から始まる3桁の連番）
 
@@ -135,19 +132,18 @@ BlockerがなければBlockersセクションに「なし」と書く。
 
 review-NNN.md に指摘がある場合:
 
-1. レビューファイルを読み、すべてのBlocker・Warningを確認する
-2. **Blockerから着手し、続けてWarningもすべて修正する** — Warningも放置せず潰す
-3. どうしてもこのPRのスコープでは対応できない場合のみ後回しにする:
-   - `.pr/{PR番号}/adr.md` に判断理由を記録する（なぜ今やらないのか、どう対応すべきか）
-   - `gh issue create` で別Issueを起票し、ADRへのリンクを含める
-   - レビューファイルの該当指摘に `→ 別Issue #{新Issue番号} で対応` と追記する
+1. すべての Blocker・Warning を指摘台帳 `.thread/{PR番号}/review/triage.md` と突き合わせる（フォーマットは共通ガイドの「指摘台帳」参照）。Key が一致する既出指摘は判定を継承して再指摘カウントを +1 し、再審議しない
+2. 新規の指摘を「このPRで直す（fix）」「対応しない（wont-fix）」「後回し（defer）」に仕分けて台帳に記録する
+   - **wont-fix** — 誤った指摘、過度に防御的な提案、場当たり的に直すより設計を見直すべき指摘。一行理由を台帳に書く
+   - **defer** — どうしてもこのPRのスコープでは対応できない場合のみ。`gh issue create` で別Issueを起票し、Issue番号を台帳に記録する
+3. **fix は Blocker から着手し、続けて Warning もすべて修正する** — Warning も放置せず潰す
 4. 修正が終わったら、Step 3に戻って再レビュー（次の連番ファイルを作る）
 
 ## Step 6: ADR への追記
 
-レビュー中に重要な設計判断が見つかった場合（例: 特定のパターンを採用した理由、ライブラリの選定理由など）、`.pr/{PR番号}/adr.md` に追記する。
+レビュー中に**プロダクトとしての重要な設計判断**を下した場合（例: 特定のパターンを採用した理由、ライブラリの選定理由など）、`.thread/{PR番号}/adr.md` に追記する。指摘への対応要否（wont-fix / defer）の記録には使わない — それは台帳の役割。仕分けが設計判断を伴う場合のみ ADR に起こし、台帳の理由欄からリンクする。adr.md は作業ログで、ルート `.adr/` への昇格判定は Step 8 でまとめて行う（基準は `_shared/references/adr-guide.md`）。
 
-1. `.pr/{PR番号}/adr.md` が存在するか確認する
+1. `.thread/{PR番号}/adr.md` が存在するか確認する
 2. なければ新規作成し、以下のヘッダーを書く
 3. あれば末尾に追記する
 
@@ -179,28 +175,48 @@ Proposed
 
 ## Step 7: 完了判定
 
-**2回連続でBlocker 0件 かつ Warning 0件**になったらレビュー完了。
+完了条件は共通ガイドの通り「**そのラウンドで `fix` と仕分けた指摘がゼロ**」（台帳に `wont-fix` / `defer` を記録済みの指摘は件数から除外）。
 
 **最大ラウンド数: 10回。** 10ラウンドに達しても収束しない場合は強制終了し、残っている指摘を最終レビューファイルにまとめてユーザーに判断を委ねる。
 
 例:
-- review-001.md → Blocker 3件, Warning 5件 → 全部修正 → 再レビュー
-- review-002.md → Blocker 0件, Warning 2件 → Warning修正 → 再レビュー
-- review-003.md → Blocker 0件, Warning 0件 → もう1回レビュー
-- review-004.md → Blocker 0件, Warning 0件 → 2回連続クリーン！完了！
+- review-001.md → Blocker 3件, Warning 5件 → 全部 fix → 再レビュー
+- review-002.md → Warning 2件 → 1件 fix、1件は wont-fix を台帳に記録 → 再レビュー
+- review-003.md → Warning 1件 → 既出（Key 一致）で判定継承、fix 0件 → 完了！
 
-完了時にサマリーを出す:
+## Step 8: ADR の昇格とレビューファイルの削除
+
+### ADR の昇格
+
+`.thread/{PR番号}/adr.md` が存在すれば、各エントリを `_shared/references/adr-guide.md` の記録基準（寿命テスト・波及テスト）にかけ、満たすものだけをプロジェクトルートの `.adr/NNN-title.md` に転記する（既存の連番の続き。ディレクトリがなければ新設する）。転記したエントリには adr.md 側に「→ `.adr/NNN` に昇格」と一行追記する。基準を満たさないエントリは作業履歴としてそのまま残す。
+
+### レビューファイルの削除
+
+APPROVED で完了したら、レビューの中間成果物を片付ける。指摘はすべてコードに反映済みか台帳の判定として決着しているため、レビューファイルを残す必要はない。
+
+```bash
+rm -rf .thread/{PR番号}/review/
+```
+
+- **削除するのは `review/` ディレクトリだけ。** `.thread/{PR番号}/adr.md` は残す（設計判断の記録なので消さない）。
+- **10ラウンドに達して APPROVED に至らなかった場合は削除しない。** 残っている指摘をユーザーが確認する必要があるため、レビューファイルと台帳をそのまま残す。
+- 削除前に、defer で起票した Issue 番号がすべて完了サマリーに載っていることを確認する（台帳が消えても追跡先が残るように）。
+- 削除前に台帳の `wont-fix` 行を確認し、「指摘は正しいが意図的に逸脱している」ものは現場の why not コメントか ADR に転記する（`_shared/references/review-loop.md` の後片付けに従う）。
+
+削除が済んだら完了サマリーを出す:
+
 ```
 PR Review 完了！
 
 全{N}ラウンドのレビューを実施しました。
 - 初回ブロッカー: {数}件
 - 修正済み: {数}件
-- 後回し（別Issue起票）: {数}件
+- 見送り: wont-fix {数}件 / defer {数}件
 - 最終ステータス: APPROVED
-- ADR追加: {あれば .pr/{PR番号}/adr.md に記載}
+- ADR追加: {あれば .thread/{PR番号}/adr.md に記載}
+- ADR昇格: {.adr/NNN-... x{数} / 昇格対象なし}
 - 別Issue: {起票したIssue番号のリスト}
-- レビューファイル: .pr/{PR番号}/review/review-001.md 〜 review-{NNN}.md
+- レビューファイル: 削除済み（.thread/{PR番号}/review/）
 ```
 
 ## 重要な注意点
@@ -208,6 +224,6 @@ PR Review 完了！
 - 委譲方式・並列実行・失敗時の扱いは `_shared/references/subagent-policy.md` に従う
 - レビューは**厳しく**行う。「まあいいか」は禁止。ただし誤検知は避ける
 - 修正するのは自分が確信を持てるものだけ。判断に迷うものはユーザーに聞く
-- **修正が基本**。後回しにするのは「このPRのスコープ外」と明確に判断できるときだけ。後回し時は必ずADR記録＋別Issue起票する
-- レビューファイルは追記ではなく、毎ラウンド新規作成（履歴が残る）
-- ADRは本当に重要な設計判断のみ。些細な実装詳細はADRにしない
+- **修正が基本**。defer は「このPRのスコープ外」と明確に判断できるときだけ。見送り（wont-fix / defer）は必ず台帳に記録し、defer は別Issueも起票する
+- レビューファイルは追記ではなく、毎ラウンド新規作成（ループ中は履歴として参照する）。完了後は Step 8 でまとめて削除する
+- ADRはプロダクトの設計判断のみ。指摘への対応要否や些細な実装詳細はADRにしない

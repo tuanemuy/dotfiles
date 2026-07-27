@@ -8,7 +8,7 @@ HTML 作成・レビューの細かい手順（レスポンシブ条件、ビュ
 
 ## Step 0: gate 判定（デザインが必要か）
 
-`.issue/{Issue番号}/plan.md` を読み、このIssueが**ユーザーに見える UI 画面を新設・変更するか**を判断する。
+`.thread/{Issue番号}/plan.md` を読み、このIssueが**ユーザーに見える UI 画面を新設・変更するか**を判断する。
 
 デザインフェーズに入るのは次のような場合:
 
@@ -57,7 +57,7 @@ design-flow の `../../design-flow/references/phase3-production.md` の手順に
 
 issue-implement 固有の差分として、`/frontend-design` に渡すコンテキストへ次を加える:
 
-- **このIssueの文脈**: `.issue/{Issue番号}/plan.md` から、この画面で実現したいこと・表示する情報・操作
+- **このIssueの文脈**: `.thread/{Issue番号}/plan.md` から、この画面で実現したいこと・表示する情報・操作
 - **既存コンポーネントへの準拠**: Step 1 で読んだ既存の Button / Card / Form / Nav 等のパターンを再利用し、**新規画面が既存アプリの一部として自然に見える**ようにすること。独自の新しいUIパターンを持ち込まない
 - **デザイントークン**: `spec/design/tokens.md`（または Step 1 で抽出した内容）
 

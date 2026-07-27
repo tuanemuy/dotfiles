@@ -1,9 +1,6 @@
 ---
 name: issue-dashboard
-description: >
-  リポジトリの全オープン Issue を読み、独立したテーマごとにセクション分けして「どれから着手すべきか」「どれを並行して進めてよいか」が一目でわかるダッシュボードを GitHub Issue として生成・更新するスキル。各 Issue の優先度・依存先・カテゴリーは AI が内容を読んで判断する。既存のダッシュボード Issue があれば新規 Issue と close 済みを反映して整理し、なければ新規作成する。
-  ユーザーが「Issue のダッシュボード作って」「Issue を整理して」「どれから着手すべき？」「Issue の優先順位つけて」「依存関係を可視化して」「並行して進められる Issue は？」「バックログ整理して」「Issue の全体像を見たい」「タスクの依存を整理して」「issue dashboard」「prioritize issues」「visualize issue dependencies」「どの Issue から手をつければいい？」「Issue 多すぎて何からやればいいかわからない」などと言ったときに積極的にトリガーする。
-  個別 Issue の実装計画は issue-planner、実装まで一気通貫は issue-implement を使う。本スキルは「複数 Issue を横断して全体の進め方を俯瞰する」ことに特化している。
+description: リポジトリの全オープン Issue を読み、独立したテーマごとにセクション分けして「どれから着手すべきか」「どれを並行して進めてよいか」が一目でわかるダッシュボードを GitHub Issue として生成・更新するスキル。各 Issue の優先度・依存先・カテゴリーは AI が内容を読んで判断する。既存のダッシュボード Issue があれば新規 Issue と close 済みを反映して整理し、なければ新規作成する。ユーザーが「Issue のダッシュボード作って」「Issue を整理して」「どれから着手すべき？」「Issue の優先順位つけて」「依存関係を可視化して」「並行して進められる Issue は？」「バックログ整理して」「Issue の全体像を見たい」「タスクの依存を整理して」「issue dashboard」「prioritize issues」「visualize issue dependencies」「どの Issue から手をつければいい？」「Issue 多すぎて何からやればいいかわからない」などと言ったときに積極的にトリガーする。個別 Issue の実装計画は issue-planner、実装まで一気通貫は issue-implement を使う。本スキルは「複数 Issue を横断して全体の進め方を俯瞰する」ことに特化している。
 ---
 
 # Issue Dashboard

@@ -28,15 +28,15 @@ Phase 1.5 でデザインモック（`spec/design/pages/*.html`）を作成し�
 
 ## 対象Issue
 - Issue番号: #{Issue番号}
-- 計画ファイル: .issue/{Issue番号}/plan.md
+- 計画ファイル: .thread/{Issue番号}/plan.md
 - デザインモック: spec/design/pages/{画面名}.html（Phase 1.5 で作成した場合のみ。完成イメージとして参照し、既存コンポーネントを使った実コードに落とし込む）
 
 ## やること
-1. .issue/{Issue番号}/plan.md を読む（デザインモックがあれば併せて確認する）
+1. .thread/{Issue番号}/plan.md を読む（デザインモックがあれば併せて確認する）
 2. 各実装ステップについて、対象ファイルを読んで現状を把握する
 3. 計画の指示に従って変更を適用する（UI はデザインモックの完成イメージに沿わせる）
 4. CLAUDE.md や README.md にテスト・lint・型チェックの実行方法が記載されていれば、それに従って確認する
-5. 実装中に非自明な設計判断を下した場合は、.issue/{Issue番号}/adr.md に追記する
+5. 実装中に非自明な設計判断を下した場合は、.thread/{Issue番号}/adr.md に追記する
    - 既に adr.md がある場合は末尾に追記、なければ新規作成
    - 形式: 各決定ごとに「## 決定タイトル」「コンテキスト」「決定内容」「理由」を記載
 
@@ -63,7 +63,7 @@ Phase 1.5 でデザインモック（`spec/design/pages/*.html`）を作成し�
 
 ### 残存課題の記録
 
-実装結果を確認した後、以下のいずれかに該当する項目があれば `.issue/{Issue番号}/progress.md` に記録する:
+実装結果を確認した後、以下のいずれかに該当する項目があれば `.thread/{Issue番号}/progress.md` に記録する:
 
 - plan.md の項目のうち、完全には実装できなかったもの
 - 既知の制限事項やエッジケース
@@ -74,40 +74,9 @@ Phase 1.5 でデザインモック（`spec/design/pages/*.html`）を作成し�
 
 該当なしの場合は progress.md を作成しない。
 
-## Step 3: 検証環境確認とブラウザ検証
+## Step 3: コミットとPR作成
 
-### 検証環境確認
-
-ブラウザ検証の前に、testing.md の「検証環境の起動」に記載されたコマンドでサーバーが正常に起動できることを確認する。ステージング・本番環境へのデプロイは行わない。
-
-```bash
-# testing.md に記載された手順に従う（例）
-pnpm dev     # 開発サーバーが起動するか確認
-```
-
-起動でエラーが発生した場合は、ブラウザ検証前に修正する。
-
-### ブラウザ検証
-
-`../manual-test/SKILL.md` の手順に従ってブラウザ検証を実行する。シードデータの準備も manual-test に委ねる。
-
-manual-test に渡す情報:
-
-- テストソース: `.issue/{Issue番号}/testing.md`
-- 成果物ディレクトリ: `.issue/{Issue番号}/manual-test/`
-- Issue番号: #{Issue番号}
-
-**スキップは原則しない。** 以下のいずれかを実際に確認した場合のみスキップ可:
-
-- Web UIなし（`package.json` の dev/start 系欠如、UIファイル不在を確認）
-- testing.md に画面操作項目が1件もない（実際に読んで確認）
-- `agent-browser --version` がエラー
-
-スキップする場合は PR の Test plan に「スキップ理由: {確認した内容}」を一行で記載する。「該当しそう」での自己判断は不可。
-
-ブラウザ検証で失敗が出たら、変更箇所起因かつ即時修正可能なら Phase 2 に戻って修正・再検証。それ以外は manual-test がIssue起票する。
-
-## Step 4: コミットとPR作成
+ブラウザ検証はこのフェーズでは行わない。Phase 3 のレビュー・修正が完了した後、Phase 4 でレビュー済みのコードに対して実行する（`../SKILL.md` Phase 4 参照）。
 
 1. 変更をステージング＆コミット
 
@@ -138,7 +107,7 @@ gh pr create --draft --title "{PRタイトル}" --body "$(cat <<'EOF'
 Closes #{Issue番号}
 
 ## Implementation Plan
-Based on `.issue/{Issue番号}/plan.md`
+Based on `.thread/{Issue番号}/plan.md`
 
 ## Test plan
 
@@ -147,10 +116,6 @@ Based on `.issue/{Issue番号}/plan.md`
 
 ### 確認項目
 - {testing.md からの主要確認項目}
-
-## Browser Verification
-- {ブラウザ検証の実行結果サマリー — 全PASS / 一部FAIL等 / スキップ}
-- {FAILがあれば起票したIssue番号と理由}
 
 🤖 Generated with [Claude Code](https://claude.com/claude-code)
 EOF

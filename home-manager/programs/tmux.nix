@@ -19,6 +19,9 @@
     bind v split-window -h -c '#{pane_current_path}'
     bind s split-window -v -c '#{pane_current_path}'
     bind-key -n C-h send-keys \u007f
+    # csi-u reports C-[ as CSI 91;5u, which apps requesting modifyOtherKeys do
+    # not read as Esc, so intercept it and hand them a bare ESC instead.
+    bind-key -n C-[ send-keys Escape
 
     set-option -gq status-justify left
     set-option -gq status-left-style none

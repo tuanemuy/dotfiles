@@ -100,5 +100,5 @@ package.json の dev スクリプトの中身を確認し、適切な方法を�
 - **URL**: http://localhost:3001
 - **依存インストール**: pnpm install
 - **ビルド**: 不要（開発サーバー）
-- **検出ソース**: .issue/123/testing.md の「確認環境」セクション
+- **検出ソース**: .thread/123/testing.md の「確認環境」セクション
 ```
