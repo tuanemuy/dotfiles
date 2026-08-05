@@ -33,7 +33,7 @@ spec/ のディレクトリ構成（domains / database / usecases / pages / test
 | 区分 | spec スコープ | 実装スコープの例 |
 |------|-------------|----------------|
 | ドメイン層 | spec/domains/ | src/core/domain/ |
-| アダプター層 | spec/database/ | src/core/adapters/, マイグレーション |
+| アダプター層 | spec/domains/ のポート定義, spec/testcases/ports/ | src/core/adapters/, マイグレーション |
 | ユースケース層 | spec/usecases/ | src/core/application/ |
 | フロントエンド | spec/pages/ | src/app/, src/components/ |
 | テスト | spec/testcases/ | テストファイル群 |

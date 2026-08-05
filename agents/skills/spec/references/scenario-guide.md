@@ -18,7 +18,7 @@
 
 出力先: `spec/scenario/${category}.md`（カテゴリーごとにファイルを分ける）
 
-カテゴリーごとに独立して詳細化できるため、`../../_shared/references/subagent-policy.md` に従い、カテゴリー単位でサブエージェントに並列で委譲する（各委譲先には `spec/idea.md` と `spec/scenario/index.md` を読ませる）。
+カテゴリーごとに独立して詳細化できるため、`../../_shared/references/subagent-policy.md` に従い、カテゴリー単位でサブエージェント（**判断区分** — シナリオの設計を伴う）に並列で委譲する（各委譲先には `spec/idea.md` と `spec/scenario/index.md` を読ませる）。
 
 条件:
 - 利用者の視点で具体的なフローが分かるように記述する

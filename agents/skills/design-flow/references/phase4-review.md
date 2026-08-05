@@ -7,7 +7,7 @@
 
 ## レビューパイプライン
 
-以下の順序でレビューを行う。各ステップで見つかった指摘は指摘台帳（`spec/design/review/triage.md`、SKILL.md「レビューの原則」参照）で仕分け、`fix` を修正してから次に進む。
+以下の順序でレビューを行う。各ステップの指摘は `spec/design/review/${連番}.md` に記録し、指摘台帳（`spec/design/review/triage.md`、SKILL.md「レビューの原則」参照）で仕分けて、`fix` を修正してから次に進む。
 
 ```
 Step 1: agent-browser による視覚的確認
@@ -56,8 +56,6 @@ agent-browser --session design-review screenshot /tmp/design-screenshots/review/
 agent-browser --session design-review close
 ```
 
-指摘事項を `spec/design/review/${連番}.md` に記録する。
-
 ## Step 2: /critique によるUXレビュー
 
 Skill ツールで `/critique` を呼び出し、`spec/design/pages/` 配下のHTMLデザインを評価する。
@@ -70,7 +68,6 @@ Skill ツールで `/critique` を呼び出し、`spec/design/pages/` 配下のH
 - **トークン準拠** — `spec/design/tokens.md` の値が正しく使われているか
 - **方針との整合性** — `spec/design/index.md` の方針に沿っているか
 
-指摘事項を `spec/design/review/${連番}.md` に記録し、修正する。
 修正後、問題が残っていれば再度 `/critique` でレビューする。
 
 ## Step 3: /polish による仕上げレビュー
@@ -82,8 +79,6 @@ Skill ツールで `/critique` を呼び出し、`spec/design/pages/` 配下のH
 - スペーシングの不統一
 - 微妙な色味やフォントサイズの不整合
 - 視覚的なリズムの乱れ
-
-指摘事項を `spec/design/review/${連番}.md` に記録し、修正する。
 
 ## Step 4: /audit によるアクセシビリティレビュー
 
@@ -99,8 +94,6 @@ Skill ツールで `/critique` を呼び出し、`spec/design/pages/` 配下のH
 - タッチターゲットサイズ（モバイル時に十分な大きさか考慮）
 - 流動的タイポグラフィ・スペーシングが破綻していないこと
 - `<meta name="viewport">` 設定の妥当性
-
-指摘事項を `spec/design/review/${連番}.md` に記録し、修正する。
 
 ## 終了条件
 

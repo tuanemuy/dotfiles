@@ -9,14 +9,14 @@ description: "Issueの計画立案 → 実装 → PRレビュー・修正 → �
 
 ```text
 Phase 1: 計画（issue-plannerに委譲）
-  → .thread/{Issue番号}/plan.md, testing.md, (adr.md) を作成
+  → .thread/{Issue番号}/plan.md, steps.md, testing.md, (adr.md) を作成
 
 Phase 1.5: デザイン作成（条件付き — フロントエンドのUI画面を新設・変更する場合のみ）
-  plan.md から gate 判定 → 既存コードからデザイン言語を抽出（ドラフト提案なし）
+  steps.md の UI セクションから gate 判定 → 既存コードからデザイン言語を抽出（ドラフト提案なし）
   → spec/design/pages/*.html を作成 → レビュー（UI画面の新設・変更がなければスキップ）
 
 Phase 2: 実装
-  ブランチ作成 → plan.md に沿って実装 → コミット → **Draft PR 作成**
+  ブランチ作成 → steps.md に沿って実装 → コミット → **Draft PR 作成**
 
 Phase 3: レビュー・修正
   → 指摘修正 → 再レビュー（1ラウンドでクリーンなら完了、最大10ラウンド）→ APPROVED（PR は **Draft のまま**）
@@ -40,11 +40,19 @@ Phase 8: ADR の昇格とレビューファイルの削除
   → APPROVED で完了していれば .thread/{Issue番号}/review/ を削除（plan.md・adr.md 等は残す）
 ```
 
+計画ファイルは役割で分かれている（詳細は `../issue-planner/references/plan-template.md`）。フェーズごとに必要なものだけを読む:
+
+| ファイル | 役割 | 読むフェーズ |
+| --- | --- | --- |
+| `plan.md` | 契約 — 目的 / 受け入れ基準 / スコープ / リスク / テスト方針 | 全フェーズ |
+| `steps.md` | 手順 — 設計 / 実装ステップ | Phase 1.5・2（Phase 3 は任意） |
+| `adr.md` | 設計判断 | Phase 8 で昇格判定 |
+
 ## Phase 1: 計画
 
 `../issue-planner/SKILL.md` を読み、その手順に従って計画を立てる。
 
-計画が完了したら（plan.md, testing.md, 必要に応じて adr.md が作成されたら）、次のフェーズに進む前に testing.md の「確認環境」セクションを検証する。具体的には:
+計画が完了したら（plan.md, steps.md, testing.md, 必要に応じて adr.md が作成されたら）、次のフェーズに進む前に testing.md の「確認環境」セクションを検証する。具体的には:
 
 1. testing.md の「実行手順」を読む
 2. そこに書かれた各コマンドが CLAUDE.md・README.md・package.json の scripts（全項目）に実在するか、実際にファイルを読んで確認する
@@ -56,11 +64,11 @@ Phase 8: ADR の昇格とレビューファイルの削除
 
 ## Phase 1.5: デザイン作成（条件付き）
 
-Issue が**ユーザーに見える UI 画面を新設・変更する**場合だけ、実装に入る前に新しい画面の HTML モックを作る。画面の絵を先に固めることで、Phase 2 の実装サブエージェントが完成イメージを持って実装でき、手戻りを減らせる。
+Issue が**ユーザーに見える UI 画面を新設・変更する**場合だけ、実装に入る前に新しい画面の HTML モックを作る。
 
 `references/design-guide.md` を読み、その手順に従う。要点:
 
-- まず `.thread/{Issue番号}/plan.md` から gate 判定する。新規UI画面の追加・既存画面のレイアウト変更がなければ（バックエンド/API/ロジックのみ、軽微な調整など）、判定理由を一言ログに残してそのまま Phase 2 へスキップする。
+- まず `.thread/{Issue番号}/steps.md` の「UI / プレゼンテーション」から gate 判定する。新規UI画面の追加・既存画面のレイアウト変更がなければ（バックエンド/API/ロジックのみ、軽微な調整など）、判定理由を一言ログに残してそのまま Phase 2 へスキップする。
 - 実行する場合、デザインの方向性は**既存実装から抽出する**（ドラフト提案・新規トークン定義はしない）。新規画面が出荷済みのアプリに自然に馴染むことがゴール。
 - 成果物は `spec/design/` 配下に出力し、Phase 2 のコミットに含めて実装と一緒に PR へ載せる。
 
@@ -99,7 +107,7 @@ manual-test に渡す情報:
 
 ### 結果の処理
 
-- **変更起因の FAIL** — サブエージェントに委譲して修正し（委譲方式は `../_shared/references/subagent-policy.md` に従う）、コミット・push してから Phase 3 のレビューループに戻る（レビューファイルの連番は続きから）。APPROVED 後にブラウザ検証を再実行する。再検証は FAIL したケースと修正の影響範囲に絞ったスコープ再実行でよい
+- **変更起因の FAIL** — サブエージェント（**判断区分**）に委譲して修正し（委譲方式とモデル選択は `../_shared/references/subagent-policy.md` に従う）、コミット・push してから Phase 3 のレビューループに戻る（レビューファイルの連番は続きから）。APPROVED 後にブラウザ検証を再実行する。再検証は FAIL したケースと修正の影響範囲に絞ったスコープ再実行でよい
 - **変更と無関係の FAIL** — manual-test の手順に従って Issue を起票し、検証としてはそのまま続行する。このような FAIL だけが残った状態は通過扱い
 - **検証サイクルの上限: 3周。**「修正 → 再レビュー → 再検証」を3周しても通過しない場合は強制終了し、残っている FAIL をまとめてユーザーに判断を委ねる（PR は Draft のまま）
 
@@ -165,7 +173,7 @@ Phase 3 のレビューが APPROVED で完了していれば、レビューの�
 rm -rf .thread/{Issue番号}/review/
 ```
 
-- **削除するのは `review/` ディレクトリだけ。** `plan.md` / `testing.md` / `adr.md` / `progress.md` / `manual-test/` は残す。
+- **削除するのは `review/` ディレクトリだけ。** `plan.md` / `steps.md` / `testing.md` / `adr.md` / `progress.md` / `manual-test/` は残す。
 - **APPROVED に至らずに終わった場合は削除しない。** レビュー10ラウンド到達、または検証サイクル3周到達で PR が Draft のまま残っている場合は、ユーザーが残った指摘を確認する必要があるため、レビューファイルと台帳をそのまま残す。
 - 削除前に、defer で起票した Issue 番号がすべて完了報告に載っていることを確認する（台帳が消えても追跡先が残るように）。
 - 削除前に台帳の `wont-fix` 行を確認し、「指摘は正しいが意図的に逸脱している」ものは現場の why not コメントか ADR に転記する（`../_shared/references/review-loop.md` の後片付けに従う）。
@@ -179,7 +187,8 @@ rm -rf .thread/{Issue番号}/review/
 Issue #{Issue番号} の実装が完了しました！
 
 ## 計画
-- 計画ファイル: .thread/{Issue番号}/plan.md
+- 契約: .thread/{Issue番号}/plan.md
+- 実装手順: .thread/{Issue番号}/steps.md
 - 設計判断: .thread/{Issue番号}/adr.md（{あり/なし}）
 - 動作確認計画: .thread/{Issue番号}/testing.md
 - 残存課題: .thread/{Issue番号}/progress.md（{あり/なし}）
@@ -222,10 +231,10 @@ Issue #{Issue番号} の実装が完了しました！
 ## 片付け
 - レビューファイル: {削除済み / APPROVED 未達のため保持（.thread/{Issue番号}/review/）}
 - ADR 昇格: {.adr/NNN-... x{数} / 昇格対象なし}
-- 残した成果物: plan.md / testing.md / adr.md / progress.md / manual-test/
+- 残した成果物: plan.md / steps.md / testing.md / adr.md / progress.md / manual-test/
 ```
 
 ## 原則
 
-- Issueの**意図**を満たすことに集中する。plan.md は手段。意図に沿う小さな修正は plan.md 外でもスコープ内
-- メインはオーケストレーションに徹し、実作業（実装・修正）はサブエージェントに委譲する。委譲方式・並列実行・失敗時の扱いは `../_shared/references/subagent-policy.md` に従う
+- Issueの**意図**を満たすことに集中する。steps.md は手段。意図に沿う小さな修正は steps.md 外でもスコープ内（ただし plan.md のスコープは越えない）
+- メインはオーケストレーションに徹し、実作業（実装・修正）はサブエージェントに委譲する。実装・レビュー・修正は判断区分、関連コードの所在調査やコマンドの裏取りといった下調べは探索区分。委譲方式・並列実行・モデル選択・失敗時の扱いは `../_shared/references/subagent-policy.md` に従う
