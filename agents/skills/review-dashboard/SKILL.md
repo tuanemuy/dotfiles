@@ -1,6 +1,6 @@
 ---
 name: review-dashboard
-description: プロジェクトを区分（レビュー単位）に分割し、GitHub Issue のダッシュボードで管理して、実行1回につき1区分だけを多観点で徹底的にレビューするスキル。「狭く深く、周回で全体を覆う」ローテーション型の定期レビュー基盤。ユーザーが「レビューダッシュボード作って」「定期レビューして」「今日のレビューやって」「1区分レビューして」「review dashboard」などと言ったときにトリガーする。1実行1区分で完結するため cron・スケジュール実行からの定期起動にも適する。単一テーマの全体監査は architecture-audit / implement-audit / spec-sync、区分の多観点深掘りは本スキル。
+description: プロジェクトを区分に分割し、GitHub Issue のダッシュボードで管理して、実行1回につき1区分だけを多観点でレビューするスキル。ユーザーが「レビューダッシュボード作って」「定期レビューして」「今日のレビューやって」「review dashboard」などと言ったときにトリガーする。1実行1区分で完結するため cron・スケジュール実行にも適する。単一テーマの全体監査は architecture-audit / implement-audit / spec-sync、区分の多観点深掘りは本スキル。
 ---
 
 # Review Dashboard — 区分ローテーションによる定期レビュー
@@ -152,7 +152,7 @@ git branch -D "review-dashboard/$(date +%Y%m%d)"
 
 ### 観点別レビューの並列実行
 
-区分に列挙された観点ごとにサブエージェントを**並列**起動する（委譲方式は `../_shared/references/subagent-policy.md`）。各観点の検査内容とプロンプトは `references/review-perspectives.md` に従う。
+区分に列挙された観点ごとにサブエージェント（**判断区分**）を**並列**起動する（委譲方式とモデル選択は `../_shared/references/subagent-policy.md`）。区分定義のためのファイル一覧収集は**探索区分**でよい。各観点の検査内容とプロンプトは `references/review-perspectives.md` に従う。
 
 各サブエージェントには必ず以下を渡す:
 

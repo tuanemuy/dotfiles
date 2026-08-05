@@ -1,6 +1,6 @@
 ---
 name: spec-to-issues
-description: spec/ の設計をシナリオ単位の縦スライスに分割し、各スライスを実装チェックリスト（spec 要素台帳由来）付きの GitHub Issue として起票するスキル。walking skeleton を先頭に依存順で並べ、起票後は issue-implement で 1 Issue ずつ end-to-end に実装・検証できる状態を作る。ユーザーが「specをIssue化して」「縦に分割して」「スライスして起票して」「実装をIssueで進めたい」「spec to issues」などと言ったとき、または spec/ がある状態で実装を Issue 駆動で進めたいと言われたときにトリガーする。起票済み Issue の実装は issue-implement、Issue 全体の俯瞰は issue-dashboard、小規模 spec の一括実装は implement を使う。
+description: spec/ の設計をシナリオ単位の縦スライスに分割し、各スライスを実装チェックリスト（spec 要素台帳由来）付きの GitHub Issue として起票するスキル。walking skeleton を先頭に依存順で並べる。ユーザーが「specをIssue化して」「縦に分割して」「スライスして起票して」「実装をIssueで進めたい」「spec to issues」などと言ったとき、または spec/ がある状態で実装を Issue 駆動で進めたいと言われたときにトリガーする。起票済み Issue の実装は issue-implement、Issue 全体の俯瞰は issue-dashboard、小規模 spec の一括実装は implement を使う。
 ---
 
 # Spec to Issues — 縦スライス Issue 化
@@ -62,10 +62,20 @@ gh issue list --state all --limit 200 --search "spec-slice" --json number,title,
 
 最初のスライスは機能ではなく「骨格」にする。縦スライスの弱点は横断的な基盤・設計の一貫性が崩れやすいことなので、それを最初の 1 本で先に固める。
 
-- DB スキーマとマイグレーションの土台、共通ドメイン基盤（エラー型・共通値オブジェクト等）、アプリの起動導線
+- 共通ドメイン基盤（エラー型・共通値オブジェクト等）、アプリの起動導線
+- **ポート適合テストの土台と in-memory アダプター** — 永続バックエンドはここでは選ばない
 - 代表シナリオ 1 本を最小構成で end-to-end に通す（ドメイン → アダプター → ユースケース → ページまで貫通）
 
 特定シナリオに属さない横断的な台帳行（共通基盤・共通コンポーネント等）は原則 walking skeleton に割り当てる。
+
+### 永続バックエンドは独立スライスにする
+
+spec はポートの契約までを定義し、物理スキーマは持たない（`spec/domains/` のポート定義が唯一の永続化仕様）。したがって「PostgreSQL アダプターの実装」はシナリオではなく**バックエンドの追加**であり、専用のスライスとして切り出す。
+
+- 依存: walking skeleton（適合テストの土台がそこにあるため）。個別の機能スライスには依存させない
+- 完了条件: `spec/testcases/ports/` の適合テストが、そのバックエンドの実装に対して全件通ること
+- 台帳行は割り当てない（物理スキーマは spec の要素ではないため台帳に存在しない）。チェックリストは適合テストの通過で構成する
+- 起票位置は依存順の末尾寄りでよい。機能スライスは in-memory で end-to-end に検証できるので、永続化を待つ必要がない
 
 ### シナリオ単位で縦に切る
 
@@ -77,7 +87,7 @@ gh issue list --state all --limit 200 --search "spec-slice" --json number,title,
 
 スライス設計が終わったら、機械的に検証する:
 
-- 台帳の全行がちょうど 1 つのスライスに割り当てられている（全レイヤーの行数合計 = 各スライスの行数合計。重複も未割当も 0）
+- 台帳の全行がちょうど 1 つのスライスに割り当てられている（全レイヤーの行数合計 = 各スライスの行数合計。重複も未割当も 0）。永続バックエンドのスライスは台帳行 0 行なのでこの合計に影響しない
 - 各スライスの依存先が特定されている（依存先スライスの成果物を使う場合のみ。弱い関連は依存にしない）
 - 依存順に並べたとき循環がない
 
@@ -119,9 +129,11 @@ Issue の起票は外向きの操作なので、起票前に一度だけスラ�
 ## 実装チェックリスト（spec/inventory/ 由来）
 
 - [ ] DOM-user-001 User エンティティ — spec/domains/user.md#エンティティ
-- [ ] ADP-user-001 UserRepository.save — spec/database/user.md#users
+- [ ] DOM-user-002 UserRepository.save（契約） — spec/domains/user.md#ポート
+- [ ] ADP-user-001 UserRepository.save（実装） — spec/domains/user.md#ポート
 - [ ] UC-user-001 registerUser — spec/usecases/user.md#登録
 - [ ] PAGE-signup-001 サインアップページ — spec/pages/signup.md
+- [ ] TC-port-user-001 UserRepository 適合テスト — spec/testcases/ports/user-repository.md
 - [ ] TC-user-001 登録の正常系 — spec/testcases/user.md#TC-user-001
 
 ## 完了条件

@@ -15,9 +15,9 @@ git checkout -b issue/{Issue番号}/{短い説明} "origin/${DEFAULT_BRANCH}"
 
 既に同名のブランチがあればユーザーに確認する。
 
-## Step 2: plan.md に沿った実装
+## Step 2: 計画に沿った実装
 
-サブエージェントを起動し、plan.md に沿って実装させる（委譲方式は `../../_shared/references/subagent-policy.md` に従う）。
+サブエージェント（**判断区分**）を起動し、steps.md の手順に沿って実装させる（委譲方式とモデル選択は `../../_shared/references/subagent-policy.md` に従う）。
 
 Phase 1.5 でデザインモック（`spec/design/pages/*.html`）を作成している場合は、該当する画面のモックのパスをサブエージェントに渡し、それを完成イメージとして実装させる。モックは視覚的・構造的な仕様であって、そのまま貼り付けるものではない点（既存コンポーネントを使った実フレームワークのコードに落とし込む）を明記する。デザインモックが無い場合は下記の「デザインモック」項を省く。
 
@@ -28,20 +28,22 @@ Phase 1.5 でデザインモック（`spec/design/pages/*.html`）を作成し�
 
 ## 対象Issue
 - Issue番号: #{Issue番号}
-- 計画ファイル: .thread/{Issue番号}/plan.md
+- 実装手順: .thread/{Issue番号}/steps.md（設計と実装ステップ）
+- 契約: .thread/{Issue番号}/plan.md（受け入れ基準とスコープ）
 - デザインモック: spec/design/pages/{画面名}.html（Phase 1.5 で作成した場合のみ。完成イメージとして参照し、既存コンポーネントを使った実コードに落とし込む）
 
 ## やること
-1. .thread/{Issue番号}/plan.md を読む（デザインモックがあれば併せて確認する）
+1. steps.md と plan.md を読む（デザインモックがあれば併せて確認する）
 2. 各実装ステップについて、対象ファイルを読んで現状を把握する
 3. 計画の指示に従って変更を適用する（UI はデザインモックの完成イメージに沿わせる）
 4. CLAUDE.md や README.md にテスト・lint・型チェックの実行方法が記載されていれば、それに従って確認する
 5. 実装中に非自明な設計判断を下した場合は、.thread/{Issue番号}/adr.md に追記する
-   - 既に adr.md がある場合は末尾に追記、なければ新規作成
-   - 形式: 各決定ごとに「## 決定タイトル」「コンテキスト」「決定内容」「理由」を記載
+   - adr.md は Issue 単位の作業ログ。書く時点では気軽に記録してよく、ルート `.adr/` への昇格判定は後の片付けフェーズでまとめて行われる
+   - 既に adr.md がある場合は既存の連番の続きに追記、なければ新規作成
+   - 形式: 各決定ごとに「## ADR-{NNN}: {タイトル}」と「### Status」（Proposed）「### Context」「### Decision」「### Consequences」を記載
 
 ## 重要な原則
-- plan.md の指示に忠実に従う — 勝手にスコープを広げない
+- steps.md の指示に忠実に従い、plan.md のスコープを越えない — 勝手に範囲を広げない
 - 既存コードのスタイル・規約に合わせる
 - 不明点や判断に迷う点があれば、実装せずにその旨を報告する
 
@@ -65,7 +67,7 @@ Phase 1.5 でデザインモック（`spec/design/pages/*.html`）を作成し�
 
 実装結果を確認した後、以下のいずれかに該当する項目があれば `.thread/{Issue番号}/progress.md` に記録する:
 
-- plan.md の項目のうち、完全には実装できなかったもの
+- steps.md の項目のうち、完全には実装できなかったもの
 - 既知の制限事項やエッジケース
 - 適用した回避策とその理由
 - フォローアップが必要な作業
@@ -107,7 +109,7 @@ gh pr create --draft --title "{PRタイトル}" --body "$(cat <<'EOF'
 Closes #{Issue番号}
 
 ## Implementation Plan
-Based on `.thread/{Issue番号}/plan.md`
+Based on `.thread/{Issue番号}/plan.md` / `steps.md`
 
 ## Test plan
 

@@ -104,7 +104,7 @@ agent-browser --session design-page-{画面名} close
 
 agent-browser に `viewport` サブコマンドが無い場合は CLI ヘルプで該当オプション（`--width`/`--height`、`--device` など）を確認して同等のことを行う。
 
-画面数が多い場合、サブエージェントに委譲して並列でスクリーンショットを取得してもよい（最大3並列）。
+画面数が多い場合、サブエージェント（**探索区分** — 撮影して返すだけの作業。`../../_shared/references/subagent-policy.md`）に委譲して並列でスクリーンショットを取得してもよい（最大3並列）。
 
 スクリーンショットを Read ツールで確認し、以下の視覚的チェックを行う:
 

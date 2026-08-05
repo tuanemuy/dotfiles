@@ -288,6 +288,5 @@
   "autoMemoryEnabled": false,
   "skipDangerousModePermissionPrompt": true,
   "theme": "dark-ansi",
-  "editorMode": "vim",
-  "model": "claude-fable-5[1m]"
+  "editorMode": "vim"
 }
