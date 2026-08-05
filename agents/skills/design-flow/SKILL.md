@@ -56,14 +56,15 @@ design-flow の成果物は `spec/design/` 配下に出力し、完了時に `sp
 ```
 メインエージェント（オーケストレーション）
   ├── /frontend-design（HTMLデザイン作成）
-  ├── agent-browser（スクリーンショット取得・視覚的レビュー）
-  └── /critique, /polish, /audit（レビュー）
+  ├── agent-browser（スクリーンショット取得）
+  └── レビュアー（観点別、Phase 4）
 ```
 
-メインエージェントは agent-browser を直接操作してもよいし、サブエージェントに委譲してもよい。
-HTMLデザインファイルのスクリーンショット取得やビジュアル確認が主な用途。
+レビューは外部スキルに委譲せず、`references/review-perspectives.md` の観点ごとに立てたレビュアーが行う。
 
-委譲する場合、スクリーンショットの取得は**探索区分**（撮って返すだけ）、デザインの評価・レビューは**判断区分**（`../_shared/references/subagent-policy.md`）。
+スクリーンショットの取得は**探索区分**（撮って返すだけ）、デザインの評価・レビューは**判断区分**（`../_shared/references/subagent-policy.md`）。
+
+メインは観点本文もスクリーンショットも抱え込まない。レビュアーが対象を自分で引き、レビュー全文をファイルに書き、メインには件数と一行リストだけを返す（`../_shared/references/review-loop.md` の「コンテキストの原則」）。
 
 ## セッション管理
 
@@ -100,7 +101,7 @@ Phase 3: デザイン作成
   → spec/design/pages/*.html を生成
 
 Phase 4: レビュー
-  agent-browser で視覚的確認 → /critique → 修正 → /polish → /audit（アクセシビリティ）
+  スクリーンショット取得 → 観点別レビュアーへ委譲（UX → ディテール → a11y・堅牢性）
   → `fix` と仕分けた指摘が0件になるまで繰り返す（最大3ラウンド）
 ```
 
@@ -157,7 +158,9 @@ spec スキルの成果物（`spec/index.md`, `spec/pages/index.md`, `spec/scena
 ## Phase 4: レビュー
 
 `references/phase4-review.md` を読み、その手順に従う。
-複数のデザインスキルを使って段階的にレビュー・改善する。
+スクリーンショット取得 → UX・デザイン品質 → ディテール・一貫性 → アクセシビリティ・堅牢性の順に、観点ごとのレビュアーへ委譲して段階的に改善する。
+
+観点の定義は `references/review-perspectives.md` にあり、各レビュアーが該当節だけを読む。**メインエージェントは観点本文を読まず**、指摘の一行リストだけを受け取る。
 
 成果物:
 - `spec/design/review/${連番}.md` — レビュー記録
