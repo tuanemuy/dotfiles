@@ -23,7 +23,6 @@
       lt = "eza --icons --tree -L";
       dark = "chth dark";
       light = "chth light";
-      autoth = "chth auto";
     }
     // pkgs.lib.optionalAttrs pkgs.stdenv.isDarwin {
       tailscale = "/Applications/Tailscale.app/Contents/MacOS/Tailscale";
@@ -47,7 +46,6 @@
     '')
     (pkgs.lib.mkAfter ''
       export LANG=ja_JP.UTF-8
-      export CURRENT_THEME="light"
       export GIT_DIRECTORY=${gitDirectory}
       export PATH=$PATH:$(npm prefix --location=global)/bin:$HOME/.local/bin
       export PATH="$PATH:/Applications/WezTerm.app/Contents/MacOS"
@@ -79,21 +77,23 @@
         fi
         nvim "$id"_"$title".md
       }
-      function chth() {
-        export CURRENT_THEME=$($GIT_DIRECTORY/dotfiles/tools/change-theme/run.sh $1)
+      THEME_STATE_FILE="''${XDG_STATE_HOME:-$HOME/.local/state}/change-theme/current"
+      function load-theme-state() {
+        CURRENT_THEME="light"
+        CURRENT_THEME_NAME="gruvbox-light"
+        [ -f "$THEME_STATE_FILE" ] && source "$THEME_STATE_FILE"
+        export CURRENT_THEME CURRENT_THEME_NAME
         if [ "$CURRENT_THEME" = "light" ]; then export BAT_THEME="gruvbox-light"; else export BAT_THEME="gruvbox-dark"; fi
+      }
+      function chth() {
+        $GIT_DIRECTORY/dotfiles/tools/change-theme/run.sh $1 >/dev/null || return
+        load-theme-state
         if [ "$2" != "--silent" ]; then
-          echo "Switched to $CURRENT_THEME theme"
+          echo "Switched to $CURRENT_THEME_NAME theme"
         fi
       }
-      # Auto-detect theme from macOS appearance on startup (lightweight, no file writes)
-      if ! defaults read -g AppleInterfaceStyle &>/dev/null; then
-        export CURRENT_THEME="light"
-        export BAT_THEME="gruvbox-light"
-      else
-        export CURRENT_THEME="dark"
-        export BAT_THEME="gruvbox-dark"
-      fi
+      # Restore the last explicitly chosen theme (never inferred from macOS appearance)
+      load-theme-state
     '')
   ];
   profileExtra = ''
