@@ -25,12 +25,7 @@ spec スキルの成果物（シナリオ、ページ設計など）をもとに
 
 ## 前提条件
 
-`agent-browser` CLIが必要。HTMLデザインのスクリーンショット取得・視覚的レビューに使用する。
-
-```bash
-agent-browser --version  # 確認
-agent-browser install     # Chrome for Testingのセットアップ（初回のみ）
-```
+`agent-browser` CLI が必要。HTMLデザインのスクリーンショット取得・視覚的レビューに使用する。セットアップ・頻出コマンド・ターン数を抑える書き方は `../_shared/references/agent-browser.md` に集約してある。
 
 ### 開始前のプロセスクリーンアップ
 

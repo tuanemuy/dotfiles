@@ -9,12 +9,7 @@ testing.md や spec/manual-tests/ に書かれたテスト手順を、agent-brow
 
 ## 前提条件
 
-`agent-browser` CLI が必要。
-
-```bash
-agent-browser --version  # 確認
-agent-browser install     # Chrome for Testing のセットアップ（初回のみ）
-```
+`agent-browser` CLI が必要。セットアップ・頻出コマンド・ターン数を抑える書き方は `../_shared/references/agent-browser.md` に集約してある。ブラウザ操作の前に読む。
 
 ## アーキテクチャ
 

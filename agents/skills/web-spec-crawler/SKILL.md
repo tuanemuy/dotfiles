@@ -19,7 +19,7 @@ description: agent-browserでWebサービスを実際に操作しながら、全
 
 ## 前提条件
 
-`agent-browser` CLI が必要。セットアップ・セッション管理・認証パターン・headed/headless の使い分け・レートリミット対策・頻出コマンドリファレンスは web-spec-explorer と共通。**重複を避けるため、ブラウザ操作のメカニクスは `../web-spec-explorer/SKILL.md` を参照すること。**本スキルはその上に「網羅エンジン」を載せる。
+`agent-browser` CLI が必要。セットアップ・頻出コマンド・ターン数を抑える書き方は `../_shared/references/agent-browser.md` に集約してある。セッション管理・認証パターン・headed/headless の使い分け・レートリミット対策は `../web-spec-explorer/SKILL.md` を参照する。本スキルはその上に「網羅エンジン」を載せる。
 
 委譲方式（サブエージェント / OSプロセス / 親内シミュレート）・並列化・モデル選択の原則は `../_shared/references/subagent-policy.md` に従う。scout と explorer は画面に出ているものを列挙して返すだけなので**探索区分**、auditor は explorer の報告の妥当性を判定するため**判断区分**とする。メインエージェントがオーケストレーションに徹する原則は `../_shared/references/implement-principles.md` の精神を踏襲する。
 
