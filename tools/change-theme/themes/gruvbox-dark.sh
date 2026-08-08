@@ -5,9 +5,6 @@ BACKGROUND="dark"
 WEZTERM_COLOR_SCHEME="Gruvbox Dark"
 GHOSTTY_THEME="Gruvbox Dark"
 
-# Herdr
-HERDR_THEME="gruvbox"
-
 # Palette colors (starship, tmux, etc.)
 # Source: /Applications/Ghostty.app/Contents/Resources/ghostty/themes/Gruvbox Dark
 COLOR_FG0="#ebdbb2"

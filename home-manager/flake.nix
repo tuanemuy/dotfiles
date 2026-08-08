@@ -17,7 +17,6 @@
       url = "https://github.com/nix-community/neovim-nightly-overlay/archive/master.tar.gz";
     };
     llm-agents.url = "github:numtide/llm-agents.nix";
-    herdr.url = "github:ogulcancelik/herdr";
   };
 
   outputs =
