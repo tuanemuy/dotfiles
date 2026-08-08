@@ -12,20 +12,22 @@ in
 {
   home.stateVersion = "24.11";
 
-  home.packages = with pkgs; [
-    cocoapods
-    deno
-    eternal-terminal
-    eza
-    fd
-    ffmpeg
-    gh
-    imagemagick
-    pm2
-    ripgrep
-    nodejs_24
-    inputs.herdr.packages.${pkgs.system}.default
-  ];
+  home.packages =
+    with pkgs;
+    [
+      deno
+      eza
+      fd
+      ffmpeg
+      gh
+      imagemagick
+      pm2
+      ripgrep
+      nodejs_24
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      cocoapods
+    ];
 
   imports = [
     ./llm-agents.nix
@@ -38,8 +40,6 @@ in
     ".wezterm.lua".source = mkOutOfStoreSymlink "${gitDirectory}/dotfiles/config/wezterm.lua";
     ".config/ghostty/config".source =
       mkOutOfStoreSymlink "${gitDirectory}/dotfiles/config/ghostty.config";
-    ".config/herdr/config.toml".source =
-      mkOutOfStoreSymlink "${gitDirectory}/dotfiles/config/herdr/config.toml";
     ".config/.markdownlint-cli2.jsonc".source =
       mkOutOfStoreSymlink "${gitDirectory}/dotfiles/config/markdownlint-cli2.jsonc";
     "biome.json".source = mkOutOfStoreSymlink "${gitDirectory}/dotfiles/biome.json";
@@ -101,36 +101,4 @@ in
           inherit gitDirectory;
         }
       );
-
-  systemd.user.services.et =
-    if pkgs.stdenv.isDarwin then
-      null
-    else
-      {
-        Unit = {
-          Description = "Eternal Terminal server";
-          After = [ "network.target" ];
-        };
-        Service = {
-          ExecStart = "${pkgs.eternal-terminal}/bin/etserver";
-          Restart = "always";
-        };
-        Install = {
-          WantedBy = [ "default.target" ];
-        };
-      };
-
-  launchd.agents.et =
-    if pkgs.stdenv.isDarwin then
-      {
-        enable = true;
-        config = {
-          Label = "com.nix.etserver";
-          ProgramArguments = [ "${pkgs.eternal-terminal}/bin/etserver" ];
-          KeepAlive = true;
-          RunAtLoad = true;
-        };
-      }
-    else
-      null;
 }

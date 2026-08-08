@@ -21,12 +21,7 @@ description: プロジェクトを区分に分割し、GitHub Issue のダッシ
 
 ## 前提条件
 
-`agent-browser` CLI が必要。
-
-```bash
-agent-browser --version  # 確認
-agent-browser install     # Chrome for Testing のセットアップ（初回のみ）
-```
+`agent-browser` CLI が必要。セットアップ・頻出コマンド・ターン数を抑える書き方は `../_shared/references/agent-browser.md` に集約してある。ブラウザ操作の前に読む。
 
 ## アーキテクチャ
 

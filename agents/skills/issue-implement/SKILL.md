@@ -13,7 +13,7 @@ Phase 1: 計画（issue-plannerに委譲）
 
 Phase 1.5: デザイン作成（条件付き — フロントエンドのUI画面を新設・変更する場合のみ）
   steps.md の UI セクションから gate 判定 → 既存コードからデザイン言語を抽出（ドラフト提案なし）
-  → spec/design/pages/*.html を作成 → レビュー（UI画面の新設・変更がなければスキップ）
+  → spec/design/pages/*.html を作成 → レビュー → レビュー記録を削除（UI画面の新設・変更がなければスキップ）
 
 Phase 2: 実装
   ブランチ作成 → steps.md に沿って実装 → コミット → **Draft PR 作成**
@@ -38,6 +38,7 @@ Phase 7: ダッシュボード更新
 Phase 8: ADR の昇格とレビューファイルの削除
   → adr.md の各エントリを記録基準にかけ、満たすものを .adr/ に昇格
   → APPROVED で完了していれば .thread/{Issue番号}/review/ を削除（plan.md・adr.md 等は残す）
+  → 他フェーズのレビュー・足場（spec/design/review/ 等）に取りこぼしがないか最終確認
 ```
 
 計画ファイルは役割で分かれている（詳細は `../issue-planner/references/plan-template.md`）。フェーズごとに必要なものだけを読む:
@@ -71,6 +72,7 @@ Issue が**ユーザーに見える UI 画面を新設・変更する**場合だ
 - まず `.thread/{Issue番号}/steps.md` の「UI / プレゼンテーション」から gate 判定する。新規UI画面の追加・既存画面のレイアウト変更がなければ（バックエンド/API/ロジックのみ、軽微な調整など）、判定理由を一言ログに残してそのまま Phase 2 へスキップする。
 - 実行する場合、デザインの方向性は**既存実装から抽出する**（ドラフト提案・新規トークン定義はしない）。新規画面が出荷済みのアプリに自然に馴染むことがゴール。
 - 成果物は `spec/design/` 配下に出力し、Phase 2 のコミットに含めて実装と一緒に PR へ載せる。
+- レビュー記録 `spec/design/review/` は、収束したら**このフェーズの終わり（Phase 2 のコミット前）に削除する**。PR に混入させない。収束しなかった場合だけ残す。
 
 ## Phase 2: 実装
 
@@ -179,6 +181,11 @@ rm -rf .thread/{Issue番号}/review/
 - 削除前に台帳の `wont-fix` 行を確認し、「指摘は正しいが意図的に逸脱している」ものは現場の why not コメントか ADR に転記する（`../_shared/references/review-loop.md` の後片付けに従う）。
 - レビューディレクトリが VCS 管理下にある場合（`.thread/` を commit している運用）は、削除もコミットして push する。管理外（`.gitignore` 済み）ならファイルを消すだけでよい。
 
+**取りこぼしの最終確認。** 他フェーズのレビュー・足場が残っていないかを見て、収束済みなのに残っていればここで削除する（未収束で意図的に残したものはそのまま）:
+
+- `spec/design/review/` — Phase 1.5 のデザインレビュー。残っていれば削除し、コミットして push する（PR に載っているため）
+- `.thread/{Issue番号}/plan-review/` / `research.md` — Phase 1 の計画足場（issue-planner が凍結時に削除済みのはず）
+
 ## 完了報告
 
 すべてのフェーズが完了したら、サマリーを出す。
@@ -195,7 +202,7 @@ Issue #{Issue番号} の実装が完了しました！
 
 ## デザイン
 - 実施: {実施（spec/design/pages/ に {数} 画面） / UI画面の新設・変更なしのためスキップ}
-- レビュー記録: spec/design/review/（{ラウンド数} / スキップ時はなし）
+- レビュー: {数}ラウンドで収束・記録は削除済み / 未収束のため spec/design/review/ に保持 / スキップ時はなし
 
 ## 実装
 - ブランチ: issue/{Issue番号}/{短い説明}
@@ -229,7 +236,9 @@ Issue #{Issue番号} の実装が完了しました！
 - この Issue の表示: {(In Progress) として反映 / 未運用のためなし}
 
 ## 片付け
-- レビューファイル: {削除済み / APPROVED 未達のため保持（.thread/{Issue番号}/review/）}
+- 計画レビュー: 削除済み（.thread/{Issue番号}/plan-review/ / research.md）
+- デザインレビュー: {削除済み（spec/design/review/） / 未収束のため保持 / デザインフェーズなし}
+- 実装レビュー: {削除済み / APPROVED 未達のため保持（.thread/{Issue番号}/review/）}
 - ADR 昇格: {.adr/NNN-... x{数} / 昇格対象なし}
 - 残した成果物: plan.md / steps.md / testing.md / adr.md / progress.md / manual-test/
 ```

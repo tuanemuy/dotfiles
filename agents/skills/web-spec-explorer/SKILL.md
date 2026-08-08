@@ -10,12 +10,7 @@ APIや実装の詳細は対象外。ユーザーから見える振る舞い・�
 
 ## 前提条件
 
-`agent-browser` CLIが必要。利用できない場合:
-
-```bash
-agent-browser --version  # 確認
-agent-browser install     # Chrome for Testingのセットアップ（初回のみ）
-```
+`agent-browser` CLI が必要。セットアップ・頻出コマンド・ターン数を抑える書き方は `../_shared/references/agent-browser.md` に集約してある。ブラウザ操作の前に読む。
 
 ## アーキテクチャ
 

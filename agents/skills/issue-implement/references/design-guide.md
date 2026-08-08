@@ -83,7 +83,18 @@ design-flow の `../../design-flow/references/phase4-review.md` のレビュー�
 
    その後 Skill ツールで `/agent-browser-cleanup` を呼び出す。
 
-2. 作成した成果物を一言サマリーしてから Phase 2 へ進む。
+2. レビューが完了条件を満たしていれば、レビュー記録を削除する:
+
+   ```bash
+   rm -rf spec/design/review/
+   ```
+
+   - **削除するのは `review/` だけ。** `spec/design/pages/*.html` と `spec/design/tokens.md` / `index.md` は成果物なので残す。
+   - `spec/design/` は Phase 2 のコミットに含めて PR に載せるため、**削除は Phase 2 のコミット前に済ませる**（レビュー記録を PR に混入させない）。
+   - **最大ラウンドに達して収束しなかった場合は削除しない** — 残った指摘をユーザーが確認するために残し、完了報告に明記する。
+   - 削除前の確認（defer した Issue 番号が報告に載っているか、`wont-fix` の恒久的な逸脱を why not コメントか ADR に転記済みか）は `../../_shared/references/review-loop.md` の「後片付け」に従う。
+
+3. 作成した成果物を一言サマリーしてから Phase 2 へ進む。
 
 ### Phase 2 への引き渡し
 

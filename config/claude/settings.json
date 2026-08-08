@@ -175,6 +175,10 @@
       "Bash(history)",
       "Bash(alias:*)",
       "Bash(curl:*)",
+      "Bash(opencode run:*)",
+      "Bash(opencode agent list)",
+      "Bash(opencode models:*)",
+      "Bash(opencode stats:*)",
       "Read(**)",
       "Edit(~/github.com/**)",
       "Edit(~/agent/**)",
@@ -251,20 +255,6 @@
       "Edit(/etc/sudoers)"
     ],
     "defaultMode": "default"
-  },
-  "hooks": {
-    "SessionStart": [
-      {
-        "matcher": "*",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash '/Users/hikaru/.claude/hooks/herdr-agent-state.sh' session",
-            "timeout": 10
-          }
-        ]
-      }
-    ]
   },
   "statusLine": {
     "type": "command",
