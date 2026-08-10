@@ -37,8 +37,11 @@ Issue取得 → 複雑度判定
 Issue番号またはURLを受け取ったら、まず内容を把握する。
 
 ```bash
+git fetch origin
 gh issue view <Issue番号> --json title,body,labels,assignees,milestone,comments
 ```
+
+調査対象のコードが古いままだと、既に解決済みの問題を前提に計画してしまう。`git fetch origin` でリモートを取り込んだうえで、ローカルの作業ツリーがベースブランチ（通常 `origin/main`）から大きく遅れていないかを `git status -sb` で確認する。遅れている場合はユーザーに取り込みを確認してから進める。
 
 Issueが取得できない場合（番号違い、権限不足、リポジトリ違いなど）はユーザーに確認して正しい情報を得る。推測で進めない。
 
