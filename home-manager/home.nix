@@ -25,6 +25,9 @@ in
       ripgrep
       nodejs_24
     ]
+    ++ [
+      (pkgs.callPackage ./packages/rinkaku.nix { })
+    ]
     ++ lib.optionals stdenv.isDarwin [
       cocoapods
     ];
