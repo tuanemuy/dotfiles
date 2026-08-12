@@ -28,12 +28,12 @@ scout / explorer / flow はいずれも画面に出ているものを観察し�
 
 ## セッション管理
 
-サブエージェント間でブラウザが衝突しないよう、必ず `--session` で分離する:
+サブエージェント間でブラウザが衝突しないよう、必ず `--session` で分離する。あわせて **`--restore` を必ず付ける**。付けないとブラウザ再起動で Cookie が失われ、ログイン状態の調査が中断される（Issue #960。詳細は `../_shared/references/agent-browser.md`）:
 
 ```bash
-agent-browser --session scout open https://example.com
-agent-browser --session explorer-settings snapshot
-agent-browser --session flow-signup click @e5
+agent-browser --session scout --restore open https://example.com
+agent-browser --session explorer-settings --restore snapshot
+agent-browser --session flow-signup --restore click @e5
 ```
 
 命名規則:
@@ -53,13 +53,13 @@ agent-browser --session flow-signup click @e5
 headed に切り替えるときは、既存セッションとの衝突を防ぐため必ず専用セッションを使う:
 
 ```bash
-agent-browser --session headed-auth --headed open https://example.com/login
+agent-browser --session headed-auth --restore --headed open https://example.com/login
 ```
 
 headedセッションはユーザー操作が終わったら速やかに閉じる:
 
 ```bash
-agent-browser --session headed-auth close
+agent-browser --session headed-auth --restore close
 ```
 
 ## リソース保護
@@ -69,14 +69,14 @@ agent-browser --session headed-auth close
 snapshot の出力はページによって巨大になる。`--max-output` で制限する:
 
 ```bash
-agent-browser --session scout snapshot --max-output 8000
+agent-browser --session scout --restore snapshot --max-output 8000
 ```
 
 大きなページは分割して調査する。全体のsnapshotではなく、特定セクションにフォーカス:
 
 ```bash
-agent-browser --session explorer-settings find role "navigation"
-agent-browser --session explorer-settings snapshot --ref @e3 --max-output 5000
+agent-browser --session explorer-settings --restore find role "navigation"
+agent-browser --session explorer-settings --restore snapshot --ref @e3 --max-output 5000
 ```
 
 サブエージェントは生のsnapshot出力をそのまま返さない。
@@ -93,7 +93,7 @@ agent-browser --session explorer-settings snapshot --ref @e3 --max-output 5000
 - `--allowed-domains` で対象ドメインに限定し、外部リンクを踏まない
 
 ```bash
-agent-browser --session scout --allowed-domains "example.com,*.example.com" open https://example.com
+agent-browser --session scout --restore --allowed-domains "example.com,*.example.com" open https://example.com
 ```
 
 ## 認証の取り扱い
@@ -110,7 +110,7 @@ agent-browser auth save myservice --url https://example.com/login \
 サブエージェントでの利用:
 
 ```bash
-agent-browser --session scout auth login myservice
+agent-browser --session scout --restore auth login myservice
 ```
 
 ### パターン2: OAuth / SSO
@@ -130,6 +130,8 @@ agent-browser --session headed-auth --headed --profile /tmp/myservice-profile op
 # 2. 以降のサブエージェントはプロファイルを使う
 agent-browser --session scout --profile /tmp/myservice-profile open https://example.com/dashboard
 ```
+
+`--profile` はプロファイルディレクトリ自体が Cookie を保持するため、このパターンでは `--restore` を併用しない。
 
 ### パターン3: 認証不要
 
@@ -307,39 +309,39 @@ allowed-domains: {domains}
 
 ```bash
 # ナビゲーション
-agent-browser --session {s} open {url}
-agent-browser --session {s} back
-agent-browser --session {s} reload
+agent-browser --session {s} --restore open {url}
+agent-browser --session {s} --restore back
+agent-browser --session {s} --restore reload
 
 # 調査
-agent-browser --session {s} snapshot --max-output 8000    # アクセシビリティツリー（refつき）
-agent-browser --session {s} snapshot --ref @e3            # 特定要素のサブツリー
-agent-browser --session {s} screenshot /tmp/page.png      # スクリーンショット
-agent-browser --session {s} get text --ref @e5            # 要素のテキスト取得
-agent-browser --session {s} get url                       # 現在のURL
-agent-browser --session {s} get title                     # ページタイトル
+agent-browser --session {s} --restore snapshot --max-output 8000    # アクセシビリティツリー（refつき）
+agent-browser --session {s} --restore snapshot --ref @e3            # 特定要素のサブツリー
+agent-browser --session {s} --restore screenshot /tmp/page.png      # スクリーンショット
+agent-browser --session {s} --restore get text --ref @e5            # 要素のテキスト取得
+agent-browser --session {s} --restore get url                       # 現在のURL
+agent-browser --session {s} --restore get title                     # ページタイトル
 
 # 操作
-agent-browser --session {s} click @e2
-agent-browser --session {s} fill @e3 "test@example.com"
-agent-browser --session {s} select @e4 --value "option1"
-agent-browser --session {s} check @e5
-agent-browser --session {s} press Enter
-agent-browser --session {s} scroll down 500
-agent-browser --session {s} hover @e6
+agent-browser --session {s} --restore click @e2
+agent-browser --session {s} --restore fill @e3 "test@example.com"
+agent-browser --session {s} --restore select @e4 --value "option1"
+agent-browser --session {s} --restore check @e5
+agent-browser --session {s} --restore press Enter
+agent-browser --session {s} --restore scroll down 500
+agent-browser --session {s} --restore hover @e6
 
 # 要素の発見
-agent-browser --session {s} find role "button"
-agent-browser --session {s} find text "ログイン"
-agent-browser --session {s} find placeholder "メールアドレス"
+agent-browser --session {s} --restore find role "button"
+agent-browser --session {s} --restore find text "ログイン"
+agent-browser --session {s} --restore find placeholder "メールアドレス"
 
 # 状態確認
-agent-browser --session {s} is visible @e3
-agent-browser --session {s} is enabled @e4
-agent-browser --session {s} wait text "読み込み完了" --timeout 10000
+agent-browser --session {s} --restore is visible @e3
+agent-browser --session {s} --restore is enabled @e4
+agent-browser --session {s} --restore wait text "読み込み完了" --timeout 10000
 
 # セッション管理
-agent-browser --session {s} close                         # セッション終了
+agent-browser --session {s} --restore close                         # セッション終了
 ```
 
 ref（@e1, @e2...）はsnapshotで取得できる。操作対象はrefで指定するのが基本。

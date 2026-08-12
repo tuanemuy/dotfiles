@@ -402,11 +402,11 @@ EOF
 
 ## セッション管理
 
-サブエージェント間でブラウザが衝突しないよう、必ず `--session` で分離する:
+サブエージェント間でブラウザが衝突しないよう、必ず `--session` で分離する。あわせて **`--restore` を必ず付ける**。付けないとブラウザ再起動で Cookie が失われ、検証中に突然ログイン画面へ戻される（Issue #960。詳細は `../_shared/references/agent-browser.md`）:
 
 ```bash
-agent-browser --session verify-tc-001 open http://localhost:{port}
-agent-browser --session verify-tc-002 open http://localhost:{port}/login
+agent-browser --session verify-tc-001 --restore open http://localhost:{port}
+agent-browser --session verify-tc-002 --restore open http://localhost:{port}/login
 ```
 
 命名規則:
@@ -416,7 +416,7 @@ agent-browser --session verify-tc-002 open http://localhost:{port}/login
 テスト完了後は必ずセッションを閉じる:
 
 ```bash
-agent-browser --session verify-tc-001 close
+agent-browser --session verify-tc-001 --restore close
 ```
 
 ## タイムアウト＆スタック対策
@@ -429,10 +429,10 @@ agent-browser の各コマンドは `AGENT_BROWSER_DEFAULT_TIMEOUT`（Phase 1 �
 
 ```bash
 # 特定テキストの出現を最大15秒待つ
-agent-browser --session {s} wait --text "読み込み完了" --timeout 15000
+agent-browser --session {s} --restore wait --text "読み込み完了" --timeout 15000
 
 # ページの描画完了を待つ
-agent-browser --session {s} wait --load networkidle
+agent-browser --session {s} --restore wait --load networkidle
 ```
 
 ### テストケース単位のタイムアウト
@@ -481,48 +481,48 @@ rm /tmp/manual-test-server.pid /tmp/manual-test-server.log 2>/dev/null
 
 ```bash
 # ナビゲーション
-agent-browser --session {s} open {url}
-agent-browser --session {s} back
-agent-browser --session {s} reload
+agent-browser --session {s} --restore open {url}
+agent-browser --session {s} --restore back
+agent-browser --session {s} --restore reload
 
 # 調査
-agent-browser --session {s} snapshot --max-output 8000
-agent-browser --session {s} snapshot --ref @e3
-agent-browser --session {s} screenshot /tmp/check.png   # 確認用のみ。成果物として保存・添付しない。スクリーンショット・録画は実 Chrome でないと動かない
-agent-browser --session {s} get text --ref @e5
-agent-browser --session {s} get url
-agent-browser --session {s} get title
+agent-browser --session {s} --restore snapshot --max-output 8000
+agent-browser --session {s} --restore snapshot --ref @e3
+agent-browser --session {s} --restore screenshot /tmp/check.png   # 確認用のみ。成果物として保存・添付しない。スクリーンショット・録画は実 Chrome でないと動かない
+agent-browser --session {s} --restore get text --ref @e5
+agent-browser --session {s} --restore get url
+agent-browser --session {s} --restore get title
 
 # 操作
-agent-browser --session {s} click @e2
-agent-browser --session {s} fill @e3 "test@example.com"
-agent-browser --session {s} select @e4 --value "option1"
-agent-browser --session {s} check @e5
-agent-browser --session {s} press Enter
-agent-browser --session {s} scroll down 500
-agent-browser --session {s} hover @e6
+agent-browser --session {s} --restore click @e2
+agent-browser --session {s} --restore fill @e3 "test@example.com"
+agent-browser --session {s} --restore select @e4 --value "option1"
+agent-browser --session {s} --restore check @e5
+agent-browser --session {s} --restore press Enter
+agent-browser --session {s} --restore scroll down 500
+agent-browser --session {s} --restore hover @e6
 
 # バッチ実行（複数コマンドを1回で実行、効率的）
-agent-browser --session {s} batch "open {url}" "snapshot -i"
-agent-browser --session {s} batch --bail "fill @e1 'test'" "click @e2" "snapshot -i"  # --bail: エラーで中断
+agent-browser --session {s} --restore batch "open {url}" "snapshot -i"
+agent-browser --session {s} --restore batch --bail "fill @e1 'test'" "click @e2" "snapshot -i"  # --bail: エラーで中断
 
 # 待機
-agent-browser --session {s} wait 2000                              # ミリ秒待機
-agent-browser --session {s} wait --text "読み込み完了" --timeout 15000  # テキスト出現待ち
-agent-browser --session {s} wait --load networkidle                # ネットワーク安定待ち
-agent-browser --session {s} wait --url "**/dashboard"              # URL パターン待ち
+agent-browser --session {s} --restore wait 2000                              # ミリ秒待機
+agent-browser --session {s} --restore wait --text "読み込み完了" --timeout 15000  # テキスト出現待ち
+agent-browser --session {s} --restore wait --load networkidle                # ネットワーク安定待ち
+agent-browser --session {s} --restore wait --url "**/dashboard"              # URL パターン待ち
 
 # 要素の発見
-agent-browser --session {s} find role "button"
-agent-browser --session {s} find text "ログイン"
-agent-browser --session {s} find placeholder "メールアドレス"
+agent-browser --session {s} --restore find role "button"
+agent-browser --session {s} --restore find text "ログイン"
+agent-browser --session {s} --restore find placeholder "メールアドレス"
 
 # 状態確認
-agent-browser --session {s} is visible @e3
-agent-browser --session {s} is enabled @e4
+agent-browser --session {s} --restore is visible @e3
+agent-browser --session {s} --restore is enabled @e4
 
 # セッション管理
-agent-browser --session {s} close
+agent-browser --session {s} --restore close
 agent-browser close --all          # 全セッション一括終了
 agent-browser session list         # アクティブセッション一覧
 ```
@@ -538,10 +538,10 @@ ref（@e1, @e2...）は snapshot で取得できる。操作対象は ref で指
 sleep 1
 
 # OK: ネットワークが落ち着くまで待つ
-agent-browser --session {s} wait --load networkidle
+agent-browser --session {s} --restore wait --load networkidle
 
 # OK: 特定要素の出現を待つ
-agent-browser --session {s} wait --text "ダッシュボード"
+agent-browser --session {s} --restore wait --text "ダッシュボード"
 ```
 
 ---
