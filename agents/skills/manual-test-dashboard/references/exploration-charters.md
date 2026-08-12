@@ -35,7 +35,7 @@ manual-test-dashboard の区分探索（SKILL.md Step 5）で使うチャータ�
 
 ## 進め方
 1. セッションを開始する
-   agent-browser --session explore-{区分番号}-{チャーター番号} open http://localhost:{port}{開始パス}
+   agent-browser --session explore-{区分番号}-{チャーター番号} --restore open http://localhost:{port}{開始パス}
 2. ログインが必要なら、シードデータのアカウントでログインする
    （fill → press Tab → fill → press Tab → click。遷移後は wait --load networkidle）
 3. スコープ内の画面を巡回しながら、チャーターに沿った操作を試す:
@@ -47,7 +47,7 @@ manual-test-dashboard の区分探索（SKILL.md Step 5）で使うチャータ�
    - 再現できる最小手順を確立する（もう一度同じ手順で起きるか確かめる）
    - 期待動作と、その根拠（spec / 画面表示 / データの整合性）を言語化する
 5. 完了したらセッションを閉じる
-   agent-browser --session explore-{区分番号}-{チャーター番号} close
+   agent-browser --session explore-{区分番号}-{チャーター番号} --restore close
 
 ## 重要な原則
 - スコープ外の画面には踏み込まない（リンクがあっても対象区分の画面に留まる）

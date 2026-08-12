@@ -77,23 +77,23 @@ manual-test スキルが生成するドキュメントは、テーブル形式�
 
 1. agent-browser でセッションを開始する
    ```bash
-   agent-browser --session verify-tc-{番号} open http://localhost:{port}{開始パス}
+   agent-browser --session verify-tc-{番号} --restore open http://localhost:{port}{開始パス}
    ```
 
 2. ページの読み込み完了を待つ
    ```bash
-   agent-browser --session verify-tc-{番号} wait --load networkidle
+   agent-browser --session verify-tc-{番号} --restore wait --load networkidle
    ```
 
 3. 各ステップを順番に実行する:
    a. snapshot を取得し、操作対象の要素を特定する（ref を使う）
       ```bash
-      agent-browser --session verify-tc-{番号} snapshot --max-output 8000
+      agent-browser --session verify-tc-{番号} --restore snapshot --max-output 8000
       ```
    b. 操作を実行する（click, fill, select 等）
    c. ページ遷移後は wait コマンドで描画完了を待つ（sleep は使わない）
       ```bash
-      agent-browser --session verify-tc-{番号} wait --load networkidle
+      agent-browser --session verify-tc-{番号} --restore wait --load networkidle
       ```
    d. 期待結果を検証する:
       - テキストの表示確認: `find text "期待するテキスト"` または `get text --ref @eN`
@@ -109,7 +109,7 @@ manual-test スキルが生成するドキュメントは、テーブル形式�
 
 5. テスト完了後、セッションを閉じる
    ```bash
-   agent-browser --session verify-tc-{番号} close
+   agent-browser --session verify-tc-{番号} --restore close
    ```
 
 ## 重要な原則
@@ -181,16 +181,16 @@ Conform は `shouldValidate: "onBlur"` を使うことが多い。`fill` 後に 
 
 ```bash
 # NG: fill して即 click（フォームの状態が追いつかない場合がある）
-agent-browser --session {s} fill @e4 "admin"
-agent-browser --session {s} fill @e6 "password"
-agent-browser --session {s} click @e5
+agent-browser --session {s} --restore fill @e4 "admin"
+agent-browser --session {s} --restore fill @e6 "password"
+agent-browser --session {s} --restore click @e5
 
 # OK: fill → Tab で blur を発火 → 次のフィールド → click
-agent-browser --session {s} fill @e4 "admin"
-agent-browser --session {s} press Tab
-agent-browser --session {s} fill @e6 "password"
-agent-browser --session {s} press Tab
-agent-browser --session {s} click @e5
+agent-browser --session {s} --restore fill @e4 "admin"
+agent-browser --session {s} --restore press Tab
+agent-browser --session {s} --restore fill @e6 "password"
+agent-browser --session {s} --restore press Tab
+agent-browser --session {s} --restore click @e5
 ```
 
 ### snapshot は fill/click の前に1回だけ
@@ -199,17 +199,17 @@ snapshot を取り直すと ref が変わるため、操作の途中で再取得
 
 ```bash
 # OK: snapshot → fill → fill → click（全て同じ ref）
-agent-browser --session {s} snapshot --max-output 8000
-agent-browser --session {s} fill @e4 "admin"
-agent-browser --session {s} press Tab
-agent-browser --session {s} fill @e6 "password"
-agent-browser --session {s} click @e5
+agent-browser --session {s} --restore snapshot --max-output 8000
+agent-browser --session {s} --restore fill @e4 "admin"
+agent-browser --session {s} --restore press Tab
+agent-browser --session {s} --restore fill @e6 "password"
+agent-browser --session {s} --restore click @e5
 
 # NG: fill の後に snapshot を挟む（ref が変わる）
-agent-browser --session {s} snapshot --max-output 8000
-agent-browser --session {s} fill @e4 "admin"
-agent-browser --session {s} snapshot --max-output 8000  # ← ref 変更！
-agent-browser --session {s} fill @e6 "password"  # ← 古い ref は無効
+agent-browser --session {s} --restore snapshot --max-output 8000
+agent-browser --session {s} --restore fill @e4 "admin"
+agent-browser --session {s} --restore snapshot --max-output 8000  # ← ref 変更！
+agent-browser --session {s} --restore fill @e6 "password"  # ← 古い ref は無効
 ```
 
 ### カスタム Select / Combobox の操作
@@ -218,11 +218,11 @@ Radix UI や shadcn/ui の Select は `<select>` ネイティブ要素ではな�
 
 ```bash
 # SelectTrigger をクリックして開く
-agent-browser --session {s} click @eN   # SelectTrigger の ref
-agent-browser --session {s} wait 500
+agent-browser --session {s} --restore click @eN   # SelectTrigger の ref
+agent-browser --session {s} --restore wait 500
 # 開いた SelectContent から選択肢をクリック
-agent-browser --session {s} find text "選択肢のテキスト"
-agent-browser --session {s} click @eM   # 選択肢の ref
+agent-browser --session {s} --restore find text "選択肢のテキスト"
+agent-browser --session {s} --restore click @eM   # 選択肢の ref
 ```
 
 ### ダイアログ内フォームの操作
@@ -231,13 +231,13 @@ agent-browser --session {s} click @eM   # 選択肢の ref
 
 ```bash
 # ダイアログを開く
-agent-browser --session {s} click @eN   # 「新規追加」ボタン等
-agent-browser --session {s} wait 500
+agent-browser --session {s} --restore click @eN   # 「新規追加」ボタン等
+agent-browser --session {s} --restore wait 500
 # ダイアログ内の要素を取得
-agent-browser --session {s} snapshot --max-output 8000
+agent-browser --session {s} --restore snapshot --max-output 8000
 # ダイアログ内のフォームを操作（fill → Tab パターンで）
-agent-browser --session {s} fill @eM "値"
-agent-browser --session {s} press Tab
+agent-browser --session {s} --restore fill @eM "値"
+agent-browser --session {s} --restore press Tab
 ...
 ```
 
@@ -246,7 +246,7 @@ agent-browser --session {s} press Tab
 `<input type="file">` には `upload` コマンドを使う。カメラ撮影の代替手段として「ファイルから選択」ボタンがある場合に有効。
 
 ```bash
-agent-browser --session {s} upload @eN /path/to/file.jpg
+agent-browser --session {s} --restore upload @eN /path/to/file.jpg
 ```
 
 ### Chrome 自動補完の干渉
