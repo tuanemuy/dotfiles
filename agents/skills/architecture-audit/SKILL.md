@@ -216,4 +216,4 @@ gh label create architecture-audit --description "architecture-audit で検出�
 - **意図的な設計と違反を区別する** — 規約の例外（ADR に記録された設計判断等）は前提が生きている限り違反ではない。`.adr/` も確認し、前提が崩れた ADR は Info（ADR 再検討候補）として報告する。判断に迷うものは Info（要確認）に分類する
 - **重要度を正しく付ける** — 偽陽性は Info に落として後で除外できる。根幹を壊す違反だけ Critical にして Issue 化し、ノイズで埋もれさせない
 - **レポートは残さない** — `.audit/` は監査実行中の作業ファイル。Critical を Issue 化し、Warning / Info を結果報告に転記したら削除する。残すのは起票に失敗したときだけ
-- 委譲方式・並列実行・失敗時の扱い・委譲時のコンテキストは `../_shared/references/subagent-policy.md` に従う
+- 委譲方式・並列実行・中断時の再委譲・委譲時のコンテキストは `../_shared/references/subagent-policy.md` に従う

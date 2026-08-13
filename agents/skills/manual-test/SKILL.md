@@ -554,4 +554,4 @@ agent-browser --session {s} --restore wait --text "ダッシュボード"
 - **コードは修正しない** — 失敗を検出したら原因分析とIssue起票に留め、修正は別のIssue対応フローに委ねる
 - **環境を汚さない** — テストで作成したデータ・ファイルは記録し、必要なら後始末する
 - **snapshot の出力制限** — `--max-output 8000` を使い、コンテキストウィンドウを保護する
-- 委譲方式・並列実行・失敗時の扱い・委譲時のコンテキストは `../_shared/references/subagent-policy.md` に従う
+- 委譲方式・並列実行・中断時の再委譲・委譲時のコンテキストは `../_shared/references/subagent-policy.md` に従う

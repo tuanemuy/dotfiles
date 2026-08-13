@@ -37,7 +37,7 @@ description: 体験側の設計（要件定義・シナリオ・ページ構成�
 
 ## ADR（Architecture Decision Records）
 
-設計中に非自明な判断を下したら、プロジェクトルートの `.adr/NNN-title.md` に記録する。記録基準・記載項目・supersede の扱いは `../_shared/references/adr-guide.md` を参照。
+設計中に非自明な判断を下したら、プロジェクトルートの `.adr/{YYYY-MM-DD}-{slug}.md` に記録する。記録基準・記載項目・supersede の扱いは `../_shared/references/adr-guide.md` を参照。
 
 ## Phase 0: 前提確認
 

@@ -82,7 +82,7 @@ typecheck + lint はダミーデータ表示・未接続のAPIスタブ・空の
 
 1. サブエージェントから報告された設計との乖離を確認し、必要に応じて:
    - `spec/pages/` の該当ドキュメントを更新する
-   - 設計判断があった場合は `.adr/{連番}-{topic}.md` に記録する
+   - 設計判断があった場合は `.adr/{YYYY-MM-DD}-{topic}.md` に記録する
 2. git commit する
 3. `spec/progress.md` を更新する
 4. サマリーを出す
