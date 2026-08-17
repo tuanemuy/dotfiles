@@ -9,7 +9,7 @@ Phase 2 で作成した PR に対して、セルフレビュー・修正を繰�
 - レビューファイル: `.thread/{Issue番号}/review/review-{NNN}-{レイヤー}.md`（各レビュアーが直接書く）
 - ラウンドサマリー: `.thread/{Issue番号}/review/review-NNN.md`（メインが件数・Verdict だけ書く）
 - 指摘台帳: `.thread/{Issue番号}/review/triage.md`（メインが仕分け結果を記録する。フォーマットは `../../_shared/references/review-loop.md` の「指摘台帳」参照）
-- ADR: `.thread/{Issue番号}/adr.md`（作業ログ。既存ファイルに追記。ルート `.adr/` への昇格判定は Phase 8）
+- ADR: `.thread/{Issue番号}/adr.md`（作業ログ。既存ファイルに追記。ルート `.adr/` への昇格判定は Phase 7）
 
 ## Step 1: 変更ファイル一覧の取得
 
@@ -187,7 +187,7 @@ BlockerがなければBlockersセクションに「なし」と書く。
 
 ## Step 6: ADR への追記
 
-レビュー中に**非自明な設計判断**を下した場合、`.thread/{Issue番号}/adr.md` に追記する。指摘への対応要否（wont-fix / defer）の記録には使わない — それは台帳の役割。仕分けが設計判断を伴う場合のみ ADR に起こし、台帳の理由欄からリンクする。adr.md は作業ログで、ルート `.adr/` への昇格判定は Phase 8 でまとめて行う（基準は `../../_shared/references/adr-guide.md`）。
+レビュー中に**非自明な設計判断**を下した場合、`.thread/{Issue番号}/adr.md` に追記する。指摘への対応要否（wont-fix / defer）の記録には使わない — それは台帳の役割。仕分けが設計判断を伴う場合のみ ADR に起こし、台帳の理由欄からリンクする。adr.md は作業ログで、ルート `.adr/` への昇格判定は Phase 7 でまとめて行う（基準は `../../_shared/references/adr-guide.md`）。
 
 Phase 1（計画時）で既に adr.md が存在する場合は、既存の連番の続きから追記する。なければ新規作成する。連番の調べ方は `../../_shared/references/adr-guide.md` の「作業ログへの追記」に従う（全文は読まない）。
 
@@ -234,7 +234,7 @@ Phase 4 のブラウザ検証で変更起因のバグが見つかり修正した
 - スコープラウンドで fix が出たら修正して再びスコープラウンド。**fix ゼロで APPROVED** とし、再検証（Phase 4）へ進む。全観点の確認ラウンドは要求しない（フルの fix ゼロは Phase 4 前に観測済み）
 - 修正が当初の変更範囲を超えて**新しいレイヤー・ドメインに広がった場合だけ**、Step 2 の観点判定からやり直してフルラウンドに戻す
 
-**この時点でレビューファイル・台帳は削除しない。** Phase 4 から戻ってきたラウンドで既出判定の継承や連番の継続が必要になるため、`.thread/{Issue番号}/review/` の片付けは全フェーズ完了後の Phase 8 でまとめて行う（`../SKILL.md` Phase 8 参照）。
+**この時点でレビューファイル・台帳は削除しない。** Phase 4 から戻ってきたラウンドで既出判定の継承や連番の継続が必要になるため、`.thread/{Issue番号}/review/` の片付けは全フェーズ完了後の Phase 7 でまとめて行う（`../SKILL.md` Phase 7 参照）。
 
 ## 重要な注意点
 
