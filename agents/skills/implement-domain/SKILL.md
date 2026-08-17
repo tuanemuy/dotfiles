@@ -72,8 +72,7 @@ typecheck + lint はスタブ・ダミーデータ・部分実装・spec 要素�
 ## Phase 4: 完了
 
 1. サブエージェントから報告された設計との乖離を確認し、必要に応じて:
-   - `spec/domains/` の該当ドキュメントを更新する
-   - 設計判断があった場合は `.adr/{YYYY-MM-DD}-{topic}.md` に記録する
+   - `spec/domains/` の該当ドキュメントを更新する（現在形のみ — 経緯・代替案は spec に書かない）
 2. git commit する
 3. `spec/progress.md` を更新する
 4. サマリーを出す
