@@ -187,7 +187,7 @@ BlockerがなければBlockersセクションに「なし」と書く。
 
 ## Step 6: ADR への追記
 
-レビュー中に**非自明な設計判断**を下した場合、`.thread/{Issue番号}/adr.md` に追記する。指摘への対応要否（wont-fix / defer）の記録には使わない — それは台帳の役割。仕分けが設計判断を伴う場合のみ ADR に起こし、台帳の理由欄からリンクする。adr.md は作業ログで、ルート `.adr/` への昇格判定は Phase 7 でまとめて行う（基準は `../../_shared/references/adr-guide.md`）。
+レビュー中に**非自明な設計判断**を下した場合、`.thread/{Issue番号}/adr.md` に追記する。指摘への対応要否（wont-fix / defer）の記録には使わない — それは台帳の役割。仕分けが設計判断を伴う場合のみ ADR に起こし、台帳の理由欄からリンクする。adr.md は作業ログで、判断の経緯が残る唯一の場所。「あるべき」を変えた判断は、記録とは別に spec を現在形で更新する — 反映漏れは Phase 7 で確認する（`../../_shared/references/adr-guide.md`）。
 
 Phase 1（計画時）で既に adr.md が存在する場合は、既存の連番の続きから追記する。なければ新規作成する。連番の調べ方は `../../_shared/references/adr-guide.md` の「作業ログへの追記」に従う（全文は読まない）。
 
@@ -195,9 +195,6 @@ Phase 1（計画時）で既に adr.md が存在する場合は、既存の連�
 
 ```markdown
 ## ADR-{NNN}: {タイトル}
-
-### Status
-Proposed
 
 ### Context
 {なぜこの判断が必要になったか}
