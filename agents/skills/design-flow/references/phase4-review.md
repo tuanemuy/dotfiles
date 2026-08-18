@@ -36,13 +36,13 @@ Step 2〜4 はそれぞれ独立したレビュアーに委譲する。観点の
 agent-browser --session design-review open file:///absolute/path/to/spec/design/pages/{画面名}.html
 
 agent-browser --session design-review viewport 375 667
-agent-browser --session design-review screenshot /tmp/design-screenshots/review/{画面名}-mobile.png
+agent-browser --session design-review screenshot {scratchpad}/design-screenshots/review/{画面名}-mobile.png
 
 agent-browser --session design-review viewport 768 1024
-agent-browser --session design-review screenshot /tmp/design-screenshots/review/{画面名}-tablet.png
+agent-browser --session design-review screenshot {scratchpad}/design-screenshots/review/{画面名}-tablet.png
 
 agent-browser --session design-review viewport 1280 800
-agent-browser --session design-review screenshot /tmp/design-screenshots/review/{画面名}-desktop.png
+agent-browser --session design-review screenshot {scratchpad}/design-screenshots/review/{画面名}-desktop.png
 ```
 
 撮り終えたらセッションを閉じる:
@@ -87,7 +87,7 @@ agent-browser --session design-review close
 
 ## 対象（全量）
 - HTML: spec/design/pages/ 配下の全ファイル
-- スクリーンショット: /tmp/design-screenshots/review/{画面名}-{mobile|tablet|desktop}.png
+- スクリーンショット: {scratchpad}/design-screenshots/review/{画面名}-{mobile|tablet|desktop}.png
 
 対象の全ファイルを読み、スクリーンショットは Read ツールで画像として確認する。
 コードだけ・画像だけで判断しない。

@@ -50,10 +50,10 @@ CLAUDE.md / README.md / spec/ / ディレクトリ構成を読み、プロジェ
 - すべてのソースコードがいずれかの区分のスコープに含まれるようにする
 - 観点は `references/review-perspectives.md` のカタログから、そのスコープに効くものを 3〜6 個選ぶ
 
-設計した区分を下記フォーマットでダッシュボード Issue として新規作成する。本文は一時ファイルに書き出してから反映する。
+設計した区分を下記フォーマットでダッシュボード Issue として新規作成する。本文は `{scratchpad}/dashboard-body.md`（`{scratchpad}` の定義は `../_shared/references/scratchpad.md`）に書き出してから反映する。
 
 ```bash
-gh issue create --title "Review Dashboard" --body-file <一時ファイル>
+gh issue create --title "Review Dashboard" --body-file {scratchpad}/dashboard-body.md
 ```
 
 **初期化した実行ではレビューまで進まない。** 区分の切り方はローテーション全体の質を決めるので、まずユーザーに区分を確認してもらう。作成したダッシュボードの URL と区分一覧を報告して終了する。ユーザーが「初期化してそのまま1区分レビューして」と明示した場合のみ Step 3 に続く。
@@ -217,7 +217,7 @@ gh label create review-dashboard --description "review-dashboard の定期レビ
 
 ## Step 6: ダッシュボードの更新
 
-旧本文をベースに、変わった分だけ手を入れる。本文を一時ファイルに書き出してから反映する。
+旧本文をベースに、変わった分だけ手を入れる。本文を `{scratchpad}/dashboard-body.md` に書き出してから反映する。
 
 1. 今回レビューした区分の `最終レビュー:` を今日の日付にする。
 2. 同区分の `起票:` に今回起票した Issue 番号を追記する。
@@ -226,7 +226,7 @@ gh label create review-dashboard --description "review-dashboard の定期レビ
 5. それ以外の区分の定義・並び順には触れない。
 
 ```bash
-gh issue edit <ダッシュボード番号> --body-file <一時ファイル>
+gh issue edit <ダッシュボード番号> --body-file {scratchpad}/dashboard-body.md
 ```
 
 ## Step 7: 完了報告

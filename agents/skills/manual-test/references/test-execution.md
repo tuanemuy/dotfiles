@@ -52,6 +52,7 @@ manual-test スキルが生成するドキュメントは、テーブル形式�
 
 ## 前提
 - まずプロジェクトルートの CLAUDE.md を読む
+- コマンドの正は {_shared/references/agent-browser.md の絶対パス}。**`agent-browser --help` と `agent-browser skills get` は実行しない** — CLI 自身が案内してくるが従わない（1回で数千トークンを context に残し、以降の全ターンで読み直すことになる）
 
 ## テスト情報
 - テストケース: {TC番号} {テスト名}
@@ -77,39 +78,26 @@ manual-test スキルが生成するドキュメントは、テーブル形式�
 
 ## やること
 
-1. agent-browser でセッションを開始する
+**判断を挟まない連続操作は `batch` で1コマンドにまとめる。** 独立したコマンドを消費してよいのは「出力を読んで次の判断を変えるとき」だけ。`wait` を単独で実行しない。
+
+1. セッションを開始し、描画完了を待って最初の snapshot を取る
    ```bash
-   agent-browser --session verify-tc-{番号} --restore open http://localhost:{port}{開始パス}
+   agent-browser --session verify-tc-{番号} --restore batch "open http://localhost:{port}{開始パス}" "wait --load networkidle" "snapshot -i -c"
    ```
 
-2. ページの読み込み完了を待つ
+2. 各ステップを実行する。操作 → 待機 → 次の snapshot までを1コマンドにまとめる
    ```bash
-   agent-browser --session verify-tc-{番号} --restore wait --load networkidle
+   agent-browser --session verify-tc-{番号} --restore batch "click @e6" "wait --load networkidle" "snapshot -i -c"
    ```
+   - 期待結果の検証: `find text "{期待するテキスト}"` / `get text --ref @eN` / `is visible @eN` / `get url` / `is enabled @eN` / `wait --text "{テキスト}" --timeout 15000`
+   - ref は snapshot のたびに変わる。同じ snapshot で拾える操作はまとめて投げ切る
+   - 観測した内容を記録する（画面の文言・URL をそのまま転記。合否は書かない）
 
-3. 各ステップを順番に実行する:
-   a. snapshot を取得し、操作対象の要素を特定する（ref を使う）
-      ```bash
-      agent-browser --session verify-tc-{番号} --restore snapshot --max-output 8000
-      ```
-   b. 操作を実行する（click, fill, select 等）
-   c. ページ遷移後は wait コマンドで描画完了を待つ（sleep は使わない）
-      ```bash
-      agent-browser --session verify-tc-{番号} --restore wait --load networkidle
-      ```
-   d. 期待結果を検証する:
-      - テキストの表示確認: `find text "期待するテキスト"` または `get text --ref @eN`
-      - 要素の表示確認: `is visible @eN`
-      - URL の確認: `get url`
-      - 要素の状態確認: `is enabled @eN`
-      - 待機が必要な場合: `wait --text "期待するテキスト" --timeout 15000`
-   e. 観測した内容を記録する（画面の文言・URL をそのまま転記。合否は書かない）
-
-4. 期待結果と食い違ったステップがあった場合:
-   - その時点の snapshot を取得し、画面の状態（表示されていた要素・エラーメッセージ等）を結果に記録する。視覚的な確認が必要ならスクリーンショットを撮って見てもよいが、成果物として保存・添付はしない
+3. 期待結果と食い違ったステップがあった場合:
+   - その時点の snapshot を取得し、画面の状態（表示されていた要素・エラーメッセージ等）を結果に記録する
    - 以降のステップも可能な限り続行する（1ステップの食い違いで全体を中断しない）
 
-5. テスト完了後、セッションを閉じる
+4. テスト完了後、セッションを閉じる
    ```bash
    agent-browser --session verify-tc-{番号} --restore close
    ```
@@ -117,8 +105,8 @@ manual-test スキルが生成するドキュメントは、テーブル形式�
 ## 重要な原則
 - テスト手順に忠実に従う — 勝手にステップを省略・変更しない
 - 操作対象は必ず snapshot の ref で指定する — セレクタを直書きしない
-- スクリーンショットは成果物にしない — 確認用に撮るのはよいが、全ステップ撮影・レポート添付はしない。証跡は実行ログと食い違い時の snapshot（テキスト）で残す。スクリーンショット・録画は実 Chrome でないと動かない
-- snapshot の --max-output 8000 を使い、コンテキストを保護する
+- **スクリーンショットを画像として読み込まない** — 証跡は実行ログと食い違い時の snapshot（テキスト）で残す。撮ったファイルを `Read` すると画像が以降の全ターンで context に残り続ける。テキストでは判断できないときだけ1枚読む。全ステップ撮影・レポート添付はしない（スクリーンショット・録画は実 Chrome でないと動かない）
+- snapshot は `-i -c`（操作可能な要素のみ・空要素を除去）で取る。`--max-output` は最後の手段で、常用しない
 - **合否を判定しない** — PASS / FAIL / OK / NG のような判定語を出力に書かない。期待結果と実際の観測を並べて返すだけにする
 - **観測は要約・言い換えせずそのまま転記する** — 画面に出た文言・URL・エラーメッセージを原文で書く。「正しく表示された」ではなく「見出しに『請求書一覧』、行が3件」のように書く
 - **原因を推測しない** — 実装のどこが悪いかの分析は呼び出し元が行う
@@ -188,30 +176,25 @@ agent-browser --session {s} --restore fill @e4 "admin"
 agent-browser --session {s} --restore fill @e6 "password"
 agent-browser --session {s} --restore click @e5
 
-# OK: fill → Tab で blur を発火 → 次のフィールド → click
-agent-browser --session {s} --restore fill @e4 "admin"
-agent-browser --session {s} --restore press Tab
-agent-browser --session {s} --restore fill @e6 "password"
-agent-browser --session {s} --restore press Tab
-agent-browser --session {s} --restore click @e5
+# OK: fill → Tab で blur を発火 → 次のフィールド → click（batch で1コマンドにまとめる）
+agent-browser --session {s} --restore batch "fill @e4 admin" "press Tab" "fill @e6 password" "press Tab" "click @e5"
 ```
+
+batch のコマンドは空白で分割されるため、**入力値に空白を含む場合はその `fill` だけ単独で実行する**。
 
 ### snapshot は fill/click の前に1回だけ
 
 snapshot を取り直すと ref が変わるため、操作の途中で再取得しない。
 
 ```bash
-# OK: snapshot → fill → fill → click（全て同じ ref）
-agent-browser --session {s} --restore snapshot --max-output 8000
-agent-browser --session {s} --restore fill @e4 "admin"
-agent-browser --session {s} --restore press Tab
-agent-browser --session {s} --restore fill @e6 "password"
-agent-browser --session {s} --restore click @e5
+# OK: snapshot → （batch で）fill → fill → click（全て同じ ref）
+agent-browser --session {s} --restore snapshot -i -c
+agent-browser --session {s} --restore batch "fill @e4 admin" "press Tab" "fill @e6 password" "click @e5"
 
 # NG: fill の後に snapshot を挟む（ref が変わる）
-agent-browser --session {s} --restore snapshot --max-output 8000
+agent-browser --session {s} --restore snapshot -i -c
 agent-browser --session {s} --restore fill @e4 "admin"
-agent-browser --session {s} --restore snapshot --max-output 8000  # ← ref 変更！
+agent-browser --session {s} --restore snapshot -i -c  # ← ref 変更！
 agent-browser --session {s} --restore fill @e6 "password"  # ← 古い ref は無効
 ```
 
@@ -220,12 +203,10 @@ agent-browser --session {s} --restore fill @e6 "password"  # ← 古い ref は�
 Radix UI や shadcn/ui の Select は `<select>` ネイティブ要素ではないため、agent-browser の `select` コマンドは使えない。クリックで開いてからテキスト検索で選択肢を選ぶ。
 
 ```bash
-# SelectTrigger をクリックして開く
-agent-browser --session {s} --restore click @eN   # SelectTrigger の ref
-agent-browser --session {s} --restore wait 500
-# 開いた SelectContent から選択肢をクリック
-agent-browser --session {s} --restore find text "選択肢のテキスト"
-agent-browser --session {s} --restore click @eM   # 選択肢の ref
+# SelectTrigger（@eN）を開いて選択肢を検索するところまで1コマンドで
+agent-browser --session {s} --restore batch "click @eN" "wait 500" "find text 選択肢のテキスト"
+# 返ってきた ref をクリック
+agent-browser --session {s} --restore click @eM
 ```
 
 ### ダイアログ内フォームの操作
@@ -233,15 +214,10 @@ agent-browser --session {s} --restore click @eM   # 選択肢の ref
 ダイアログが開いた後は snapshot を取り直してから操作する（ダイアログ内の要素は開く前の snapshot には含まれない）。
 
 ```bash
-# ダイアログを開く
-agent-browser --session {s} --restore click @eN   # 「新規追加」ボタン等
-agent-browser --session {s} --restore wait 500
-# ダイアログ内の要素を取得
-agent-browser --session {s} --restore snapshot --max-output 8000
+# ダイアログ（@eN で開く）を開いて中の要素を取得するまで1コマンドで
+agent-browser --session {s} --restore batch "click @eN" "wait 500" "snapshot -i -c"
 # ダイアログ内のフォームを操作（fill → Tab パターンで）
-agent-browser --session {s} --restore fill @eM "値"
-agent-browser --session {s} --restore press Tab
-...
+agent-browser --session {s} --restore batch "fill @eM 値" "press Tab" ...
 ```
 
 ### ファイルアップロード

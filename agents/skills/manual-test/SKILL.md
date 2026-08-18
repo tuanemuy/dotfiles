@@ -72,6 +72,8 @@ agent-browser --version
 
 利用できない場合はユーザーにインストールを案内して中断する。
 
+コマンドの正は `../_shared/references/agent-browser.md`。**メインもサブエージェントも `agent-browser --help` / `skills get` を実行しない。** サブエージェントに渡すプロンプトには、このファイルの**絶対パス**を埋めて「これを読む」と指示する（本文は転記しない）。
+
 ### agent-browser プロセスのクリーンアップ
 
 別セッションで agent-browser が使用中でなければ、残存プロセスをクリーンアップしてからテストを開始する。Skill ツールは使わず、以下の bash コマンドを直接実行する:
@@ -112,6 +114,8 @@ TEST_DATE=$(date +%Y-%m-%d)
 - 単体実行: `.manual-test/{YYYY-MM-DD}/`
 
 以降、この保存先を `{output_dir}` と表記する。
+
+使い捨てのファイル（サーバーログ・pid・確認用スクリーンショット）は `{output_dir}` ではなく `{scratchpad}` に置く（定義は `../_shared/references/scratchpad.md`）。
 
 ---
 
@@ -187,9 +191,9 @@ done
 
 ```bash
 # 例: Next.js
-PORT={port} nohup pnpm dev > /tmp/manual-test-server.log 2>&1 &
+PORT={port} nohup pnpm dev > {scratchpad}/server.log 2>&1 &
 SERVER_PID=$!
-echo $SERVER_PID > /tmp/manual-test-server.pid
+echo $SERVER_PID > {scratchpad}/server.pid
 ```
 
 ### ヘルスチェック
@@ -214,6 +218,8 @@ done
 `references/test-execution.md` を読み、その手順に従ってテストを実行する。
 
 テストケースごとにセッションを分離し、サブエージェント（**探索区分**）で実行する。サブエージェントが返すのは観測ログまでで、合否はメインが付ける。
+
+テストソースの確認項目に **検証手段** フィールドがある場合、`api` の項目は実行対象外（呼び出し元がコマンド実行で検証する）。未記載・定義外の値は `browser` として扱う。
 
 ### 実行戦略: 原則として順次実行
 
@@ -473,8 +479,8 @@ timeout 90 bash -c 'for i in $(seq 1 30); do curl -s -o /dev/null -w "%{http_cod
 agent-browser close --all 2>/dev/null
 
 # サーバー停止
-kill $(cat /tmp/manual-test-server.pid) 2>/dev/null
-rm /tmp/manual-test-server.pid /tmp/manual-test-server.log 2>/dev/null
+kill $(cat {scratchpad}/server.pid) 2>/dev/null
+rm {scratchpad}/server.pid {scratchpad}/server.log 2>/dev/null
 ```
 
 その後、Skill ツールで `/agent-browser-cleanup` を呼び出し、別セッションで使用中でなければ残存プロセスをすべて終了してクリーンな状態に戻す。
@@ -488,9 +494,9 @@ agent-browser --session {s} --restore back
 agent-browser --session {s} --restore reload
 
 # 調査
-agent-browser --session {s} --restore snapshot --max-output 8000
+agent-browser --session {s} --restore snapshot -i -c
 agent-browser --session {s} --restore snapshot --ref @e3
-agent-browser --session {s} --restore screenshot /tmp/check.png   # 確認用のみ。成果物として保存・添付しない。スクリーンショット・録画は実 Chrome でないと動かない
+agent-browser --session {s} --restore screenshot {scratchpad}/check.png   # 確認用のみ。成果物として保存・添付しない。スクリーンショット・録画は実 Chrome でないと動かない
 agent-browser --session {s} --restore get text --ref @e5
 agent-browser --session {s} --restore get url
 agent-browser --session {s} --restore get title
@@ -551,9 +557,10 @@ agent-browser --session {s} --restore wait --text "ダッシュボード"
 ## 原則
 
 - **テストソースに忠実に実行する** — 手順を勝手に変えたり省略したりしない
-- **スクリーンショットは成果物にしない** — 検証中に視覚的な確認が必要なら撮ってよいが、全ステップでの撮影・レポートへの保存/添付はしない。証跡は実行ログと失敗時の snapshot（テキスト）で残す。なお、スクリーンショット・録画は実 Chrome でないと動かない
+- **スクリーンショットを画像として読み込まない** — 証跡は実行ログと失敗時の snapshot（テキスト）で残す。撮ったファイルを `Read` すると画像が以降の全ターンで context に残り続けるので、テキストで判断できないときだけ1枚読む。全ステップでの撮影・レポートへの保存/添付はしない（スクリーンショット・録画は実 Chrome でないと動かない）
 - **サーバーは必ず停止する** — テスト終了後（成功・失敗問わず）サーバーを停止し、ポートを解放する
 - **コードは修正しない** — 失敗を検出したら原因分析とIssue起票に留め、修正は別のIssue対応フローに委ねる
 - **環境を汚さない** — テストで作成したデータ・ファイルは記録し、必要なら後始末する
-- **snapshot の出力制限** — `--max-output 8000` を使い、コンテキストウィンドウを保護する
+- **snapshot は `-i -c`**（操作可能な要素のみ・空要素を除去）で取る。`--max-output` は最後の手段で常用しない
+- **判断を挟まない連続操作は `batch` でまとめる** — `wait` を単独で実行しない
 - 委譲方式・並列実行・中断時の再委譲・委譲時のコンテキストは `../_shared/references/subagent-policy.md` に従う

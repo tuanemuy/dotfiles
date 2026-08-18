@@ -138,7 +138,7 @@ Conflict #111 #112
 
 ## Step 5: Issue の作成 または 更新
 
-本文を一時ファイルに書き出してから反映する。
+本文を `{scratchpad}/issue-body.md`（`{scratchpad}` の定義は `../_shared/references/scratchpad.md`）に書き出してから反映する。
 
 **既存のダッシュボード Issue があった場合（差分更新）。** 旧本文をベースに、変わった分だけ手を入れる。構造は作り直さない（見るたびにカテゴリー分けや並び順がブレるため）。
 
@@ -152,13 +152,13 @@ Conflict #111 #112
 ユーザーが明示的に「整理し直して」と言った場合だけ、引き継がず全件フル解析で作り直す。
 
 ```bash
-gh issue edit <ダッシュボード番号> --body-file <一時ファイル>
+gh issue edit <ダッシュボード番号> --body-file {scratchpad}/issue-body.md
 ```
 
 **なかった場合。** 新規作成する。
 
 ```bash
-gh issue create --title "Issue Dashboard" --body-file <一時ファイル>
+gh issue create --title "Issue Dashboard" --body-file {scratchpad}/issue-body.md
 ```
 
 ## Step 6: 完了報告

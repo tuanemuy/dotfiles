@@ -86,20 +86,20 @@ HTMLの `<style>` セクションで CSS カスタムプロパティとしてト
 agent-browser --session design-page-{画面名} open file:///absolute/path/to/spec/design/pages/{画面名}.html
 
 agent-browser --session design-page-{画面名} viewport 375 667
-agent-browser --session design-page-{画面名} screenshot /tmp/design-screenshots/pages/{画面名}-mobile.png
+agent-browser --session design-page-{画面名} screenshot {scratchpad}/design-screenshots/pages/{画面名}-mobile.png
 
 agent-browser --session design-page-{画面名} viewport 768 1024
-agent-browser --session design-page-{画面名} screenshot /tmp/design-screenshots/pages/{画面名}-tablet.png
+agent-browser --session design-page-{画面名} screenshot {scratchpad}/design-screenshots/pages/{画面名}-tablet.png
 
 agent-browser --session design-page-{画面名} viewport 1280 800
-agent-browser --session design-page-{画面名} screenshot /tmp/design-screenshots/pages/{画面名}-desktop.png
+agent-browser --session design-page-{画面名} screenshot {scratchpad}/design-screenshots/pages/{画面名}-desktop.png
 
 agent-browser --session design-page-{画面名} close
 ```
 
 `2xl` (1536px) を本格的に活用するデザインの場合は、`1536×960` のワイドビューポートも追加で取得する。
 
-スクリーンショットの保存先: `/tmp/design-screenshots/pages/`
+スクリーンショットの保存先: `{scratchpad}/design-screenshots/pages/`
 命名規則: `{画面名}-desktop.png`, `{画面名}-tablet.png`, `{画面名}-mobile.png`
 
 agent-browser に `viewport` サブコマンドが無い場合は CLI ヘルプで該当オプション（`--width`/`--height`、`--device` など）を確認して同等のことを行う。

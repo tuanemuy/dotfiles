@@ -39,7 +39,7 @@ manual-test-dashboard の区分探索（SKILL.md Step 5）で使うチャータ�
 2. ログインが必要なら、シードデータのアカウントでログインする
    （fill → press Tab → fill → press Tab → click。遷移後は wait --load networkidle）
 3. スコープ内の画面を巡回しながら、チャーターに沿った操作を試す:
-   - 操作前に snapshot --max-output 8000 で画面を把握し、操作対象は ref（@eN）で指定する
+   - 操作前に snapshot -i -c で画面を把握し、操作対象は ref（@eN）で指定する
    - ページ遷移・操作の後は wait --load networkidle か wait --text で待つ（sleep は使わない）
    - 何を試したか（画面・操作・結果）を逐一記録する。問題がなかった操作も探索ログに残す
 4. 問題らしき事象を見つけたら:
@@ -53,7 +53,7 @@ manual-test-dashboard の区分探索（SKILL.md Step 5）で使うチャータ�
 - スコープ外の画面には踏み込まない（リンクがあっても対象区分の画面に留まる）
 - 破壊的な操作（削除・退会・全件クリア等）はテスト用とわかるデータに対してのみ行う
 - スクリーンショットは確認用のみ。成果物として保存・添付しない。証跡は操作ログと snapshot（テキスト）。スクリーンショット・録画は実 Chrome でないと動かない
-- snapshot は --max-output 8000 でコンテキストを保護する
+- snapshot は `-i -c`（操作可能な要素のみ）で取る。`--max-output` は常用しない
 - フォーム操作の注意点（fill → Tab、カスタム Select、ダイアログ内の snapshot 取り直し等）は
   agent-browser が期待通り動かないときに ../manual-test/references/test-execution.md の
   操作パターンを参照する
