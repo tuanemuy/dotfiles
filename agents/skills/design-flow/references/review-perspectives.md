@@ -8,7 +8,7 @@ design-flow の Phase 4（`phase4-review.md`）で使う観点の定義。Step �
 
 - 判定基準の土台は `../../frontend-design/SKILL.md` の **DON'T ガイドライン**。2024-2025年のAI生成デザインの指紋であり、このパイプラインで最も検出優先度が高い
 - 加えて `spec/design/index.md`（デザイン方針・採用した様式）と `spec/design/tokens.md`（トークン定義）を判定基準にする。「このデザインが自分で定めた基準を満たしているか」を照合する
-- コードだけ、または画像だけで判断しない。HTML と `/tmp/design-screenshots/review/` のスクリーンショットを両方確認する
+- コードだけ、または画像だけで判断しない。HTML と `{scratchpad}/design-screenshots/review/` のスクリーンショットを両方確認する
 - 自分の節の観点だけでレビューする。他ステップの観点には踏み込まない（別のレビュアーが担当する）
 - 指摘には必ず**根拠**（該当箇所のHTML抜粋、またはスクリーンショットで確認した事実）を添える
 

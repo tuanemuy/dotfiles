@@ -10,7 +10,7 @@ APIや実装の詳細は対象外。ユーザーから見える振る舞い・�
 
 ## 前提条件
 
-`agent-browser` CLI が必要。セットアップ・頻出コマンド・ターン数を抑える書き方は `../_shared/references/agent-browser.md` に集約してある。ブラウザ操作の前に読む。
+`agent-browser` CLI が必要。セットアップ・頻出コマンド・ターン数を抑える書き方は `../_shared/references/agent-browser.md` に集約してある。ブラウザ操作の前に読む。スクリーンショット等の使い捨てファイルの置き場所 `{scratchpad}` の定義は `../_shared/references/scratchpad.md`。
 
 ## アーキテクチャ
 
@@ -66,18 +66,20 @@ agent-browser --session headed-auth --restore close
 
 ### コンテキストウィンドウの保護
 
-snapshot の出力はページによって巨大になる。`--max-output` で制限する:
+snapshot の出力はコンテキストに残り、以降の全ターンで再読み込みされる。既定で絞る:
 
 ```bash
-agent-browser --session scout --restore snapshot --max-output 8000
+agent-browser --session scout --restore snapshot -i -c
 ```
 
 大きなページは分割して調査する。全体のsnapshotではなく、特定セクションにフォーカス:
 
 ```bash
 agent-browser --session explorer-settings --restore find role "navigation"
-agent-browser --session explorer-settings --restore snapshot --ref @e3 --max-output 5000
+agent-browser --session explorer-settings --restore snapshot --ref @e3 -i -c
 ```
+
+`--max-output` は最後の手段で、常用しない（`../_shared/references/agent-browser.md`）。
 
 サブエージェントは生のsnapshot出力をそのまま返さない。
 構造化した要約（画面名、項目一覧、アクション一覧）にまとめてから返す。
@@ -124,11 +126,11 @@ agent-browser --session scout --restore auth login myservice
 
 ```bash
 # 1. ユーザーに手動認証してもらう
-agent-browser --session headed-auth --headed --profile /tmp/myservice-profile open https://example.com/login
+agent-browser --session headed-auth --headed --profile {scratchpad}/browser-profile open https://example.com/login
 # → ユーザーが認証操作を完了するのを待つ
 
 # 2. 以降のサブエージェントはプロファイルを使う
-agent-browser --session scout --profile /tmp/myservice-profile open https://example.com/dashboard
+agent-browser --session scout --profile {scratchpad}/browser-profile open https://example.com/dashboard
 ```
 
 `--profile` はプロファイルディレクトリ自体が Cookie を保持するため、このパターンでは `--restore` を併用しない。
@@ -171,7 +173,7 @@ Phase 2〜4 の全サブエージェントに以下を渡す（各 Phase のテ�
 allowed-domains: {domains}
 
 - ページ遷移ごとに sleep 1 を入れること
-- snapshot は --max-output 8000 を使うこと
+- snapshot は `-i -c` で取ること（`--max-output` は常用しない）
 - 生の snapshot 出力は返さないこと。構造化した要約のみ返す
 ```
 
@@ -221,7 +223,7 @@ agent-browserを使って以下のセクションの詳細仕様を調査して�
 3. ボタン・リンクを記録（ラベル、遷移先、実行されるアクション）
 4. 状態変化があれば記録（タブ切替、モーダル、アコーディオン等）
 5. エラー状態を確認（空送信、不正入力でのバリデーションメッセージ）
-6. screenshotを /tmp/spec-screenshots/{section}/ に保存
+6. screenshotを {scratchpad}/spec-screenshots/{section}/ に保存
 
 バリデーション確認時は実際にフォームを操作してエラーメッセージを取得すること。
 
@@ -257,7 +259,7 @@ allowed-domains: {domains}
 4. 分岐点があれば記録（条件とそれぞれの結果）
 5. エラーケースも1つ以上試す
 6. フロー完了まで追跡
-7. screenshotを /tmp/spec-screenshots/flows/{flow_name}/ に保存
+7. screenshotを {scratchpad}/spec-screenshots/flows/{flow_name}/ に保存
 
 ページ遷移ごとにsleep 1を入れること。
 フォーム入力にはテストデータを使うこと（実際に送信はしない、または送信が安全な場合のみ送信）。
@@ -314,9 +316,9 @@ agent-browser --session {s} --restore back
 agent-browser --session {s} --restore reload
 
 # 調査
-agent-browser --session {s} --restore snapshot --max-output 8000    # アクセシビリティツリー（refつき）
+agent-browser --session {s} --restore snapshot -i -c    # アクセシビリティツリー（refつき）
 agent-browser --session {s} --restore snapshot --ref @e3            # 特定要素のサブツリー
-agent-browser --session {s} --restore screenshot /tmp/page.png      # スクリーンショット
+agent-browser --session {s} --restore screenshot {scratchpad}/page.png      # スクリーンショット
 agent-browser --session {s} --restore get text --ref @e5            # 要素のテキスト取得
 agent-browser --session {s} --restore get url                       # 現在のURL
 agent-browser --session {s} --restore get title                     # ページタイトル
@@ -351,5 +353,5 @@ ref（@e1, @e2...）はsnapshotで取得できる。操作対象はrefで指定�
 - **本番データに触れない**: フォーム送信は原則しない。バリデーション確認のための空送信や不正値入力は可。実データの作成・変更・削除は絶対にしない
 - **認証情報をspec/に書かない**: auth.mdには認証方式の仕様のみ記載。パスワードやトークンは書かない
 - **外部リンクを踏まない**: `--allowed-domains` で対象ドメインに限定する
-- **screenshotの保存先**: `/tmp/spec-screenshots/` 配下に整理して保存。spec/からは相対パスで参照
+- **screenshotの保存先**: `{scratchpad}/spec-screenshots/` 配下に整理して保存（調査中の確認用）。セッション終了で消えるので spec/ からリンクしない。成果物として残すものだけ `spec/screenshots/` にコピーして参照する
 - **探索の深さ**: 全ページを完全に網羅する必要はない。重要度の高いページとフローに集中し、低優先度のページは画面一覧に名前だけ記載して「TODO: 詳細未調査」とする

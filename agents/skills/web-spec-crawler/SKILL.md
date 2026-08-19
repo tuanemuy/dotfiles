@@ -19,7 +19,7 @@ description: agent-browserでWebサービスを実際に操作しながら、全
 
 ## 前提条件
 
-`agent-browser` CLI が必要。セットアップ・頻出コマンド・ターン数を抑える書き方は `../_shared/references/agent-browser.md` に集約してある。セッション管理・認証パターン・headed/headless の使い分け・レートリミット対策は `../web-spec-explorer/SKILL.md` を参照する。本スキルはその上に「網羅エンジン」を載せる。
+`agent-browser` CLI が必要。セットアップ・頻出コマンド・ターン数を抑える書き方は `../_shared/references/agent-browser.md` に集約してある。セッション管理・認証パターン・headed/headless の使い分け・レートリミット対策は `../web-spec-explorer/SKILL.md` を参照する。本スキルはその上に「網羅エンジン」を載せる。スクリーンショット等の使い捨てファイルの置き場所 `{scratchpad}` の定義は `../_shared/references/scratchpad.md`。
 
 委譲方式（サブエージェント / OSプロセス / 親内シミュレート）・並列化・モデル選択の原則は `../_shared/references/subagent-policy.md` に従う。scout と explorer は画面に出ているものを列挙して返すだけなので**探索区分**、auditor は explorer の報告の妥当性を判定するため**判断区分**とする。メインエージェントがオーケストレーションに徹する原則は `../_shared/references/implement-principles.md` の精神を踏襲する。
 
@@ -129,5 +129,5 @@ frontier ドレイン完了後、全結果を spec/ に構造化する。網羅�
 - **認証情報を spec/ に書かない**: auth.md には認証方式の仕様のみ。パスワード・トークンは書かない。
 - **外部リンクを踏まない**: `--allowed-domains` で対象ドメインに限定する。
 - **レート制限を守る**: ページ遷移ごとに sleep を入れ、並列は最大3。429/CAPTCHA が出たら間隔を広げる。
-- **screenshot の保存先**: `/tmp/spec-screenshots/` 配下に整理。spec/ からは相対パスで参照。
+- **screenshot の保存先**: `{scratchpad}/spec-screenshots/` 配下に整理（調査中の確認用）。セッション終了で消えるので spec/ からリンクしない。成果物として残すものだけ `spec/screenshots/` にコピーして参照する。
 - **網羅と爆発のバランス**: 「全分岐」は等価クラス（代表値＋境界値）と状態シグネチャ dedup で有限化する。全データ組み合わせの列挙ではない。詳細は `references/strategy.md`。

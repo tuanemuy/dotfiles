@@ -25,7 +25,7 @@ spec スキルの成果物（シナリオ、ページ設計など）をもとに
 
 ## 前提条件
 
-`agent-browser` CLI が必要。HTMLデザインのスクリーンショット取得・視覚的レビューに使用する。セットアップ・頻出コマンド・ターン数を抑える書き方は `../_shared/references/agent-browser.md` に集約してある。
+`agent-browser` CLI が必要。HTMLデザインのスクリーンショット取得・視覚的レビューに使用する。セットアップ・頻出コマンド・ターン数を抑える書き方は `../_shared/references/agent-browser.md` に集約してある。スクリーンショット等の使い捨てファイルの置き場所 `{scratchpad}` の定義は `../_shared/references/scratchpad.md`。
 
 ### 開始前のプロセスクリーンアップ
 
@@ -67,7 +67,7 @@ agent-browser を使うのは Phase 3（デザイン作成）と Phase 4（レ�
 
 ```bash
 agent-browser --session design-page-dashboard open file:///path/to/spec/design/pages/dashboard.html
-agent-browser --session design-review screenshot /tmp/design-screenshots/review/dashboard.png
+agent-browser --session design-review screenshot {scratchpad}/design-screenshots/review/dashboard.png
 ```
 
 命名規則:

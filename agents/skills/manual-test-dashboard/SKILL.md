@@ -23,6 +23,8 @@ description: プロジェクトを区分に分割し、GitHub Issue のダッシ
 
 `agent-browser` CLI が必要。セットアップ・頻出コマンド・ターン数を抑える書き方は `../_shared/references/agent-browser.md` に集約してある。ブラウザ操作の前に読む。
 
+使い捨てのファイル（サーバーログ・pid・Issue 本文の下書き）は `{scratchpad}` に置く（定義は `../_shared/references/scratchpad.md`）。
+
 ## アーキテクチャ
 
 ```text
@@ -66,10 +68,10 @@ spec/pages/ / spec/scenario/ / ルーティング定義 / CLAUDE.md / README.md 
 - 到達可能なすべての画面がいずれかの区分のスコープに含まれるようにする
 - チャーターは `references/exploration-charters.md` のカタログから、そのスコープに効くものを 3〜5 個選ぶ
 
-設計した区分を下記フォーマットでダッシュボード Issue として新規作成する。本文は一時ファイルに書き出してから反映する。
+設計した区分を下記フォーマットでダッシュボード Issue として新規作成する。本文は `{scratchpad}/dashboard-body.md` に書き出してから反映する。
 
 ```bash
-gh issue create --title "Manual Test Dashboard" --body-file <一時ファイル>
+gh issue create --title "Manual Test Dashboard" --body-file {scratchpad}/dashboard-body.md
 ```
 
 初期化した実行では**探索まで進まない**。区分の切り方はローテーション全体の質を決めるので、まずユーザーに区分を確認してもらう。作成したダッシュボードの URL と区分一覧を報告して終了する。ユーザーが「初期化してそのまま1区分探索して」と明示した場合のみ Step 3 に続く。
@@ -197,8 +199,8 @@ export AGENT_BROWSER_IDLE_TIMEOUT_MS=120000  # daemon無操作: 2分で自動終
 `../manual-test/references/server-detection.md` を読み、その手順に従ってサーバー起動コマンドとポートを検出する。検出ポートが使用中なら空きポートを探して変更する。
 
 ```bash
-PORT={port} nohup {起動コマンド} > /tmp/manual-test-dashboard-server.log 2>&1 &
-echo $! > /tmp/manual-test-dashboard-server.pid
+PORT={port} nohup {起動コマンド} > {scratchpad}/server.log 2>&1 &
+echo $! > {scratchpad}/server.pid
 
 timeout 90 bash -c 'for i in $(seq 1 30); do curl -s -o /dev/null -w "%{http_code}" http://localhost:{port}/ | grep -q "200\|301\|302" && exit 0; sleep 2; done; exit 1'
 ```
@@ -275,7 +277,7 @@ timeout 90 bash -c 'for i in $(seq 1 30); do curl -s -o /dev/null -w "%{http_cod
 起票候補（Critical / Warning）は、起票前に**別セッションで再現確認する**。発見したサブエージェントの報告を鵜呑みにしない。
 
 1. 発見ごとに再現用サブエージェント（**判断区分**。セッション指定は `--session verify-{発見番号} --restore`）を起動し、**最小の再現手順**で同じ事象が起きるか確認する
-2. サーバーログ（/tmp/manual-test-dashboard-server.log）に対応するエラー・スタックトレースがあれば根拠に加える
+2. サーバーログ（`{scratchpad}/server.log`）に対応するエラー・スタックトレースがあれば根拠に加える
 3. 再現しないもの・判断が割れるものは Info に落とす。偽陽性の起票はローテーション全体の信頼を損なう
 
 **クリックが無反応な系の発見**は要注意。agent-browser の `click @ref` が React の合成 onClick に届かない既知の偽陽性がある（詳細は `../manual-test/SKILL.md` の Known Issue）。`eval` 経由の `button.click()` で発火するか切り分け、発火するなら agent-browser 起因の可能性が高いので、実装バグと断定せず確信度を下げて Info に落とすか、起票する場合はその旨を注記する。
@@ -332,7 +334,7 @@ gh label create manual-test-dashboard --description "manual-test-dashboard の�
 
 ## Step 8: ダッシュボードの更新
 
-旧本文をベースに、変わった分だけ手を入れる。本文を一時ファイルに書き出してから反映する。
+旧本文をベースに、変わった分だけ手を入れる。本文を `{scratchpad}/dashboard-body.md` に書き出してから反映する。
 
 1. 今回探索した区分の `最終探索:` を今日の日付にする。
 2. 同区分の `起票:` に今回起票した Issue 番号を追記する。
@@ -341,7 +343,7 @@ gh label create manual-test-dashboard --description "manual-test-dashboard の�
 5. それ以外の区分の定義・並び順には触れない。
 
 ```bash
-gh issue edit <ダッシュボード番号> --body-file <一時ファイル>
+gh issue edit <ダッシュボード番号> --body-file {scratchpad}/dashboard-body.md
 ```
 
 ## Step 9: レポート・クリーンアップ・完了報告
@@ -355,8 +357,8 @@ gh issue edit <ダッシュボード番号> --body-file <一時ファイル>
 ```bash
 agent-browser close --all 2>/dev/null
 
-kill $(cat /tmp/manual-test-dashboard-server.pid) 2>/dev/null
-rm /tmp/manual-test-dashboard-server.pid /tmp/manual-test-dashboard-server.log 2>/dev/null
+kill $(cat {scratchpad}/server.pid) 2>/dev/null
+rm {scratchpad}/server.pid {scratchpad}/server.log 2>/dev/null
 
 git switch "$ORIG_BRANCH"
 git branch -D "manual-test-dashboard/$(date +%Y%m%d)"
