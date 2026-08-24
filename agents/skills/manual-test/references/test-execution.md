@@ -52,6 +52,7 @@ manual-test スキルが生成するドキュメントは、テーブル形式�
 
 ## 前提
 - まずプロジェクトルートの CLAUDE.md を読む
+- **テストソースのファイルは開かない** — 担当する手順と期待結果は下に転記済み
 - コマンドの正は {_shared/references/agent-browser.md の絶対パス}。**`agent-browser --help` と `agent-browser skills get` は実行しない** — CLI 自身が案内してくるが従わない（1回で数千トークンを context に残し、以降の全ターンで読み直すことになる）
 
 ## テスト情報
