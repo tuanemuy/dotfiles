@@ -83,7 +83,7 @@ agent-browser --session design-review close
 2. {スキルパス}/../frontend-design/SKILL.md の DON'T ガイドライン — 判定基準の土台
 3. spec/design/index.md — デザイン方針と採用した様式
 4. spec/design/tokens.md — トークン定義
-5. spec/design/review/triage.md（あれば） — 既出指摘の判定。Key が一致する指摘は再指摘しない
+5. spec/design/review/triage-keys.md（あれば） — 既出指摘の判定。Key が一致する指摘は再指摘しない
 
 ## 対象（全量）
 - HTML: spec/design/pages/ 配下の全ファイル

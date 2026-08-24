@@ -58,20 +58,41 @@ Issue #960 の実測: 同一セッションに httpOnly Cookie を入れて `clo
 | 移動 | `open <url>` / `back` / `reload` |
 | 構造把握 | `snapshot -i -c`（AI 向け・ref 付き） |
 | 本文取得 | `read` / `get text <sel>` |
-| 操作 | `click <sel\|@ref>` / `fill <sel> <text>` / `press <key>` / `select <sel> <val>` |
+| 操作 | `click <sel\|@ref>` / `fill <sel> <text>` / `press <key>` / `select <sel> <val>` / `hover <sel>`（ホバーのみ・クリックしない） |
 | 待機 | `wait <sel\|ms>` / `wait --load networkidle` |
 | 検索 | `find role\|text\|label\|testid <value> <action>` |
 | 状態確認 | `is visible\|enabled\|checked <sel>` |
 | 画像 | `screenshot [path]` |
 | エラー確認 | `console` / `errors` |
 | 任意 JS | `eval <js>` |
+| ダウンロード | `download <sel\|@ref> <保存パス>`（要素をクリックしてファイルを保存する） |
+| ファイル選択 | `upload <sel\|@ref> <パス...>`（`input[type=file]` にファイルを渡す。`fill` では `files` が空のままで反映されない） |
 | 終了 | `close` / `close --all` |
 | ビューポート変更 | `set viewport <w> <h>`（既定は 1280x633。ポップオーバーが画面外にはみ出すときに使う） |
+| タブ管理 | `tab new` / `tab list` / `tab <n>`（切替） / `tab close`。同一セッション内で Cookie を共有した複数タブを扱える（別セッションは Cookie を共有しないため、同一ブラウザーの「別タブ」を再現するにはこちらを使う） |
 | 座標クリック | `mouse move <x> <y>` → `mouse down` → `mouse up`（`click`/`find` で拾えない要素の最後の手段） |
 
 `batch` に渡すコマンドは**空白で分割される**。`click table thead th:nth-child(4)` は先頭の `table` だけがセレクタとして解釈され、意図しない要素をクリックする。空白を含む CSS セレクタは避け、`th:nth-child(4)` のように単一トークンで指定する。
 
-`snapshot` が返す `@ref`（`e6` など）はセレクタとして使える。CSS セレクタを組み立てるより安定する。
+`snapshot` が返す `@ref`（`e6` など）はセレクタとして使える。CSS セレクタを組み立てるより安定する。ただし **`download` / `eval` / ポップオーバーの開閉を挟むと ref が振り直される**ことがある（`✗ Unknown ref: e13`）。操作のたびに `snapshot` を取り直すのが安全。
+
+## ファイルをダウンロードする
+
+`click` でダウンロードのトリガーを押しても、ファイルはどこにも残らない（`~/Downloads` にも `AGENT_BROWSER_DOWNLOAD_PATH` にも現れない）。**`download <ref> <保存パス>` を使う。**
+
+```bash
+agent-browser --session s1 --restore download e13 /path/to/out.pdf
+```
+
+保存パスを自分で決めるので、**画面から降ってきたファイル名は失われる。** 元の名前が必要なら、押す前に `<a download>` を差し込みで捕まえる:
+
+```bash
+agent-browser --session s1 --restore eval "(()=>{if(!window.__dlPatched){window.__dlPatched=1;const o=HTMLAnchorElement.prototype.click;HTMLAnchorElement.prototype.click=function(){if(this.download)window.__dl.push(this.download);return o.apply(this,arguments)};}window.__dl=[];return 'ok'})()"
+agent-browser --session s1 --restore download e13 /tmp/dl.bin
+agent-browser --session s1 --restore eval "window.__dl[window.__dl.length-1]"   # → "settlement_statement_20260819_20260819003.pdf"
+```
+
+`--download-path <path>`（環境変数 `AGENT_BROWSER_DOWNLOAD_PATH`）もあるが、daemon が起動済みの状態で環境変数を足しても効かなかった。
 
 ## 作業ファイルの置き場所
 
@@ -85,3 +106,30 @@ agent-browser install      # Chrome for Testing のセットアップ（初回�
 ```
 
 開始前と終了時に `/agent-browser-cleanup` を Skill ツールで呼ぶ。
+
+## Cookie を読む・書き換える
+
+`document.cookie` は `HttpOnly` Cookie を返さないので、`eval` では読めない。専用サブコマンドを使う。
+
+```bash
+agent-browser --session {s} --restore cookies get --json          # HttpOnly も含めて全 Cookie を取得
+agent-browser --session {s} --restore cookies set <name> <value>  # 現在のページ URL に対して設定
+agent-browser --session {s} --restore cookies clear               # 全消去
+```
+
+`cookies set` のオプション: `--url` / `--domain` / `--path` / `--httpOnly` / `--secure` / `--sameSite <Strict|Lax|None>` / `--expires <Unix秒>`。`--url` / `--domain` / `--path` をすべて省略すると現在のページ URL に対して設定される。
+
+**上書きは属性ごと置き換わる。** 元と同じ属性（`--httpOnly --sameSite Lax --path /` など）を明示しないと、値だけ差し替えたつもりで `HttpOnly` が外れる。改ざん再現のテストでは、書き換え前に `cookies get --json` で属性を控えてから同じ属性を付けて `set` する。
+
+## リクエスト・レスポンスヘッダーを読む
+
+DevTools の Network タブに相当する。`Set-Cookie` の生ヘッダーを読むときはこれ。
+
+```bash
+agent-browser --session {s} --restore network requests --filter "callback" --json
+agent-browser --session {s} --restore network requests --type document,fetch --method POST
+agent-browser --session {s} --restore network request <requestId>   # ヘッダー・ボディまで含む詳細
+agent-browser --session {s} --restore network requests --clear      # 記録をクリア（計測区間を絞る）
+```
+
+`requests` は一覧（id・URL・status）を返し、`request <id>` が1件の全詳細を返す。**ヘッダーが要るときだけ `request <id>` を引く** — 一覧を `--json` で丸ごと出すとコンテキストを食う。

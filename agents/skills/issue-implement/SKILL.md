@@ -1,6 +1,6 @@
 ---
 name: issue-implement
-description: "Issueの計画立案 → 実装 → PRレビュー・修正 → ブラウザ検証を一気通貫で行うスキル。ユーザーが「Issue #123 を実装して」「#45 をやって」「このIssue対応して」「implement #123」「計画から実装までやって」などと言ったとき、または Issue 番号・URL とともに実装まで求める依頼があったときにトリガーする。計画だけなら issue-planner、spec/ ベースの全体実装は implement を使う。"
+description: "Issueの計画立案 → 実装 → PRレビュー・修正 → 動作検証を一気通貫で行うスキル。ユーザーが「Issue #123 を実装して」「#45 をやって」「このIssue対応して」「implement #123」「計画から実装までやって」などと言ったとき、または Issue 番号・URL とともに実装まで求める依頼があったときにトリガーする。計画だけなら issue-planner、spec/ ベースの全体実装は implement を使う。"
 ---
 
 # Issue Implement
@@ -21,8 +21,8 @@ Phase 2: 実装
 Phase 3: レビュー・修正
   → 指摘修正 → 再レビュー（1ラウンドでクリーンなら完了、最大10ラウンド）→ APPROVED（PR は **Draft のまま**）
 
-Phase 4: ブラウザ検証
-  manual-test スキルで検証（シードデータ準備・サーバー起動含む）
+Phase 4: 動作検証
+  testing.md の全項目を観測（browser 項目は manual-test スキル — シードデータ準備・サーバー起動含む、api 項目はコマンド実行）
   → 変更起因の FAIL があれば修正 → Phase 3 のスコープ再レビュー → APPROVED 後に再検証（検証サイクル最大3周）
   → 全PASS（または見送り記録済みの FAIL のみ）で **Ready for review に切替**
 
@@ -32,8 +32,8 @@ Phase 5: スコープ外Issueの起票
 Phase 6: ダッシュボード更新
   → ダッシュボード Issue があれば該当行だけ差分更新（この Issue の (In Progress) と新規起票の挿入のみ）
 
-Phase 7: 設計判断の反映確認とレビューファイルの削除
-  → adr.md の「あるべき」を変えた判断が spec に現在形で反映済みかを確認し、漏れを反映
+Phase 7: 判断の昇格確認とレビューファイルの削除
+  → adr.md の判断を昇格ゲートに照らす（既定は昇格なし・.thread に残す）
   → APPROVED で完了していれば .thread/{Issue番号}/review/ を削除（plan.md・adr.md 等は残す）
   → 他フェーズのレビュー・足場（spec/design/review/ 等）に取りこぼしがないか最終確認
 
@@ -47,7 +47,7 @@ Phase 8: コメント整理
 | --- | --- | --- |
 | `plan.md` | 契約 — 目的 / 受け入れ基準 / スコープ / リスク / テスト方針 | 全フェーズ |
 | `steps.md` | 手順 — 設計 / 実装ステップ | Phase 1.5・2（Phase 3 は任意） |
-| `adr.md` | 設計判断の経緯 | Phase 3 の仕分け・Phase 7 の反映確認（追記時は連番だけ引く） |
+| `adr.md` | 設計判断の経緯 | Phase 3 の仕分け・Phase 7 の昇格確認（追記時は連番だけ引く） |
 
 **`.thread/` の成果物はフェーズごとに必要なものだけをサブエージェントに渡す。** 全員に一式配ると、同じファイルが観点数×ラウンド数だけコンテキストに乗る（ラウンドを追うごとに肥大するので後半ほど高い）。
 
@@ -55,7 +55,7 @@ Phase 8: コメント整理
 
 `../issue-planner/SKILL.md` を読み、その手順に従って計画を立てる。
 
-Issue 本文の先頭に `<!-- spec-slice -->` マーカーがある場合（spec-to-issues が起票した縦スライス Issue）、issue-planner は **spec-slice ファストパス**で動く — 再調査と計画レビューループを省略し、Issue のチェックリストと spec/ から plan.md / steps.md を転記ベースで作る。以降のフェーズ（実装レビュー・ブラウザ検証を含む）はフルで行い、省略しない。
+Issue 本文の先頭に `<!-- spec-slice -->` マーカーがある場合（spec-to-issues が起票した縦スライス Issue）、issue-planner は **spec-slice ファストパス**で動く — 再調査と計画レビューループを省略し、Issue のチェックリストと spec/ から plan.md / steps.md を転記ベースで作る。以降のフェーズ（実装レビュー・動作検証を含む）はフルで行い、省略しない。
 
 計画が完了したら（plan.md, steps.md, testing.md, 必要に応じて adr.md が作成されたら）、次のフェーズに進む前に testing.md の「確認環境」セクションを検証する。具体的には:
 
@@ -90,41 +90,36 @@ Issue が**ユーザーに見える UI 画面を新設・変更する**場合だ
 
 `references/review-guide.md` を読み、その手順に従ってレビュー・修正を行う。
 
-レビューの成果物は `.thread/{Issue番号}/review/` に保存し、ADR は `.thread/{Issue番号}/adr.md` に追記する。レビューファイルはこの時点では削除しない — Phase 4 のブラウザ検証からこのループに戻る可能性があるため、片付けは Phase 7 でまとめて行う。
+レビューの成果物は `.thread/{Issue番号}/review/` に保存し、ADR は `.thread/{Issue番号}/adr.md` に追記する。Phase 4 の動作検証からこのループに戻るラウンドも、既出判定の継承と連番の継続にこれらを使う。
 
-APPROVED になっても PR は Draft のまま維持し、Phase 4 のブラウザ検証に進む。Ready for review への切り替えは Phase 4 の通過後に行う。10ラウンドに達して APPROVED に至らなかった場合は Draft のまま残してユーザーに判断を委ね、Phase 4 には進まず Phase 5 へ進む。
+APPROVED になっても PR は Draft のまま維持し、Phase 4 の動作検証に進む。Ready for review への切り替えは Phase 4 の通過後に行う。10ラウンドに達して APPROVED に至らなかった場合は Draft のまま残してユーザーに判断を委ね、Phase 4 には進まず Phase 5 へ進む。
 
-## Phase 4: ブラウザ検証
+## Phase 4: 動作検証
 
-レビュー済みの最終形に近いコードに対して、`../manual-test/SKILL.md` の手順に従ってブラウザ検証を実行する。検証環境の起動・シードデータの準備も manual-test に委ねる。Phase 3 の修正がすべてコミット・push 済みであることを確認してから始める。
+testing.md の全確認項目に観測結果（PASS / FAIL）が付いた状態がこのフェーズの完了。Phase 3 の修正がすべてコミット・push 済みであることを確認してから始める。
+
+検証手段は計画時（testing.md 作成時）に各項目へ付与済み。`browser` 項目の観測は `../manual-test/SKILL.md` の手順に従って manual-test が担い、検証環境の起動・シードデータの準備も manual-test に委ねる。`api` 項目の観測はサブエージェント（**探索区分**）1体のコマンド実行が担い、結果を `.thread/{Issue番号}/manual-test/api-results.md` に記録する。期待結果との突き合わせと合否判定はどちらもメインが行う。手段が未記載の項目は `browser` として扱う。
 
 manual-test に渡す情報:
 
-- テストソース: `.thread/{Issue番号}/testing.md`
+- テストソース: `.thread/{Issue番号}/testing.md`（`browser` 項目）
 - 成果物ディレクトリ: `.thread/{Issue番号}/manual-test/`
 - Issue番号: #{Issue番号}
 
-**検証手段によるルーティング**: testing.md の検証手段 `api` の項目は manual-test に渡さず、サブエージェント（**探索区分**）1体にコマンドを実行させて観測結果を `.thread/{Issue番号}/manual-test/api-results.md` に記録させる（期待結果との突き合わせと合否判定はメイン）。手段が未記載の項目は `browser` として扱う。検証の省略ではなく手段の変更なので、`api` 項目の実行は省略しない。
-
-**スキップは原則しない。** 以下のいずれかを実際に確認した場合のみスキップ可:
-
-- Web UIなし（`package.json` の dev/start 系欠如、UIファイル不在を確認）
-- testing.md に検証手段 `browser` の項目が1件もない（実際に読んで確認。`api` 項目の実行は行う）
-- `agent-browser --version` がエラー
-
-スキップする場合は PR の Test plan に「スキップ理由: {確認した内容}」を一行で記載する。「該当しそう」での自己判断は不可。
+**実行を担うサブエージェントに `testing.md` のパスを渡さない。** browser・api とも、担当する確認項目の手順と期待結果だけを転記して渡す（全文は1項目あたり数万トークンの重複になる）。
 
 ### 結果の処理
 
-- **変更起因の FAIL** — サブエージェント（**判断区分**）に委譲して修正し（委譲方式とモデル選択は `../_shared/references/subagent-policy.md` に従う）、コミット・push してから Phase 3 のレビューループに戻る。戻り先は修正で触れたファイルに絞った**スコープラウンド**（`references/review-guide.md` の「Phase 4 からの戻り」。連番は続きから）。APPROVED 後にブラウザ検証を再実行する。再検証は FAIL したケースと修正の影響範囲に絞ったスコープ再実行でよい
+- **変更起因の FAIL** — サブエージェント（**判断区分**）に委譲して修正し（委譲方式とモデル選択は `../_shared/references/subagent-policy.md` に従う）、コミット・push してから Phase 3 のレビューループに戻る。戻り先は修正で触れたファイルに絞った**スコープラウンド**（`references/review-guide.md` の「Phase 4 からの戻り」。連番は続きから）。APPROVED 後に検証を再実行する。再検証は FAIL したケースと修正の影響範囲に絞ったスコープ再実行でよい
 - **変更と無関係の FAIL** — manual-test の手順に従って Issue を起票し、検証としてはそのまま続行する。このような FAIL だけが残った状態は通過扱い
+- **観測が成立しない項目**（agent-browser が起動しない等の環境障害）— 結果を推測で埋めず、フェーズ未完了としてユーザーに報告する（PR は Draft のまま）
 - **検証サイクルの上限: 3周。**「修正 → 再レビュー → 再検証」を3周しても通過しない場合は強制終了し、残っている FAIL をまとめてユーザーに判断を委ねる（PR は Draft のまま）
 
 ### PR の更新と Ready for review への切り替え
 
 検証を通過したら:
 
-1. PR 本文に「## Browser Verification」セクションを追記する（実行結果サマリー — 全PASS / 見送り記録済みFAILの内訳 / スキップ理由、起票した Issue 番号）。`gh pr view <PR番号> --json body` で現在の本文を取得し、追記した本文を `{scratchpad}/pr-body.md`（`{scratchpad}` の定義は `../_shared/references/scratchpad.md`）に書き出して `gh pr edit <PR番号> --body-file {scratchpad}/pr-body.md` で反映する
+1. PR 本文に「## Verification」セクションを追記する（実行結果サマリー — 全PASS / 見送り記録済みFAILの内訳、起票した Issue 番号）。`gh pr view <PR番号> --json body` で現在の本文を取得し、追記した本文を `{scratchpad}/pr-body.md`（`{scratchpad}` の定義は `../_shared/references/scratchpad.md`）に書き出して `gh pr edit <PR番号> --body-file {scratchpad}/pr-body.md` で反映する
 2. `gh pr ready <PR番号>` で Ready for review に切り替える
 
 ## Phase 5: スコープ外Issueの起票
@@ -150,16 +145,25 @@ manual-test に渡す情報:
   同名タイトルの誤検出を避けるため、本文先頭に `<!-- issue-dashboard -->` マーカーがあるかで最終確認する。
 - **issue-dashboard スキルのフル更新は行わない。** 全 Issue・全 PR の再取得や再分析はせず、検出時に取得済みの本文に対して**この実行に関係する行だけ**を直接編集する:
   1. **この Issue の行**に `(In Progress)` を付ける（既に付いていればそのまま。本文に行が無ければ、内容に合う既存セクションに `- #番号 タイトル (In Progress)` の1行を挿入する）。
-  2. **この実行で新たに起票した Issue**（Phase 3 の後回し・Phase 4 のブラウザ検証・Phase 5 のスコープ外起票）があれば、それぞれ内容に合う既存セクション（無ければ「その他」）に1行ずつ挿入する。依存先が自明な場合（この Issue から派生した等）のみサブリストを付ける。
+  2. **この実行で新たに起票した Issue**（Phase 3 の後回し・Phase 4 の動作検証・Phase 5 のスコープ外起票）があれば、それぞれ内容に合う既存セクション（無ければ「その他」）に1行ずつ挿入する。依存先が自明な場合（この Issue から派生した等）のみサブリストを付ける。
   3. それ以外の行・セクション構成・並び順には**一切手を入れない**（フル整理は issue-dashboard スキルを明示的に呼んだときだけ）。
 - 編集後の本文を `{scratchpad}/dashboard-body.md` に書き出し、`gh issue edit <ダッシュボード番号> --body-file {scratchpad}/dashboard-body.md` で反映する。
 - 更新対象はダッシュボード Issue 本文だけで、実装ブランチや PR には一切影響しない。
 
-## Phase 7: 設計判断の反映確認とレビューファイルの削除
+## Phase 7: 判断の昇格確認とレビューファイルの削除
 
-### 設計判断の反映確認
+### 判断の昇格確認
 
-`.thread/{Issue番号}/adr.md` が存在すれば、各エントリを読み、「あるべき」を変えた判断（設計の変更・規約・意図的な逸脱）が spec の該当ドキュメントに現在形で反映済みかを確認する。漏れていれば反映する — 書くのは結果だけで、経緯・代替案は spec に書かない（`../_shared/references/adr-guide.md`）。CLAUDE.md の変更を要する判断は書き換えず、完了報告でユーザーに提案する。adr.md は判断の経緯の記録としてそのまま残す。
+`.thread/{Issue番号}/adr.md` が存在すれば、各エントリを `../_shared/references/adr-guide.md` の昇格ゲート（2条件）に照らす。
+
+**既定は昇格なし。** 作業中に下した判断の正しい置き場所は `.thread` であって、これは毎回どこかのドキュメントを更新する手順ではない。ゲートを両方満たすエントリが1件もなければ、何も更新せずレビューファイルの削除に進む。
+
+満たすエントリがあったときだけ、内容に応じて反映する:
+
+- **spec/ · docs/** — 該当ドキュメントを現在形で更新し、Phase 8 のコミットに含める。docs/ に該当ファイルが無ければ新設せず、CLAUDE.md と同じく提案に回す
+- **CLAUDE.md** — 書き換えない。該当箇所と提案内容を完了報告に一行で挙げ、判断はユーザーに委ねる
+
+adr.md は判断の経緯の記録としてそのまま残す。
 
 ### レビューファイルの削除
 
@@ -172,7 +176,7 @@ rm -rf .thread/{Issue番号}/review/
 - **削除するのは `review/` ディレクトリだけ。** `plan.md` / `steps.md` / `testing.md` / `adr.md` / `progress.md` / `manual-test/` は残す。
 - **APPROVED に至らずに終わった場合は削除しない。** レビュー10ラウンド到達、または検証サイクル3周到達で PR が Draft のまま残っている場合は、ユーザーが残った指摘を確認する必要があるため、レビューファイルと台帳をそのまま残す。
 - 削除前に、defer で起票した Issue 番号がすべて完了報告に載っていることを確認する（台帳が消えても追跡先が残るように）。
-- 削除前に台帳の `wont-fix` 行を確認し、「指摘は正しいが意図的に逸脱している」ものは現場の why not コメントに転記する（プロジェクト全体に効く逸脱なら spec に現在形の規約として反映する。`../_shared/references/review-loop.md` の後片付けに従う）。
+- 削除前に台帳の `wont-fix` 行を確認し、「指摘は正しいが意図的に逸脱している」ものは現場の why not コメントに転記する（今回の変更を越えて効く逸脱だけ、昇格ゲートに照らして spec / docs に上げる。`../_shared/references/review-loop.md` の後片付けに従う）。
 - レビューディレクトリが VCS 管理下にある場合（`.thread/` を commit している運用）は、削除もコミットして push する。管理外（`.gitignore` 済み）ならファイルを消すだけでよい。
 
 **取りこぼしの最終確認。** 他フェーズのレビュー・足場が残っていないかを見て、収束済みなのに残っていればここで削除する（未収束で意図的に残したものはそのまま）:
@@ -223,8 +227,8 @@ Issue #{Issue番号} の実装が完了しました！
 - 見送り: wont-fix {数}件 / defer {数}件（起票したIssue: {番号一覧、またはなし}）
 - レビューファイル: 削除済み（.thread/{Issue番号}/review/）
 
-## ブラウザ検証
-- 成果物: .thread/{Issue番号}/manual-test/（またはスキップ）
+## 動作検証
+- 成果物: .thread/{Issue番号}/manual-test/
 - テストケース: {数}件（PASS: {数} / FAIL: {数}）
 - 検証サイクル: {数}周
 - 起票したIssue: {Issue一覧、またはなし}
@@ -241,7 +245,8 @@ Issue #{Issue番号} の実装が完了しました！
 - 計画レビュー: 削除済み（.thread/{Issue番号}/plan-review/ / research.md）
 - デザインレビュー: {削除済み（spec/design/review/） / 未収束のため保持 / デザインフェーズなし}
 - 実装レビュー: {削除済み / APPROVED 未達のため保持（.thread/{Issue番号}/review/）}
-- 設計判断の spec 反映: {Phase 7 で反映したファイル / 反映済み・漏れなし / 判断なし}
+- 判断の昇格: {昇格先のファイル / なし（.thread に保持）}
+- CLAUDE.md・docs への提案: {該当箇所と提案内容 / なし}
 - コメント整理: {対象 {数} ファイル・削除 {数} 件をコミット / 変更なし}
 - 残した成果物: plan.md / steps.md / testing.md / adr.md / progress.md / manual-test/
 ```
