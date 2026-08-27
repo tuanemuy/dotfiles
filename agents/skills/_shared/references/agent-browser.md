@@ -133,3 +133,21 @@ agent-browser --session {s} --restore network requests --clear      # 記録を�
 ```
 
 `requests` は一覧（id・URL・status）を返し、`request <id>` が1件の全詳細を返す。**ヘッダーが要るときだけ `request <id>` を引く** — 一覧を `--json` で丸ごと出すとコンテキストを食う。
+
+## 通信失敗を再現する（DevTools のオフラインの代わり）
+
+DevTools の Network タブは開けないので、`network route` で特定の通信だけを落とす。
+
+```bash
+agent-browser --session {s} --restore network route "**/_serverFn/**" --abort   # 該当リクエストを中断
+agent-browser --session {s} --restore network unroute                            # 解除（URL を渡すと個別解除）
+```
+
+`--body <json>` を付ければ任意のレスポンスを返せる。オフライン全体をエミュレートするより、**失敗させたい経路だけ `--abort` する**ほうが観測が絞れる。
+
+## React の制御コンポーネントに値を入れる
+
+- `fill <sel> <text>` は React の `onChange` まで届く（Playwright の `Input.insertText` 相当）。長文の貼り付けにも使える。
+- `eval` で `value` を直接代入したり `document.execCommand('insertText')` を呼んでも **React の state は更新されない**（DOM の値だけが変わる）。判定に使ってはいけない。
+- `type <sel> <text>` はセレクタ引数が必須。`type "<text>"` は `✓ Done` を返すが値が入らない。
+- **`<input type="date">` には `fill` も `type` も入らない。** `snapshot -i -c` に出る年 / 月 / 日の `spinbutton` の ref をクリックし、`press 2` `press 0` … と数字キーを1つずつ送る。送出が速いと桁を取りこぼすので、値を `eval` で確認してから次へ進む。
