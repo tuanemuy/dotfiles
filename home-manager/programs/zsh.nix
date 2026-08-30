@@ -99,7 +99,4 @@
       load-theme-state
     '')
   ];
-  profileExtra = ''
-    source ~/.orbstack/shell/init.zsh 2>/dev/null || :
-  '';
 }

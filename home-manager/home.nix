@@ -34,6 +34,7 @@ in
 
   imports = [
     ./llm-agents.nix
+    ./containers.nix
   ];
 
   home.file = {

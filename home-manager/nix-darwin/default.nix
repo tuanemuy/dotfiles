@@ -22,7 +22,6 @@
   };
 
   nixpkgs = {
-    # The platform the configuration will be used on.
     hostPlatform = "aarch64-darwin";
     config.allowUnfree = true;
     overlays = [
@@ -51,6 +50,20 @@
   # Enable Touch ID for sudo (including tmux support via pam-reattach)
   security.pam.services.sudo_local.touchIdAuth = true;
   security.pam.services.sudo_local.reattach = true;
+
+  # OrbStack kept /var/run/docker.sock pointing at its daemon via a privileged
+  # helper. Colima never creates the link, and macOS clears /private/var/run on
+  # boot, so this has to re-run each boot rather than live in an activation
+  # script. Only host-side tools need it; compose files resolve the path inside
+  # the VM.
+  launchd.daemons.colima-docker-socket.serviceConfig = {
+    ProgramArguments = [
+      "/bin/sh"
+      "-c"
+      "ln -sfn /Users/${username}/.colima/default/docker.sock /var/run/docker.sock"
+    ];
+    RunAtLoad = true;
+  };
 
   system = {
     configurationRevision = self.rev or self.dirtyRev or null;

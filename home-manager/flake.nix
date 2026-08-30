@@ -2,9 +2,12 @@
   description = "Home Manager configuration of hikaru";
 
   inputs = {
-    # Specify the source of Home Manager and Nixpkgs.
     nixpkgs.url = "github:nixos/nixpkgs/nixos-25.11";
     nixpkgs-darwin.url = "github:nixos/nixpkgs/nixpkgs-25.11-darwin";
+    # Used for colima alone. 25.11 ships lima 1.2.2, which nixpkgs marks
+    # insecure (EOL), and colima pulls it in through lima-full, so the stable
+    # colima refuses to evaluate at all.
+    nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     home-manager = {
       url = "github:nix-community/home-manager/release-25.11";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -55,8 +58,6 @@
       homeConfigurations.${username} = home-manager.lib.homeManagerConfiguration {
         pkgs = nixpkgs.legacyPackages."x86_64-linux";
 
-        # Specify your home configuration modules here, for example,
-        # the path to your home.nix.
         extraSpecialArgs = {
           inherit inputs;
           gitDirectory = "${homeDirectory}/github.com/tuanemuy";
@@ -73,9 +74,6 @@
             }
           )
         ];
-
-        # Optionally use extraSpecialArgs
-        # to pass through arguments to home.nix
       };
       darwinConfigurations.${hostname} = nix-darwin.lib.darwinSystem {
         system = "aarch64-darwin";
@@ -106,9 +104,6 @@
                   homeDirectory = lib.mkForce darwinHomeDirectory;
                 };
               };
-
-            # Optionally, use home-manager.extraSpecialArgs to pass
-            # arguments to home.nix
           }
         ];
       };
