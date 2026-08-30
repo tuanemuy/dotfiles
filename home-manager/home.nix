@@ -50,6 +50,8 @@ in
       mkOutOfStoreSymlink "${gitDirectory}/dotfiles/config/claude/settings.json";
     ".claude/statusline-command.sh".source =
       mkOutOfStoreSymlink "${gitDirectory}/dotfiles/config/claude/statusline-command.sh";
+    ".claude/worktree-setup.sh".source =
+      mkOutOfStoreSymlink "${gitDirectory}/dotfiles/config/claude/worktree-setup.sh";
     ".claude/skills".source = mkOutOfStoreSymlink "${gitDirectory}/dotfiles/agents/skills";
     ".agents/skills".source = mkOutOfStoreSymlink "${gitDirectory}/dotfiles/agents/skills";
     ".aerospace.toml".source = mkOutOfStoreSymlink "${gitDirectory}/dotfiles/config/aerospace.toml";

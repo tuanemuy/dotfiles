@@ -51,5 +51,8 @@
     # direnv
     ".envrc"
     ".direnv"
+
+    # Claude Code worktrees
+    ".claude/worktrees/"
   ];
 }

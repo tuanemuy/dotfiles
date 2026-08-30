@@ -85,6 +85,9 @@
         export CURRENT_THEME CURRENT_THEME_NAME
         if [ "$CURRENT_THEME" = "light" ]; then export BAT_THEME="gruvbox-light"; else export BAT_THEME="gruvbox-dark"; fi
       }
+      function wtclean() {
+        $GIT_DIRECTORY/dotfiles/tools/worktree-status/run.sh "$@"
+      }
       function chth() {
         $GIT_DIRECTORY/dotfiles/tools/change-theme/run.sh $1 >/dev/null || return
         load-theme-state
