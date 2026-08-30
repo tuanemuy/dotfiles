@@ -279,6 +279,7 @@
   "skipDangerousModePermissionPrompt": true,
   "theme": "dark-ansi",
   "editorMode": "vim",
+  "agentPushNotifEnabled": true,
   "hooks": {
     "SessionStart": [
       {

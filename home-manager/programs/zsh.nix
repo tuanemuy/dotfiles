@@ -23,6 +23,9 @@
       lt = "eza --icons --tree -L";
       dark = "chth dark";
       light = "chth light";
+      # direnv が dotenv したプロジェクトの ANTHROPIC_API_KEY を拾うと、
+      # Claude Code が API キー認証と判定して Remote Control を拒否する。
+      claude = "env -u ANTHROPIC_API_KEY claude";
     }
     // pkgs.lib.optionalAttrs pkgs.stdenv.isDarwin {
       tailscale = "/Applications/Tailscale.app/Contents/MacOS/Tailscale";
@@ -65,6 +68,7 @@
       abbr -S -q tl="tmux ls"
       abbr -S -q tk="tmux kill-session -t"
       abbr -S -q cld="claude --dangerously-skip-permissions"
+      abbr -S -q clrc="claude remote-control --spawn worktree --permission-mode auto --remote-control-session-name-prefix "
       abbr -S -q codexd="codex --dangerously-bypass-approvals-and-sandbox"
       abbr -S -q authrestart="sudo fdesetup authrestart"
       test -e "$HOME"/.wezterm_shell_integration.zsh && source "$HOME"/.wezterm_shell_integration.zsh
