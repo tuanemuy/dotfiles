@@ -23,6 +23,9 @@
       lt = "eza --icons --tree -L";
       dark = "chth dark";
       light = "chth light";
+      # direnv が dotenv したプロジェクトの ANTHROPIC_API_KEY を拾うと、
+      # Claude Code が API キー認証と判定して Remote Control を拒否する。
+      claude = "env -u ANTHROPIC_API_KEY claude";
     }
     // pkgs.lib.optionalAttrs pkgs.stdenv.isDarwin {
       tailscale = "/Applications/Tailscale.app/Contents/MacOS/Tailscale";
@@ -85,6 +88,12 @@
         export CURRENT_THEME CURRENT_THEME_NAME
         if [ "$CURRENT_THEME" = "light" ]; then export BAT_THEME="gruvbox-light"; else export BAT_THEME="gruvbox-dark"; fi
       }
+      function wtclean() {
+        $GIT_DIRECTORY/dotfiles/tools/worktree-status/run.sh "$@"
+      }
+      function clrc() {
+        $GIT_DIRECTORY/dotfiles/tools/remote-control/run.sh "$@"
+      }
       function chth() {
         $GIT_DIRECTORY/dotfiles/tools/change-theme/run.sh $1 >/dev/null || return
         load-theme-state
@@ -96,7 +105,4 @@
       load-theme-state
     '')
   ];
-  profileExtra = ''
-    source ~/.orbstack/shell/init.zsh 2>/dev/null || :
-  '';
 }
