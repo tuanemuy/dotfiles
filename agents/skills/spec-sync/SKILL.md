@@ -120,6 +120,8 @@ spec ファイルを実装に合わせて更新する。更新はサブエージ
 
 更新は現在形のみ — 「以前は」「〜に変更した」といった経緯の文は spec に書かない（`../_shared/references/adr-guide.md`）。変更の理由は完了報告に含める。
 
+`spec/inventory/` がある場合は、更新した spec ファイルに対応する台帳の行も追加・修正・**削除**まで同期する（`../_shared/references/spec-inventory.md`）。消えた要素の行を残すと、実装者が spec にない要素を実装しにいく。
+
 ### 実装誤り・漏れ → Issue 起票
 
 `gh issue create` で Issue を起票する。関連する乖離はまとめて1つの Issue にしてよいが、レイヤーが異なる場合は分割する。
