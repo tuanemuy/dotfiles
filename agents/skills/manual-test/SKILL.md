@@ -103,15 +103,17 @@ export AGENT_BROWSER_IDLE_TIMEOUT_MS=120000  # daemon無操作: 2分で自動終
 
 ### 成果物ディレクトリの決定
 
-呼び出し元に応じて成果物の保存先を決める。実行日時を `YYYY-MM-DD` 形式で取得してサブディレクトリにすることで、複数回の実行結果を混在させない:
+**呼び出し元が成果物ディレクトリを指定していればそれをそのまま使う。** 指定がない単体実行のときだけ既定値を使い、実行日を `YYYY-MM-DD` 形式のサブディレクトリにして複数回の実行結果を混在させない:
 
 ```bash
 TEST_DATE=$(date +%Y-%m-%d)
 ```
 
-- issue-implement から: `.thread/{Issue番号}/.manual-test/` （日付のサブディレクトリは不要）
-- implement から: `.manual-test/{YYYY-MM-DD}/`
-- 単体実行: `.manual-test/{YYYY-MM-DD}/`
+| 呼び出し元 | 成果物ディレクトリ |
+| --- | --- |
+| issue-implement | `.thread/{Issue番号}/manual-test/`（Issue 単位で1回なので日付サブディレクトリなし） |
+| implement | `.manual-test/{YYYY-MM-DD}/` |
+| 単体実行 | `.manual-test/{YYYY-MM-DD}/` |
 
 以降、この保存先を `{output_dir}` と表記する。
 
@@ -209,7 +211,7 @@ done
 
 30回（60秒）以内に応答がなければ、サーバーログを確認してエラーを報告する。
 
-起動結果（PID、ポート、URL）を `{output_dir}/server-info.md` に記録する。
+起動結果（PID、ポート、URL）を `{scratchpad}/server-info.md` に記録する。実行中の受け渡しにしか使わないので成果物には残さない。
 
 ---
 

@@ -200,7 +200,7 @@ Web UI を持つプロジェクトで、かつ `spec/manual-tests/` が存在す
 manual-test に渡す情報:
 
 - テストソース: `spec/manual-tests/`
-- 成果物ディレクトリ: `.manual-test/`
+- 成果物ディレクトリ: `.manual-test/{YYYY-MM-DD}/`（`{YYYY-MM-DD}` は実行日）
 
 `spec/manual-tests/` が存在しない場合は、spec-manual-test スキルで先に生成することを検討する。ただし、以下の場合はこの Phase をスキップする:
 
@@ -254,7 +254,7 @@ manual-test に渡す情報:
 ## ブラウザ検証（実行した場合）
 - テストケース: {数}件（PASS: {数} / FAIL: {数}）
 - 修正ラウンド: {数}回
-- レポート: .manual-test/report.md を参照
+- レポート: .manual-test/{実行日}/report.md を参照
 
 ## 実装監査
 - ラウンド数: {数}回
