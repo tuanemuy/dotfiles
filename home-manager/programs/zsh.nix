@@ -68,7 +68,6 @@
       abbr -S -q tl="tmux ls"
       abbr -S -q tk="tmux kill-session -t"
       abbr -S -q cld="claude --dangerously-skip-permissions"
-      abbr -S -q clrc="claude remote-control --spawn worktree --permission-mode auto --remote-control-session-name-prefix "
       abbr -S -q codexd="codex --dangerously-bypass-approvals-and-sandbox"
       abbr -S -q authrestart="sudo fdesetup authrestart"
       test -e "$HOME"/.wezterm_shell_integration.zsh && source "$HOME"/.wezterm_shell_integration.zsh
@@ -91,6 +90,9 @@
       }
       function wtclean() {
         $GIT_DIRECTORY/dotfiles/tools/worktree-status/run.sh "$@"
+      }
+      function clrc() {
+        $GIT_DIRECTORY/dotfiles/tools/remote-control/run.sh "$@"
       }
       function chth() {
         $GIT_DIRECTORY/dotfiles/tools/change-theme/run.sh $1 >/dev/null || return
