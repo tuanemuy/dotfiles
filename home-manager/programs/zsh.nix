@@ -92,7 +92,7 @@
         $GIT_DIRECTORY/dotfiles/tools/worktree-status/run.sh "$@"
       }
       function clrc() {
-        $GIT_DIRECTORY/dotfiles/tools/remote-control/run.sh "$@"
+        CLRC_NAME=clrc $GIT_DIRECTORY/dotfiles/tools/remote-control/run.sh "$@"
       }
       function chth() {
         $GIT_DIRECTORY/dotfiles/tools/change-theme/run.sh $1 >/dev/null || return
