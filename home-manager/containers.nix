@@ -20,6 +20,12 @@ lib.mkIf pkgs.stdenv.hostPlatform.isDarwin {
     pkgs.docker_29
     pkgs.docker-compose
     pkgs.docker-buildx
+    # Provides docker-credential-osxkeychain, which ~/.docker/config.json names
+    # as credsStore. Without it every registry login fails to resolve.
+    pkgs.docker-credential-helpers
+    # Symlinked into /usr/local/bin by OrbStack, so uninstalling it took kubectl
+    # with it.
+    pkgs.kubectl
   ];
 
   # docker_29 ships the CLI alone, with no bundled plugins. `docker compose` and
