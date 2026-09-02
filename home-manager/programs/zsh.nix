@@ -68,6 +68,8 @@
       abbr -S -q tl="tmux ls"
       abbr -S -q tk="tmux kill-session -t"
       abbr -S -q cld="claude --dangerously-skip-permissions"
+      abbr -S -q clw="claude --worktree"
+      abbr -S -q cldw="claude --dangerously-skip-permissions --worktree"
       abbr -S -q codexd="codex --dangerously-bypass-approvals-and-sandbox"
       abbr -S -q authrestart="sudo fdesetup authrestart"
       test -e "$HOME"/.wezterm_shell_integration.zsh && source "$HOME"/.wezterm_shell_integration.zsh

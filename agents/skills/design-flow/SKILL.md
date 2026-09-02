@@ -57,7 +57,7 @@ design-flow の成果物は `spec/design/` 配下に出力し、完了時に `sp
 
 レビューは外部スキルに委譲せず、`references/review-perspectives.md` の観点ごとに立てたレビュアーが行う。
 
-スクリーンショットの取得は**探索区分**（撮って返すだけ）、デザインの評価・レビューは**判断区分**（`../_shared/references/subagent-policy.md`）。
+スクリーンショットの取得は**探索区分**（撮って返すだけ）、デザインの評価・レビューは**審査区分**（`../_shared/references/subagent-policy.md`）。
 
 メインは観点本文もスクリーンショットも抱え込まない。レビュアーが対象を自分で引き、レビュー全文をファイルに書き、メインには件数と一行リストだけを返す（`../_shared/references/review-loop.md` の「コンテキストの原則」）。
 

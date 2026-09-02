@@ -152,7 +152,7 @@ git branch -D "review-dashboard/$(date +%Y%m%d)"
 
 ### 観点別レビューの並列実行
 
-区分に列挙された観点ごとにサブエージェント（**判断区分**）を**並列**起動する（委譲方式とモデル選択は `../_shared/references/subagent-policy.md`）。区分定義のためのファイル一覧収集は**探索区分**でよい。各観点の検査内容とプロンプトは `references/review-perspectives.md` に従う。
+区分に列挙された観点ごとにサブエージェント（**審査区分**）を**並列**起動する（委譲方式とモデル選択は `../_shared/references/subagent-policy.md`）。区分定義のためのファイル一覧収集は**探索区分**でよい。各観点の検査内容とプロンプトは `references/review-perspectives.md` に従う。
 
 各サブエージェントには必ず以下を渡す:
 
