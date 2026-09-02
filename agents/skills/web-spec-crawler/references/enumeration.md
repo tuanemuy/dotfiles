@@ -2,7 +2,7 @@
 
 explorer（全要素を列挙する）と auditor（列挙の抜けを裏取りする）のプロンプトテンプレート。この2つの組が `../_shared/references/completeness-gate.md` の find → adversarially verify を「ページの網羅」に適用したもの。explorer の自己申告を auditor が独立に検証することで、「調べたつもり」の漏れを潰す。
 
-委譲方式・並列化・モデル選択・委譲時のコンテキストは `../../_shared/references/subagent-policy.md` に従う。explorer は**探索区分**、auditor は**判断区分**。各サブエージェントには独立したセッション名を渡す（`explorer-{page}`, `auditor-{page}`）。
+委譲方式・並列化・モデル選択・委譲時のコンテキストは `../../_shared/references/subagent-policy.md` に従う。explorer は**探索区分**、auditor は**審査区分**。各サブエージェントには独立したセッション名を渡す（`explorer-{page}`, `auditor-{page}`）。
 
 ## explorer の原則
 

@@ -95,7 +95,7 @@ Phase 4: クロスフェーズ検証
 | 2. ユースケース設計 | `references/usecase-guide.md` | `spec/usecases/${domain}.md`、`spec/flows/index.md`（動的フロー台帳） |
 | 3. テストケース定義 | `references/testcase-guide.md` | `spec/testcases/${domain}/${usecase}.md`、`spec/testcases/ports/${port}.md`（適合テスト） |
 
-Phase 3 はユースケーステストがドメイン単位、ポート適合テストがポート単位で独立するため、`../_shared/references/subagent-policy.md` に従いサブエージェント（**判断区分** — テストケースの設計を伴う）へ並列に委譲する。`spec/index.md` の更新は競合を避けるため全サブエージェント完了後にまとめて行う。
+Phase 3 はユースケーステストがドメイン単位、ポート適合テストがポート単位で独立するため、`../_shared/references/subagent-policy.md` に従いサブエージェント（**審査区分** — テストケースの設計を伴う）へ並列に委譲する。`spec/index.md` の更新は競合を避けるため全サブエージェント完了後にまとめて行う。
 
 ---
 

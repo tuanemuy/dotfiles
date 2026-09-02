@@ -11,7 +11,7 @@ Phase 0 でライトと判定された Issue の短縮フロー。計画・デ�
 
 - 計画ファイル（plan.md 等）も `.thread/{Issue番号}/` も作らない。**契約は Issue 本文**。中間成果物は `{scratchpad}/light/{Issue番号}/` に置く（定義は `../../_shared/references/scratchpad.md`）。
 - 指摘台帳・ADR は作らない。それらが要るほど指摘・判断が出るのはライト誤判定のシグナル。
-- メインはオーケストレーションに徹する。実装・レビュー・修正はサブエージェント（**判断区分**）に委譲し、中断時の再委譲も含めて `../../_shared/references/subagent-policy.md` に従う。
+- メインはオーケストレーションに徹する。実装・修正はサブエージェント（**判断区分**）、レビューは（**審査区分**）に委譲し、中断時の再委譲も含めて `../../_shared/references/subagent-policy.md` に従う。
 
 ## エスカレーション
 
@@ -23,7 +23,7 @@ Phase 0 でライトと判定された Issue の短縮フロー。計画・デ�
 1. **ブランチ作成** — `implementation-guide.md` Step 1 と同じ（`.gitignore` 確認は不要）。
 2. **実装** — サブエージェント1体に委譲。`implementation-guide.md` Step 2 のプロンプトをベースに、steps.md / plan.md / デザインモック / adr.md への言及を Issue 本文（転記）に置き換え、「Issue の意図を満たす最小の変更に絞る」「非自明な設計判断が必要なら実装せず報告する」を指示する。変異スポットチェックは維持。完了後、メインが typecheck・lint・テストで整合性を確認する。
 3. **Draft PR 作成** — `implementation-guide.md` Step 4 に準じる。Test plan には実行したコマンドと結果を書き、`> Light path: 計画・ブラウザ動作検証は省略` を明記する。
-4. **軽レビュー（最大2ラウンド）** — 差分を `{scratchpad}/light/{Issue番号}/round-{N}.diff` に書き出し、レビュアー1体（**判断区分**・`general` 相当）を起動。判定基準は Issue 本文と CLAUDE.md、観点は `review-guide.md` Step 3 の5観点（範囲は差分全量×1体）。レビューは `{scratchpad}/light/{Issue番号}/review-{N}.md` に直接書かせ、返答は件数と一行リストのみ。指摘はメインが fix / skip を判断（skip の理由は完了報告に一行）、fix は委譲で修正 → 品質ゲート → コミット・push。fix があったときだけラウンド2で確認し、fix ゼロで APPROVED。ラウンド2でも fix が出たらエスカレーション（実装後）。
+4. **軽レビュー（最大2ラウンド）** — 差分を `{scratchpad}/light/{Issue番号}/round-{N}.diff` に書き出し、レビュアー1体（**審査区分**・`general` 相当）を起動。判定基準は Issue 本文と CLAUDE.md、観点は `review-guide.md` Step 3 の5観点（範囲は差分全量×1体）。レビューは `{scratchpad}/light/{Issue番号}/review-{N}.md` に直接書かせ、返答は件数と一行リストのみ。指摘はメインが fix / skip を判断（skip の理由は完了報告に一行）、fix は委譲で修正 → 品質ゲート → コミット・push。fix があったときだけラウンド2で確認し、fix ゼロで APPROVED。ラウンド2でも fix が出たらエスカレーション（実装後）。
 5. **Ready for review** — 全修正の push を確認して `gh pr ready`。
 6. **ダッシュボード更新** — `../SKILL.md` Phase 6 と同じ。
 7. **コメント整理** — `../SKILL.md` Phase 8 と同じ。差分がなければスキップ。

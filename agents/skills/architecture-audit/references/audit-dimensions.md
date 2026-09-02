@@ -1,6 +1,6 @@
 # アーキテクチャ監査の観点
 
-architecture-audit が検査する観点のカタログ。各観点は独立しており、観点ごとにサブエージェントを並列起動する（**判断区分**。`../../_shared/references/subagent-policy.md`）。
+architecture-audit が検査する観点のカタログ。各観点は独立しており、観点ごとにサブエージェントを並列起動する（**審査区分**。`../../_shared/references/subagent-policy.md`）。
 
 すべての観点に共通する前提:
 

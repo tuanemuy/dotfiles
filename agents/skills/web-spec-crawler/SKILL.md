@@ -21,7 +21,7 @@ description: agent-browserでWebサービスを実際に操作しながら、全
 
 `agent-browser` CLI が必要。セットアップ・頻出コマンド・ターン数を抑える書き方は `../_shared/references/agent-browser.md` に集約してある。セッション管理・認証パターン・headed/headless の使い分け・レートリミット対策は `../web-spec-explorer/SKILL.md` を参照する。本スキルはその上に「網羅エンジン」を載せる。スクリーンショット等の使い捨てファイルの置き場所 `{scratchpad}` の定義は `../_shared/references/scratchpad.md`。
 
-委譲方式（サブエージェント / OSプロセス / 親内シミュレート）・並列化・モデル選択の原則は `../_shared/references/subagent-policy.md` に従う。scout と explorer は画面に出ているものを列挙して返すだけなので**探索区分**、auditor は explorer の報告の妥当性を判定するため**判断区分**とする。メインエージェントがオーケストレーションに徹する原則は `../_shared/references/implement-principles.md` の精神を踏襲する。
+委譲方式（サブエージェント / OSプロセス / 親内シミュレート）・並列化・モデル選択の原則は `../_shared/references/subagent-policy.md` に従う。scout と explorer は画面に出ているものを列挙して返すだけなので**探索区分**、auditor は explorer の報告の妥当性を判定するため**審査区分**とする。メインエージェントがオーケストレーションに徹する原則は `../_shared/references/implement-principles.md` の精神を踏襲する。
 
 ## アーキテクチャ
 
@@ -84,7 +84,7 @@ dedup（同一 URL テンプレート・同一状態シグネチャの再登録�
 
 ### Phase 4: 完全性ゲート — auditor で再確認
 
-explorer の「全部調べた」を信用しない。`explored` ページを auditor サブエージェント（**判断区分**）に渡し、**同じページを開き直して** snapshot 上の全要素が explorer の報告に含まれているか裏取りさせる。これは `../_shared/references/completeness-gate.md` の find → adversarially verify をページに適用したもの。
+explorer の「全部調べた」を信用しない。`explored` ページを auditor サブエージェント（**審査区分**）に渡し、**同じページを開き直して** snapshot 上の全要素が explorer の報告に含まれているか裏取りさせる。これは `../_shared/references/completeness-gate.md` の find → adversarially verify をページに適用したもの。
 
 - auditor が抜けを発見 → 該当要素・分岐を台帳に差し戻し（`discovered` / 未探索分岐に戻す）→ Phase 3 で再調査
 - 抜けゼロ → ページを `verified` に更新

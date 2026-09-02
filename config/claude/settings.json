@@ -87,6 +87,7 @@
       "Bash(rtx:*)",
       "Bash(git:*)",
       "Bash(gh:*)",
+      "Bash(agent-browser:*)",
       "Bash(glab:*)",
       "Bash(hub:*)",
       "Bash(lazygit:*)",
@@ -294,5 +295,10 @@
   "skipDangerousModePermissionPrompt": true,
   "theme": "dark-ansi",
   "editorMode": "vim",
-  "agentPushNotifEnabled": true
+  "agentPushNotifEnabled": true,
+  "modelSettings": {
+    "claude-fable-5-1": {
+      "effortLevel": "high"
+    }
+  }
 }

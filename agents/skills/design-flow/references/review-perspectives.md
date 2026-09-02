@@ -1,6 +1,6 @@
 # デザインレビュー観点カタログ
 
-design-flow の Phase 4（`phase4-review.md`）で使う観点の定義。Step ごとに1体のレビュアー（**判断区分**、`../../_shared/references/subagent-policy.md`）を立て、**該当節だけ**を読ませる。
+design-flow の Phase 4（`phase4-review.md`）で使う観点の定義。Step ごとに1体のレビュアー（**審査区分**、`../../_shared/references/subagent-policy.md`）を立て、**該当節だけ**を読ませる。
 
 メインエージェントはこのファイルを読まない。委譲の手順・指示テンプレート・終了条件は `phase4-review.md` を参照。
 

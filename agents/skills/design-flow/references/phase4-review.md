@@ -63,7 +63,7 @@ agent-browser --session design-review close
 
 ## Step 2〜4: 観点別レビューの委譲
 
-各ステップで1体のレビュアー（**判断区分**）を立てる。ステップ間は直列。
+各ステップで1体のレビュアー（**審査区分**）を立てる。ステップ間は直列。
 
 | Step | 観点 | `review-perspectives.md` の該当節 |
 | --- | --- | --- |
