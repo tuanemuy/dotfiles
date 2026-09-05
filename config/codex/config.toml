@@ -1,4 +1,4 @@
-model = "gpt-5.6-sol"
+model = "gpt-6-astra"
 model_reasoning_effort = "high"
 approvals_reviewer = "user"
 
@@ -12,7 +12,3 @@ hide_full_access_warning = true
 
 [features]
 hooks = true
-
-# home.nix copies this to ~/.codex/config.toml rather than symlinking it, so
-# edits made over there are untracked and are discarded whenever this file
-# changes. Edit here, then switch.

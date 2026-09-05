@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ gitDirectory, pkgs, ... }:
 {
   enable = true;
   signing.format = null;
@@ -18,6 +18,10 @@
     merge."ours-lockfile" = {
       name = "Keep ours on conflict";
       driver = "true";
+    };
+    filter."codex-config" = {
+      clean = "${gitDirectory}/dotfiles/tools/git-filters/codex-config-clean.sh";
+      required = true;
     };
   };
   ignores = [
@@ -52,7 +56,9 @@
     ".envrc"
     ".direnv"
 
-    # Claude Code worktrees
+    # Claude Code local state
+    ".claude/settings.local.json"
+    "CLAUDE.local.md"
     ".claude/worktrees/"
   ];
 }
