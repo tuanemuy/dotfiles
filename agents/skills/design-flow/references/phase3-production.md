@@ -6,11 +6,11 @@ Phase 2 で定義したトークンと方針に基づき、全画面のHTMLデ�
 
 ## Step 1: 画面ごとのHTMLデザイン作成
 
-Phase 0 で整理した画面一覧の各画面について、Skill ツールで `/frontend-design` を呼び出してHTMLファイルを作成する。
+Phase 0 で整理した画面一覧の各画面について、デザイン担当エージェント（**判断区分**、`../../_shared/references/subagent-policy.md`）に作成を委譲する。
 
 出力先: `spec/design/pages/{画面名}.html`
 
-`/frontend-design` に渡すコンテキスト:
+デザイン担当エージェントに渡すコンテキスト:
 - **デザイン対象**: 画面名と、`spec/pages/index.md` に記載されたその画面の目的・機能
 - **ユーザーシナリオ**: `spec/scenario/` からこの画面に関連するシナリオの要約
 - **デザイントークン**: `spec/design/tokens.md` の内容（CSS カスタムプロパティの命名規則を含む）

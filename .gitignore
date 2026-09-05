@@ -26,8 +26,14 @@ Network Trash Folder
 Temporary Items
 .apdisk
 
+# Claude Code: ignore machine-local state and keep only managed configuration.
 config/claude/*
 !config/claude/settings.json
 !config/claude/statusline-command.sh
 !config/claude/worktree-setup.sh
 !config/claude/skills/
+
+# Claude Code project-local state
+.claude/settings.local.json
+CLAUDE.local.md
+.claude/worktrees/

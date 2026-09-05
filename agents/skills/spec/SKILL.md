@@ -96,35 +96,14 @@ Phase 4: マニュアルテストドキュメント生成（spec-manual-test ス
 
 ## 完了報告
 
-すべてのフェーズが完了したら、作成した設計ドキュメントのサマリーを出す。
+完了時は、実施した範囲に応じて以下を簡潔に報告する。
 
-```
-設計が完了しました！
+- 作成・更新した設計ドキュメント
+- 主要な設計判断と、検討した代替案・トレードオフ
+- 未収束のレビュー指摘とレビュー記録の参照先（ある場合）
+- 実装に進む場合の推奨手順
 
-## 成果物
-
-### シナリオ
-- spec/scenario/index.md
-- spec/scenario/${category}.md (x{数})
-
-### ページ設計
-- spec/pages/index.md
-
-### 技術設計（spec-domain）
-- spec/domains/
-- spec/usecases/
-- spec/flows/
-- spec/testcases/
-
-### マニュアルテスト（spec-manual-test）
-- spec/manual-tests/index.md
-- spec/manual-tests/${category}.md (x{数})
-
-### 主要な設計判断
-- {採用案と検討した代替案の一行要約} (x{数} 件)
-```
-
-実装に進む場合の次のステップも添える: 小規模なら implement で一括実装、それ以上なら spec-to-issues で縦スライス Issue 化 → issue-implement で 1 Issue ずつ実装（使い分けの目安は implement スキル参照）。
+小規模な実装には implement を使う。それ以上の実装は spec-to-issues で縦スライス Issue に分割し、issue-implement で Issue ごとに進める。使い分けは implement スキルに従う。
 
 ---
 

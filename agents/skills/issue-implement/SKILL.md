@@ -76,7 +76,7 @@ Phase 8: コメント整理
 
 Issue 本文の先頭に `<!-- spec-slice -->` マーカーがある場合（spec-to-issues が起票した縦スライス Issue）、issue-planner は **spec-slice ファストパス**で動く — 再調査と計画レビューループを省略し、Issue のチェックリストと spec/ から plan.md / steps.md を転記ベースで作る。以降のフェーズ（実装レビュー・動作検証を含む）はフルで行い、省略しない。
 
-計画が完了したら（plan.md, steps.md, 必要に応じて adr.md が作成されたら）Phase 1.5 に進む。動作確認計画（testing.md）は実装が確定してから Phase 2 の末に作る。
+plan.md・steps.md（判断があれば adr.md）ができたら Phase 1.5 に進む。動作確認計画（testing.md）は実装が確定してから Phase 2 の末に作る。
 
 ## Phase 1.5: デザイン作成（条件付き）
 
@@ -150,7 +150,7 @@ FAIL はまず原因を**三分**する: 手順書起因 / 変更起因 / 変更
 
 このリポジトリで Issue ダッシュボードを運用していれば、その全体像を最新化する。ダッシュボードは `Issue Dashboard` というタイトルの GitHub Issue として管理されている。
 
-- **ダッシュボード Issue が存在するときだけ実行する。** 次のコマンドで探し、見つからなければダッシュボード運用をしていないということなので、勝手に新規作成せずスキップする。
+- **ダッシュボード Issue が存在するときだけ実行する。** 次のコマンドで探し、見つからなければダッシュボードを運用していないので、新規作成せずスキップする。
 
   ```bash
   gh issue list --state open --search "Issue Dashboard in:title" --json number,title,body
@@ -191,12 +191,12 @@ rm -rf .thread/{Issue番号}/review/
 - **APPROVED に至らずに終わった場合は削除しない。** レビュー10ラウンド到達、または検証サイクル3周到達で PR が Draft のまま残っている場合は、ユーザーが残った指摘を確認する必要があるため、レビューファイルと台帳をそのまま残す。
 - 削除前に、defer で起票した Issue 番号がすべて完了報告に載っていることを確認する（台帳が消えても追跡先が残るように）。
 - 削除前に台帳の `wont-fix` 行を確認し、「指摘は正しいが意図的に逸脱している」ものは現場の why not コメントに転記する（今回の変更を越えて効く逸脱だけ、昇格ゲートに照らして spec / docs に上げる。`../_shared/references/review-loop.md` の後片付けに従う）。
-- レビューディレクトリが VCS 管理下にある場合は、削除もコミットして push する（Phase 2 の `.gitignore` 追記が入っていれば `review/` は通常管理外になるため、これは追記前に作られた既存ブランチ向けのフォールバック）。管理外（`.gitignore` 済み）ならファイルを消すだけでよい。
+- レビューディレクトリが VCS 管理下にある場合は、削除もコミットして push する（Phase 2 の `.gitignore` 追記があれば `review/` は管理外になる。この手順は追記前に作られたブランチ向け）。管理外（`.gitignore` 済み）ならファイルを消すだけでよい。
 
 **取りこぼしの最終確認。** 他フェーズのレビュー・足場が残っていないかを見て、収束済みなのに残っていればここで削除する（未収束で意図的に残したものはそのまま）:
 
 - `spec/design/review/` — Phase 1.5 のデザインレビュー。残っていれば削除し、コミットして push する（PR に載っているため）
-- `.thread/{Issue番号}/plan-review/` / `research.md` — Phase 1 の計画足場（issue-planner が凍結時に削除済みのはず）
+- `.thread/{Issue番号}/plan-review/` / `research.md` — Phase 1 の計画足場（issue-planner が凍結時に削除する）
 
 ## Phase 8: コメント整理
 
