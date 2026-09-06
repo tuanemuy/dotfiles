@@ -9,7 +9,7 @@ Manager は `.spec-implement/` 直下と各実行ディレクトリの `plan.md`
 | ファイル | 書き込み担当 | 内容 |
 | --- | --- | --- |
 | `plan.md` | Manager | 依頼範囲、設計との対応、項目の状態と受け入れ根拠、フェーズの依存関係、現在の指示、停滞の閾値、エージェント識別子 |
-| `phases/{phase-id}.md` | Implementer | 変更内容、検証コマンドと結果、残項目、障害、次に必要な作業 |
+| `phases/{phase-id}.md` | Implementer | 変更内容、検証手順と結果、残項目、障害、次に必要な作業 |
 
 Manager が `plan.md` を更新し、Implementer はフェーズ報告を更新する。追加のサブエージェントは結果を Implementer に返し、全体の管理ファイルを直接更新しない。
 
@@ -27,7 +27,7 @@ Manager だけが項目状態を更新する。通常の遷移は `pending → i
 
 受け入れ・差し戻し・再オープン・範囲変更には、実時刻、対象 ID、理由を短く残す。元の検証根拠は保持する。ユーザーが範囲を変更した場合は、変更元と対象外になった ID を記録する。未完了項目を進捗率のために削除しない。
 
-進捗は `plan.md` に現在のフェーズ、`done` 数 / 対象数、`review` 数、障害、次の一手、更新日時を短く記す。受け入れ前の項目は完了数に含めない。進捗専用の JSON・HTML・グラフは生成しない。
+進捗は `plan.md` に現在のフェーズ、`done` 数 / 対象数、`review` 数、障害、次の一手、更新日時を短く記す。受け入れ前の項目は完了数に含めない。進捗管理用の別形式の成果物は作らない。
 
 ## 検証根拠
 
@@ -52,7 +52,7 @@ Complete phase {phase-id} completely, extremely well.
 設計の参照先: {paths and sections}
 依存フェーズの成果: {accepted outputs}
 変更範囲と規約: {scope / project instructions}
-検証コマンド: {commands}
+検証環境と手順: {environment / verification steps}
 停滞の閾値と長時間処理の見込み: {durations}
 goal 機能の利用条件: {available mechanism and authorization, or normal execution}
 
@@ -84,4 +84,4 @@ Manager は `plan.md`、現在のフェーズ報告、作業ツリーを照合�
 
 新しい Implementer には、現在のフェーズ、未完了 ID、受け入れ済みの依存成果、既存の変更、検証済みの範囲、失敗した試行、次の一手を渡す。チャット履歴を読まなくても再開できる内容を進捗ファイルに残す。
 
-既存の `checklist.json` がある場合は、Manager が受け入れ結果と検証根拠を照合し、固定 ID と必要な履歴を `plan.md` に取り込む。受け入れが確認できない完了候補は `review` とする。元の記録は保持し、以後の状態更新は `plan.md` に集約する。
+既存の進捗記録が別形式で残っている場合は、Manager が受け入れ結果と検証根拠を照合し、固定 ID と必要な履歴を `plan.md` に取り込む。受け入れが確認できない完了候補は `review` とする。元の記録は保持し、以後の状態更新は `plan.md` に集約する。
