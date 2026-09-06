@@ -10,7 +10,7 @@ Phase 2 で作成した PR を、全量レビュー 2 ラウンド（R1・R2）�
 - ラウンドサマリー: `.thread/{Issue番号}/review/review-NNN.md`（メインが件数・Verdict だけ書く）
 - 指摘台帳: `.thread/{Issue番号}/review/triage.md`（メインが仕分け結果を記録する。フォーマットは `../../_shared/references/review-loop.md` の「指摘台帳」参照）
 - 台帳の薄いビュー: `.thread/{Issue番号}/review/triage-keys.md`（`wont-fix` / `defer` の Key・判定・Issue番号だけ。台帳と同時にメインが書き出し、レビュアーにはこちらを渡す）
-- ADR: `.thread/{Issue番号}/adr.md`（作業ログ。既存ファイルに追記。「あるべき」を変えた判断の spec 反映確認は Phase 7）
+- ADR: `.thread/{Issue番号}/adr.md`（作業ログ。既存ファイルに追記。「あるべき」を変えた判断の spec 反映確認は Phase 5）
 
 ## Step 1: 変更ファイル一覧の取得
 
@@ -222,7 +222,7 @@ BlockerがなければBlockersセクションに「なし」と書く。
 
 ## Step 6: ADR への追記
 
-レビュー中に**非自明な設計判断**を下した場合、`.thread/{Issue番号}/adr.md` に追記する。指摘への対応要否（wont-fix / defer）の記録には使わない — それは台帳の役割。仕分けが設計判断を伴う場合のみ ADR に起こし、台帳の理由欄からリンクする。adr.md は作業ログで、判断の経緯が残る唯一の場所。ここでは昇格の要否を判定しない — 気軽に記録してよい。spec / docs / CLAUDE.md に上げるべきものがあるかは Phase 7 の昇格ゲートでまとめて見る（`../../_shared/references/adr-guide.md`）。
+レビュー中に**非自明な設計判断**を下した場合、`.thread/{Issue番号}/adr.md` に追記する。指摘への対応要否（wont-fix / defer）の記録には使わない — それは台帳の役割。仕分けが設計判断を伴う場合のみ ADR に起こし、台帳の理由欄からリンクする。adr.md は作業ログで、判断の経緯が残る唯一の場所。ここでは昇格の要否を判定しない — 気軽に記録してよい。spec / docs / CLAUDE.md に上げるべきものがあるかは Phase 5 の昇格ゲートでまとめて見る（`../../_shared/references/adr-guide.md`）。
 
 Phase 1（計画時）で既に adr.md が存在する場合は、既存の連番の続きから追記する。なければ新規作成する。連番の調べ方は `../../_shared/references/adr-guide.md` の「作業ログへの追記」に従う（全文は読まない）。
 
@@ -253,6 +253,8 @@ Phase 1（計画時）で既に adr.md が存在する場合は、既存の連�
 - **R2 で `fix` が 1 件以上** → 修正・品質ゲート・コミットの後、再レビューせず Phase 4 へ。R2 の修正増分は Phase 4 後のスコープラウンドが見る
 
 R1 の修正をコミットした時点の HEAD を台帳の先頭に `scope-base: {sha}` と記録する（R1 で fix がゼロなら R1 開始時の HEAD）。スコープラウンドはこの sha 以降の差分を対象にする。
+
+**小規模**（`../SKILL.md` Phase 0）は R2 を行わない。R1 の fix を修正・コミットして Phase 4 へ進み、`scope-base` は R1 開始時の HEAD にする（R1 の修正増分をスコープラウンドが見る）。
 
 全量ラウンドを 2 回で止めるのは、R3 以降の全量ラウンドが出す指摘のほぼ全部が前ラウンドの修正起因か文言であり、読解で届かない欠陥（ビルド不能・遷移・状態の巻き戻り）は Phase 4 の実行だけが拾うため。
 

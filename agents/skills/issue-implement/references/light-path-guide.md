@@ -25,8 +25,8 @@ Phase 0 でライトと判定された Issue の短縮フロー。計画・デ�
 3. **Draft PR 作成** — `implementation-guide.md` Step 4 に準じる。Test plan には実行したコマンドと結果を書き、`> Light path: 計画・ブラウザ動作検証は省略` を明記する。
 4. **軽レビュー（最大2ラウンド）** — 差分を `{scratchpad}/light/{Issue番号}/round-{N}.diff` に書き出し、レビュアー1体（**審査区分**・`general` 相当）を起動。判定基準は Issue 本文と CLAUDE.md、観点は `../../_shared/references/review-loop.md` の「レビューの観点」（範囲は差分全量×1体）。レビューは `{scratchpad}/light/{Issue番号}/review-{N}.md` に直接書かせ、返答は件数と一行リストのみ。指摘はメインが fix / skip を判断（skip の理由は完了報告に一行）、fix は委譲で修正 → 品質ゲート → コミット・push。fix があったときだけラウンド2で確認し、fix ゼロで APPROVED。ラウンド2でも fix が出たらエスカレーション（実装後）。
 5. **Ready for review** — 全修正の push を確認して `gh pr ready`。
-6. **ダッシュボード更新** — `../SKILL.md` Phase 6 と同じ。
-7. **コメント整理** — `../SKILL.md` Phase 8 と同じ。差分がなければスキップ。
+6. **ダッシュボード更新** — `../SKILL.md` Phase 5 の「ダッシュボード更新」と同じ（起票・昇格・削除は無い）。
+7. **コメント整理** — `../SKILL.md` Phase 6 と同じ。差分がなければスキップ。
 
 ## 完了報告（短縮版）
 
