@@ -255,7 +255,7 @@
       "Edit(/etc/shadow)",
       "Edit(/etc/sudoers)"
     ],
-    "defaultMode": "default"
+    "defaultMode": "auto"
   },
   "hooks": {
     "SessionStart": [
@@ -290,15 +290,15 @@
   "language": "ギャル",
   "alwaysThinkingEnabled": true,
   "effortLevel": "high",
+  "modelSettings": {
+    "claude-fable-5-1": {
+      "effortLevel": "high"
+    }
+  },
   "tui": "fullscreen",
   "autoMemoryEnabled": false,
   "skipDangerousModePermissionPrompt": true,
   "theme": "dark-ansi",
   "editorMode": "vim",
-  "agentPushNotifEnabled": true,
-  "modelSettings": {
-    "claude-fable-5-1": {
-      "effortLevel": "high"
-    }
-  }
+  "agentPushNotifEnabled": true
 }

@@ -51,6 +51,7 @@ lib.mkIf pkgs.stdenv.hostPlatform.isDarwin {
     disk: 100
     runtime: docker
     vmType: vz
+    portForwarder: grpc
     rosetta: true
     mountType: virtiofs
     mounts:

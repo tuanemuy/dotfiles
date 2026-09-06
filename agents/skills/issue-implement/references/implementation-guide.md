@@ -61,7 +61,7 @@ Phase 1.5 でデザインモック（`spec/design/pages/*.html`）を作成し�
 
 ### 実装結果の確認
 
-まず**中断か完了か**を判定する（基準は `../../_shared/references/subagent-policy.md` の「中断と完了の区別」）。実装の委譲は steps.md 全体を1体に任せるため、context 上限での中断が最も起きやすい箇所。
+まず**中断か完了か**を判定する（基準は `../../_shared/references/subagent-policy.md` の「中断と完了の区別」）。実装の委譲は steps.md 全体を1体に任せるため、context 上限での中断が最も起きやすい。
 
 中断していた場合、**メインが残りを実装してはいけない**。同じ作業を再委譲する:
 
