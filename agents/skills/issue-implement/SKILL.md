@@ -134,6 +134,7 @@ manual-test に渡す情報:
 
 - テストソース: `.thread/{Issue番号}/testing.md`
 - 成果物ディレクトリ: `.thread/{Issue番号}/manual-test/`
+- 証跡ディレクトリ: `.thread/{Issue番号}/manual-test/media/`（TC ごとに終了時スクリーンショットと録画。PR に添付する）
 - Issue番号: #{Issue番号}
 
 **実行を担うサブエージェントに `testing.md` のパスを渡さない。** 担当する確認項目の手順と期待結果だけを転記して渡す（全文は1項目あたり数万トークンの重複になる）。
@@ -145,6 +146,7 @@ manual-test に渡す情報:
 判定担当に渡すもの:
 
 - 観測ログのパス一覧（`.thread/{Issue番号}/manual-test/logs/`）
+- 証跡ファイルの一覧（`ls .thread/{Issue番号}/manual-test/media/` の結果。画像として読まず、results の「証跡」欄にパスを転記する）
 - testing.md の各確認項目の手順と期待結果（転記）
 - `.thread/{Issue番号}/plan.md` と、期待結果の根拠になる spec のパス
 - 変更ファイル一覧（`git diff --no-renames --name-status origin/{ベースブランチ}...HEAD` から `.thread/` を除いたもの。変更起因の判定に使う）
@@ -180,8 +182,42 @@ manual-test に渡す情報:
 
 スコープラウンドが APPROVED になったら:
 
-1. PR 本文に「## Verification」セクションを追記する（実行結果サマリー — 全PASS / 見送り記録済みFAILの内訳、起票した Issue 番号）。`gh pr view <PR番号> --json body` で現在の本文を取得し、追記した本文を `{scratchpad}/pr-body.md`（`{scratchpad}` の定義は `../_shared/references/scratchpad.md`）に書き出して `gh pr edit <PR番号> --body-file {scratchpad}/pr-body.md` で反映する
-2. `gh pr ready <PR番号>` で Ready for review に切り替える
+1. PR 本文に「## Verification」セクションを追記する。`gh pr view <PR番号> --json body -q .body` で現在の本文を取得し、追記した本文を `{scratchpad}/pr-body.md`（`{scratchpad}` の定義は `../_shared/references/scratchpad.md`）に書き出す。内容は実行結果サマリー（全PASS / 見送り記録済みFAILの内訳、起票した Issue 番号）と、TC ごとの証跡:
+
+   ```markdown
+   ## Verification
+
+   {実行結果サマリー}
+
+   | TC | 内容 | 結果 |
+   |---|---|---|
+   | TC-01 | {一行} | PASS |
+
+   ### 証跡
+
+   録画は本文末尾に TC 順で並ぶ。
+
+   <details>
+   <summary>TC-01 {内容} — PASS</summary>
+
+   ![TC-01](.thread/{Issue番号}/manual-test/media/TC-01.png)
+
+   </details>
+   ```
+
+   FAIL の TC は `TC-{番号}-step{N}.png` も同じ `<details>` に並べる。
+2. 証跡を添付して本文を反映する。`gh pr edit --help | grep -q -- '--attach'` が真（gh 2.99.0 以上）なら、本文で参照したスクリーンショットと同じパスを `--attach` に渡す。gh が本文中の参照をアップロード先 URL に書き換える。録画は `--attach` だけ渡して本文で参照しない（末尾にプレイヤーとして付く）。10 MB を超える動画は添付せず、`<details>` にパスだけ書く。上限は 1 回 50 ファイル
+
+   ```bash
+   MEDIA=.thread/{Issue番号}/manual-test/media
+   ATTACH=()
+   while IFS= read -r f; do ATTACH+=(--attach "$f"); done < <(find "$MEDIA" -name 'TC-*.png' | sort)
+   while IFS= read -r f; do ATTACH+=(--attach "$f"); done < <(find "$MEDIA" -name 'TC-*.webm' -size -10240k | sort)
+   gh pr edit <PR番号> --body-file {scratchpad}/pr-body.md "${ATTACH[@]}"
+   ```
+
+   `--attach` が無ければ添付せず `gh pr edit <PR番号> --body-file {scratchpad}/pr-body.md` だけ実行し、画像行の代わりに `media/` のパスを書いて「gh 2.99.0 以上で添付可」と一行残す
+3. `gh pr ready <PR番号>` で Ready for review に切り替える
 
 ## Phase 5: 片付け
 
@@ -305,6 +341,7 @@ Issue #{Issue番号} の実装が完了しました！
 - 成果物: .thread/{Issue番号}/manual-test/
 - テストケース: {数}件（PASS: {数} / FAIL: {数}）
 - 検証サイクル: {数}周
+- 証跡: PR に添付（スクリーンショット {数} 枚 / 録画 {数} 本） / gh が --attach 非対応のためパスのみ記載
 - 起票したIssue: {Issue一覧、またはなし}
 - PR状態: Ready for review（スコープラウンド3回到達・検証3周到達時のみ Draft のまま）
 

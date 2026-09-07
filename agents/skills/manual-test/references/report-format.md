@@ -44,6 +44,17 @@
 
 ---
 
+## 証跡
+
+`{output_dir}/media/` に TC ごとの終了時スクリーンショットと録画がある。呼び出し元（issue-implement）は PR に添付する。
+
+| TC | スクリーンショット | 録画 | 食い違い時 |
+|----|-------------------|------|-----------|
+| TC-001 | media/TC-001.png | media/TC-001.webm | - |
+| TC-002 | media/TC-002.png | media/TC-002.webm | media/TC-002-step3.png |
+
+---
+
 ## 起票した Issue
 
 {FAILがある場合のみ記載}

@@ -60,6 +60,7 @@ manual-test スキルが生成するドキュメントは、テーブル形式�
 - 種別: {正常系/異常系}
 - サーバーURL: http://localhost:{port}
 - セッション名: verify-tc-{番号}
+- 証跡ディレクトリ: {output_dir}/media/（作成済み）
 
 ## シードデータ情報
 {seed-data.md の内容から該当するテストデータを抽出して記載}
@@ -81,9 +82,9 @@ manual-test スキルが生成するドキュメントは、テーブル形式�
 
 **判断を挟まない連続操作は `batch` で1コマンドにまとめる。** 独立したコマンドを消費してよいのは「出力を読んで次の判断を変えるとき」だけ。`wait` を単独で実行しない。
 
-1. セッションを開始し、描画完了を待って最初の snapshot を取る
+1. セッションを開始し、録画を始め、描画完了を待って最初の snapshot を取る（録画はログインより前、セッションを開いた直後に始める）
    ```bash
-   agent-browser --session verify-tc-{番号} --restore batch "open http://localhost:{port}{開始パス}" "wait --load networkidle" "snapshot -i -c"
+   agent-browser --session verify-tc-{番号} --restore batch "open http://localhost:{port}{開始パス}" "record start {output_dir}/media/TC-{番号}.webm" "wait --load networkidle" "snapshot -i -c"
    ```
 
 2. 各ステップを実行する。操作 → 待機 → 次の snapshot までを1コマンドにまとめる
@@ -96,17 +97,19 @@ manual-test スキルが生成するドキュメントは、テーブル形式�
 
 3. 期待結果と食い違ったステップがあった場合:
    - その時点の snapshot を取得し、画面の状態（表示されていた要素・エラーメッセージ等）を結果に記録する
+   - 同じ呼び出しでスクリーンショットを保存する: `"snapshot -i -c" "screenshot {output_dir}/media/TC-{番号}-step{N}.png"`
    - 以降のステップも可能な限り続行する（1ステップの食い違いで全体を中断しない）
 
-4. テスト完了後、セッションを閉じる
+4. テスト完了後、終了時の画面を保存し、録画を止めてセッションを閉じる
    ```bash
-   agent-browser --session verify-tc-{番号} --restore close
+   agent-browser --session verify-tc-{番号} --restore batch "screenshot {output_dir}/media/TC-{番号}.png" "record stop" "close"
    ```
+   打ち切り（時間超過）で終える場合も同じ呼び出しで閉じる。
 
 ## 重要な原則
 - テスト手順に忠実に従う — 勝手にステップを省略・変更しない
 - 操作対象は必ず snapshot の ref で指定する — セレクタを直書きしない
-- **スクリーンショットを画像として読み込まない** — 証跡は実行ログと食い違い時の snapshot（テキスト）で残す。撮ったファイルを `Read` すると画像が以降の全ターンで context に残り続ける。テキストでは判断できないときだけ1枚読む。全ステップ撮影・レポート添付はしない（スクリーンショット・録画は実 Chrome でないと動かない）
+- **撮ったスクリーンショット・録画を画像として読み込まない** — 判断は実行ログと食い違い時の snapshot（テキスト）で行う。撮ったファイルを `Read` すると画像が以降の全ターンで context に残り続ける。テキストでは判断できないときだけ1枚読む。証跡の撮影は上の手順どおり（終了時1枚・食い違い時1枚・録画1本）に限り、それ以外のステップでは撮らない
 - snapshot は `-i -c`（操作可能な要素のみ・空要素を除去）で取る。`--max-output` は最後の手段で、常用しない
 - **合否を判定しない** — PASS / FAIL / OK / NG のような判定語を出力に書かない。期待結果と実際の観測を並べて返すだけにする
 - **観測は要約・言い換えせずそのまま転記する** — 画面に出た文言・URL・エラーメッセージを原文で書く。「正しく表示された」ではなく「見出しに『請求書一覧』、行が3件」のように書く
@@ -136,6 +139,12 @@ manual-test スキルが生成するドキュメントは、テーブル形式�
 - 期待: {期待結果}
 - 観測: {実際に観測した内容}
 - 画面状態: {その時点の snapshot から読み取れた要点}
+- スクリーンショット: {output_dir}/media/TC-{番号}-step{N}.png
+
+## 証跡
+- スクリーンショット: {output_dir}/media/TC-{番号}.png
+- 録画: {output_dir}/media/TC-{番号}.webm
+（保存に失敗したファイルは「保存失敗: {エラーメッセージ}」と書く）
 ```
 ```
 
