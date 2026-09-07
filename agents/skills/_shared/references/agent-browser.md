@@ -62,7 +62,7 @@ Issue #960 の実測: 同一セッションに httpOnly Cookie を入れて `clo
 | 待機 | `wait <sel\|ms>` / `wait --load networkidle` |
 | 検索 | `find role\|text\|label\|testid <value> <action>` |
 | 状態確認 | `is visible\|enabled\|checked <sel>` |
-| 画像 | `screenshot [path]` |
+| 画像・録画 | `screenshot [path]` / `record start <path.webm>` / `record stop`（下の「スクリーンショットと録画」） |
 | エラー確認 | `console` / `errors` |
 | 任意 JS | `eval <js>` |
 | ダウンロード | `download <sel\|@ref> <保存パス>`（要素をクリックしてファイルを保存する） |
@@ -96,7 +96,27 @@ agent-browser --session s1 --restore eval "window.__dl[window.__dl.length-1]"   
 
 ## 作業ファイルの置き場所
 
-スクリーンショット・ブラウザプロファイル・サーバーログ / pid は `{scratchpad}` に置く（定義は `scratchpad.md`）。
+確認用のスクリーンショット・ブラウザプロファイル・サーバーログ / pid は `{scratchpad}` に置く（定義は `scratchpad.md`）。成果物として残す証跡は呼び出し元が指定するディレクトリに置く。
+
+## スクリーンショットと録画
+
+headless の Chrome for Testing で `screenshot` と `record` は動く（agent-browser 0.36.0）。`batch` の中でも使える。PNG は 1280x633 で保存される。
+
+| 目的 | コマンド |
+| --- | --- |
+| 画面を保存 | `screenshot <path.png>`（`--full` でページ全体） |
+| 録画開始 | `record start <path.webm>`（現在のページから開始。Cookie・localStorage は引き継ぐ） |
+| 録画停止・保存 | `record stop` |
+
+```bash
+agent-browser --session {s} --restore batch "open {url}" "record start {dir}/TC-01.webm" "wait --load networkidle" "snapshot -i -c"
+agent-browser --session {s} --restore batch "click @e2" "wait --load networkidle" "get url" "screenshot {dir}/TC-01.png" "record stop" "close"
+```
+
+- `record start` は新しいブラウザコンテキストを作る。**セッションを開いた直後、ログインより前に始める**と、切り替えの影響を受けない
+- 撮ったファイルを `Read` で画像として読み込まない。画像は以降の全ターンで context に残る。判断は snapshot（テキスト）で行い、メディアは人が後から見る証跡として残す
+- 証跡は `gh pr edit` / `gh issue create` の `--attach <file>` で GitHub にアップロードする（gh 2.99.0 以上）。本文中の `![alt](<file>)` はアップロード先の URL に書き換わる。参照されていない添付は本文末尾に付く。動画はプレイヤーとして表示される
+- 上限は画像 10 MB、動画 10 MB（有料プランは 100 MB）、1 回 50 ファイル。録画は遷移・スクロールが続く画面で約 1.6 MB/分、静止画面で約 0.6 MB/分になる。3 分のテストケースで 5 MB 程度に収まる
 
 ## セットアップと後片付け
 
