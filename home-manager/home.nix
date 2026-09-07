@@ -8,6 +8,11 @@
 }:
 let
   mkOutOfStoreSymlink = config.lib.file.mkOutOfStoreSymlink;
+  # Stable 25.11 pins gh 2.93.0. The `--attach` flag that uploads images and
+  # videos to PRs and issues needs gh 2.99.0, so gh alone tracks unstable.
+  unstable = import inputs.nixpkgs-unstable {
+    inherit (pkgs.stdenv.hostPlatform) system;
+  };
 in
 {
   home.stateVersion = "24.11";
@@ -19,7 +24,6 @@ in
       eza
       fd
       ffmpeg
-      gh
       imagemagick
       pm2
       python314
@@ -29,6 +33,7 @@ in
     ]
     ++ [
       (pkgs.callPackage ./packages/rinkaku.nix { })
+      unstable.gh
     ]
     ++ lib.optionals stdenv.isDarwin [
       cocoapods
