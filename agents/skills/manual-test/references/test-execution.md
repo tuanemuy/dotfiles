@@ -60,7 +60,7 @@ manual-test スキルが生成するドキュメントは、テーブル形式�
 - 種別: {正常系/異常系}
 - サーバーURL: http://localhost:{port}
 - セッション名: verify-tc-{番号}
-- 証跡ディレクトリ: {output_dir}/media/（作成済み）
+- 証跡ディレクトリ: {media_dir}（作成済み）
 
 ## シードデータ情報
 {seed-data.md の内容から該当するテストデータを抽出して記載}
@@ -84,7 +84,7 @@ manual-test スキルが生成するドキュメントは、テーブル形式�
 
 1. セッションを開始し、録画を始め、描画完了を待って最初の snapshot を取る（録画はログインより前、セッションを開いた直後に始める）
    ```bash
-   agent-browser --session verify-tc-{番号} --restore batch "open http://localhost:{port}{開始パス}" "record start {output_dir}/media/TC-{番号}.webm" "wait --load networkidle" "snapshot -i -c"
+   agent-browser --session verify-tc-{番号} --restore batch "open http://localhost:{port}{開始パス}" "record start {media_dir}/TC-{番号}.webm" "wait --load networkidle" "snapshot -i -c"
    ```
 
 2. 各ステップを実行する。操作 → 待機 → 次の snapshot までを1コマンドにまとめる
@@ -97,12 +97,12 @@ manual-test スキルが生成するドキュメントは、テーブル形式�
 
 3. 期待結果と食い違ったステップがあった場合:
    - その時点の snapshot を取得し、画面の状態（表示されていた要素・エラーメッセージ等）を結果に記録する
-   - 同じ呼び出しでスクリーンショットを保存する: `"snapshot -i -c" "screenshot {output_dir}/media/TC-{番号}-step{N}.png"`
+   - 同じ呼び出しでスクリーンショットを保存する: `"snapshot -i -c" "screenshot {media_dir}/TC-{番号}-step{N}.png"`
    - 以降のステップも可能な限り続行する（1ステップの食い違いで全体を中断しない）
 
 4. テスト完了後、終了時の画面を保存し、録画を止めてセッションを閉じる
    ```bash
-   agent-browser --session verify-tc-{番号} --restore batch "screenshot {output_dir}/media/TC-{番号}.png" "record stop" "close"
+   agent-browser --session verify-tc-{番号} --restore batch "screenshot {media_dir}/TC-{番号}.png" "record stop" "close"
    ```
    打ち切り（時間超過）で終える場合も同じ呼び出しで閉じる。
 
@@ -139,11 +139,11 @@ manual-test スキルが生成するドキュメントは、テーブル形式�
 - 期待: {期待結果}
 - 観測: {実際に観測した内容}
 - 画面状態: {その時点の snapshot から読み取れた要点}
-- スクリーンショット: {output_dir}/media/TC-{番号}-step{N}.png
+- スクリーンショット: {media_dir}/TC-{番号}-step{N}.png
 
 ## 証跡
-- スクリーンショット: {output_dir}/media/TC-{番号}.png
-- 録画: {output_dir}/media/TC-{番号}.webm
+- スクリーンショット: {media_dir}/TC-{番号}.png
+- 録画: {media_dir}/TC-{番号}.webm
 （保存に失敗したファイルは「保存失敗: {エラーメッセージ}」と書く）
 ```
 ```
