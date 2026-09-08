@@ -15,7 +15,7 @@ git checkout -b issue/{Issue番号}/{短い説明} "origin/${DEFAULT_BRANCH}"
 
 既に同名のブランチがあればユーザーに確認する。
 
-ブランチを作ったら、`.gitignore` を確認する。運用の判別は `git ls-files .thread/ | head -1` — 出力があれば `.thread/` をコミットする運用。コミットしない運用なら `.thread/` が、コミットする運用なら `.thread/*/review/` と `.thread/*/manual-test/media/` が ignore されているかを見て、無ければ追記してコミットに含める（証跡メディアは PR に添付するので、リポジトリには残さない）。
+ブランチを作ったら、`.gitignore` を確認する。運用の判別は `git ls-files .thread/ | head -1` — 出力があれば `.thread/` をコミットする運用。コミットしない運用なら `.thread/` が、コミットする運用なら `.thread/*/review/` が ignore されているかを見て、無ければ追記してコミットに含める。
 
 ## Step 2: 計画に沿った実装
 
