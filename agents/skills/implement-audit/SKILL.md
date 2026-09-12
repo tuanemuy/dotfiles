@@ -1,6 +1,7 @@
 ---
 name: implement-audit
-description: TODO・FIXME・仮実装・省略箇所と、spec/ 照合による実装漏れを検出して構造化レポートに記録する監査専門スキル。diff に依存せずプロジェクト全体を探査し、修正は行わない。ユーザーが「TODO探して」「仮実装ない？」「実装の抜け漏れチェックして」「完成度チェック」「implement audit」などと言ったとき、または implement 完了後のフォローアップや PR作成前の最終チェックでトリガーする。implement-audit は「コードの完全性」、spec-sync は「ドキュメントの正確性」、architecture-audit は「構造的健全性」を見る補完関係。
+description: "TODO・FIXME・仮実装・省略箇所と、spec/ 照合による実装漏れを検出して構造化レポートに記録する監査専門スキル。diff に依存せずプロジェクト全体を探査し、修正は行わない。起動条件: `/implement-audit` の実行、スキル名の明示的な指定、他スキルからの委譲のみ。実装完了後のフォローアップや PR 作成前の流れでは自動起動しない。implement-audit は「コードの完全性」、spec-sync は「ドキュメントの正確性」、architecture-audit は「構造的健全性」を見る補完関係。"
+user-invokable: true
 ---
 
 # Implement Audit — 実装完全性の監査レポート
