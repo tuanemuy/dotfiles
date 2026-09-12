@@ -1,6 +1,7 @@
 ---
 name: spec-implement
-description: spec/ の設計を Manager Loop で最後まで実装する。Manager が全体の進捗と受け入れを管理し、別の Implementer が一フェーズずつ実装、独立した Verifier が検証する。「Manager Loop で実装して」「spec を最後まで実装して」「spec-implement」、またはこの方式での途中再開で使用する。
+description: "spec/ の設計を Manager Loop で最後まで実装する。Manager が全体の進捗と受け入れを管理し、別の Implementer が一フェーズずつ実装、独立した Verifier が検証する。起動条件: `/spec-implement` の実行、スキル名の明示的な指定、またはこの方式での途中再開の指示のみ。「spec どおりに実装して」のような一般的な実装依頼では自動起動しない。"
+user-invokable: true
 ---
 
 # Spec Implement

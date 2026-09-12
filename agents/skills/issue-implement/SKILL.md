@@ -1,6 +1,7 @@
 ---
 name: issue-implement
-description: "Issueの計画立案 → 実装 → PRレビュー・修正 → 動作検証を一気通貫で行うスキル。ユーザーが「Issue #123 を実装して」「#45 をやって」「このIssue対応して」「implement #123」「計画から実装までやって」などと言ったとき、または Issue 番号・URL とともに実装まで求める依頼があったときにトリガーする。計画だけなら issue-planner、spec/ ベースの全体実装は implement を使う。工程を省いた簡易対応を求める依頼や軽微な Issue もライトパスで短縮対応する。"
+description: "Issueの計画立案 → 実装 → PRレビュー・修正 → 動作検証を一気通貫で行うスキル。工程を省いた簡易対応を求める依頼や軽微な Issue もライトパスで短縮対応する。起動条件: `/issue-implement` の実行、スキル名の明示的な指定、他スキルからの委譲のみ。Issue 番号や URL を渡されただけ、「#123 やって」「このIssue対応して」のような依頼では自動起動せず、通常どおり対応する。計画だけなら issue-planner、spec/ ベースの全体実装は spec-implement を使う。"
+user-invokable: true
 ---
 
 # Issue Implement

@@ -1,6 +1,7 @@
 ---
 name: issue-dashboard
-description: リポジトリの全オープン Issue を読み、独立したテーマごとにセクション分けして「どれから着手すべきか」「どれを並行して進めてよいか」が一目でわかるダッシュボードを GitHub Issue として生成・更新するスキル。優先度・依存先・カテゴリーは AI が内容を読んで判断する。既存のダッシュボード Issue があれば新規 Issue と close 済みを反映して整理し、なければ新規作成する。ユーザーが「Issue のダッシュボード作って」「Issue を整理して」「Issue の優先順位つけて」「依存関係を可視化して」「バックログ整理して」「どの Issue から手をつければいい？」「issue dashboard」「prioritize issues」などと言ったときに積極的にトリガーする。個別 Issue の実装計画は issue-planner、実装まで一気通貫は issue-implement を使う。
+description: "リポジトリの全オープン Issue を読み、独立したテーマごとにセクション分けして「どれから着手すべきか」「どれを並行して進めてよいか」が一目でわかるダッシュボードを GitHub Issue として生成・更新するスキル。優先度・依存先・カテゴリーは AI が内容を読んで判断する。既存のダッシュボード Issue があれば新規 Issue と close 済みを反映して整理し、なければ新規作成する。起動条件: `/issue-dashboard` の実行、スキル名の明示的な指定、他スキルからの委譲のみ。Issue の整理・優先順位についての相談や質問だけでは自動起動しない。個別 Issue の実装計画は issue-planner、実装まで一気通貫は issue-implement を使う。"
+user-invokable: true
 ---
 
 # Issue Dashboard
