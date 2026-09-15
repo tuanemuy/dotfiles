@@ -270,6 +270,17 @@
           }
         ]
       }
+    ],
+    "SessionEnd": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash /Users/hikaru/github.com/tuanemuy/dotfiles/config/claude/archive-hook.sh",
+            "timeout": 10
+          }
+        ]
+      }
     ]
   },
   "statusLine": {
