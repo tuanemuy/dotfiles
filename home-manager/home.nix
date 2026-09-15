@@ -60,6 +60,10 @@ in
       mkOutOfStoreSymlink "${gitDirectory}/dotfiles/config/claude/statusline-command.sh";
     ".claude/worktree-setup.sh".source =
       mkOutOfStoreSymlink "${gitDirectory}/dotfiles/config/claude/worktree-setup.sh";
+    ".claude/archive-hook.sh".source =
+      mkOutOfStoreSymlink "${gitDirectory}/dotfiles/config/claude/archive-hook.sh";
+    ".claude/archive-run.sh".source =
+      mkOutOfStoreSymlink "${gitDirectory}/dotfiles/config/claude/archive-run.sh";
     ".codex/config.toml".source =
       mkOutOfStoreSymlink "${gitDirectory}/dotfiles/config/codex/config.toml";
     ".claude/skills".source = mkOutOfStoreSymlink "${gitDirectory}/dotfiles/agents/skills";

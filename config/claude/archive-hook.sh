@@ -13,7 +13,7 @@ OUT="${CLAUDE_ARCHIVE_DIR:-$HOME/claude-archive}"
 WM="$OUT/.watermark"
 LOCK="$OUT/.lock"
 INTERVAL="${CLAUDE_ARCHIVE_INTERVAL:-$((7 * 86400))}"   # 日次にするなら 86400
-RUN="${CLAUDE_ARCHIVE_RUN:-/Users/hikaru/github.com/tuanemuy/dotfiles/config/claude/archive-run.sh}"
+RUN="${CLAUDE_ARCHIVE_RUN:-$HOME/.claude/archive-run.sh}"
 
 mkdir -p "$OUT"
 
