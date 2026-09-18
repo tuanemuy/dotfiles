@@ -1,6 +1,7 @@
 ---
 name: pr-review
-description: "Structured multi-layer PR review with iterative improvement loop. Use this skill whenever the user asks to review a pull request, do code review, check a PR, or wants feedback on changes in a GitHub PR. Also trigger when the user mentions \"PR review\", \"review this PR\", \"code review PR #123\", or gives a GitHub PR URL. Even casual phrasing like \"this PR大丈夫？\" or \"PRチェックして\" should trigger this skill."
+description: "Structured multi-layer PR review with iterative improvement loop. Invoke ONLY when explicitly requested: the `/pr-review` command, the skill named directly, or delegation from another skill. Do NOT trigger from a PR number, a GitHub PR URL, or casual phrasing such as 「PRチェックして」「このPR大丈夫？」「レビューして」 — handle those as an ordinary request instead."
+user-invokable: true
 ---
 
 # PR Review Skill

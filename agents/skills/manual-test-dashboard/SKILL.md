@@ -1,6 +1,7 @@
 ---
 name: manual-test-dashboard
-description: プロジェクトを区分に分割し、GitHub Issue のダッシュボードで管理して、実行1回につき1区分だけを agent-browser で探索的テストするスキル。ユーザーが「探索的テストして」「テストダッシュボード作って」「今日の探索テストやって」「exploratory test」などと言ったときにトリガーする。1実行1区分で完結するため cron・スケジュール実行にも適する。手順書（testing.md / spec/manual-tests/）の実行は manual-test、手順書のない探索は本スキル。
+description: "プロジェクトを区分に分割し、GitHub Issue のダッシュボードで管理して、実行1回につき1区分だけを agent-browser で探索的テストするスキル。1実行1区分で完結するため cron・スケジュール実行にも適する。起動条件: `/manual-test-dashboard` の実行、スキル名の明示的な指定、スケジュール実行からの呼び出しのみ。テストや品質の話題では自動起動しない。手順書（testing.md / spec/manual-tests/）の実行は manual-test、手順書のない探索は本スキル。"
+user-invokable: true
 ---
 
 # Manual Test Dashboard — 区分ローテーションによる定期探索的テスト

@@ -1,6 +1,7 @@
 ---
 name: review-dashboard
-description: プロジェクトを区分に分割し、GitHub Issue のダッシュボードで管理して、実行1回につき1区分だけを多観点でレビューするスキル。ユーザーが「レビューダッシュボード作って」「定期レビューして」「今日のレビューやって」「review dashboard」などと言ったときにトリガーする。1実行1区分で完結するため cron・スケジュール実行にも適する。単一テーマの全体監査は architecture-audit / implement-audit / spec-sync、区分の多観点深掘りは本スキル。
+description: "プロジェクトを区分に分割し、GitHub Issue のダッシュボードで管理して、実行1回につき1区分だけを多観点でレビューするスキル。1実行1区分で完結するため cron・スケジュール実行にも適する。起動条件: `/review-dashboard` の実行、スキル名の明示的な指定、スケジュール実行からの呼び出しのみ。レビュー依頼一般では自動起動しない。単一テーマの全体監査は architecture-audit / implement-audit / spec-sync、区分の多観点深掘りは本スキル。"
+user-invokable: true
 ---
 
 # Review Dashboard — 区分ローテーションによる定期レビュー
