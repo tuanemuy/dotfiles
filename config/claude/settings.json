@@ -270,6 +270,17 @@
           }
         ]
       }
+    ],
+    "SessionEnd": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash /Users/hikaru/.claude/archive-hook.sh",
+            "timeout": 10
+          }
+        ]
+      }
     ]
   },
   "statusLine": {
