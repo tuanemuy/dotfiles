@@ -35,8 +35,8 @@ Phase 4: 動作検証
   → testing.md の全項目を manual-test スキルで観測（シードデータ準備・サーバー起動含む）
   → 判定担当 1 体が PASS / FAIL と FAIL の三分を付ける
   → 変更起因の FAIL があれば修正 → 再検証（検証サイクル最大3周）
-  → 全PASS（または見送り記録済みの FAIL のみ）→ R2 以降の修正増分を general 1 体のスコープラウンド S1 → S2 → 確認で見る（3 段固定）
-  → 確認で退行なし → **Ready for review に切替**。退行あり → Draft のままユーザーへ
+  → 全PASS（または見送り記録済みの FAIL のみ）→ R2 以降の修正増分を general 1 体のスコープラウンドで見る（問いは退行の有無だけ）
+  → 退行なし → **Ready for review に切替**。退行あり → 修正して 1 回だけ再確認。なお退行あり → Draft のままユーザーへ
 
 Phase 5: 片付け（片付け担当 1 体に委譲）
   → スコープ外の改善・課題を Issue として起票（既存へのマージ優先）
@@ -134,7 +134,7 @@ Phase 3 の R1 を起動した直後に、`../manual-test/SKILL.md` の Phase 1�
 manual-test に渡す情報:
 
 - テストソース: `.thread/{Issue番号}/testing.md`
-- 成果物ディレクトリ: `.thread/{Issue番号}/manual-test/`
+- 成果物ディレクトリ: `.thread/{Issue番号}/manual-test/`（コミットしない。検証の記録として PR に残るのは本文の Verification）
 - 証跡ディレクトリ: `{scratchpad}/media/`（TC ごとに終了時スクリーンショットと録画。`{scratchpad}` の定義は `../_shared/references/scratchpad.md`）。**メディアはリポジトリにも `.thread/` にも置かない** — PR に添付して破棄する
 - Issue番号: #{Issue番号}
 
@@ -173,12 +173,12 @@ manual-test に渡す情報:
 
 ### スコープラウンド
 
-検証を通過したら、`references/review-guide.md` Step 8 の**スコープラウンド**で R2 以降の修正増分（R2 の修正と Phase 4 の変更起因修正。台帳の `scope-base` 以降の差分）を `general` 1 体にレビューさせる。増分が空なら行わない。
+検証を通過したら、`references/review-guide.md` Step 8 の**スコープラウンド**で R2 以降の修正増分（R2 の修正と Phase 4 の変更起因修正。台帳の `scope-base` 以降の差分）を `general` 1 体に見させる。増分が空なら行わない。
 
-- 段は S1（全増分）→ S2（S1 の修正増分）→ 確認（S2 の修正増分。S2 の修正が持ち込んだ不具合の有無だけを退行として返す）の 3 段で固定する
-- fix が出たら修正・品質ゲート・コミットし、挙動・UI・出力を変えた場合は `testing.md` の該当項目を再実行してから、次の段で修正増分を見る。修正は `../_shared/references/review-loop.md` の「修正の受け取り条件」（変異の証跡・同根の経路・記述の根拠）を満たすまで受け取らない
-- fix ゼロ、または確認で退行なし → APPROVED
-- 確認で退行あり → 修正せず PR を Draft のまま残し、退行の内容と台帳をまとめてユーザーに判断を委ねる。fix を残したまま Ready にしない
+- 問いは 1 つ — 増分の修正が不具合を持ち込んでいないか。設計・コメント・既存の問題は見させない（全観点で読むのは R1 と R2）
+- 退行なし → APPROVED
+- 退行あり → 修正・品質ゲート・コミットし、挙動・UI・出力を変えた場合は `testing.md` の該当項目を再実行してから、その修正増分に同じ問いをもう 1 回当てる。修正は `../_shared/references/review-loop.md` の「修正の受け取り条件」（変異の証跡・同根の経路・記述の根拠）を満たすまで受け取らない
+- 2 回目も退行あり → 修正せず PR を Draft のまま残し、退行の内容と台帳をまとめてユーザーに判断を委ねる
 
 ### PR の更新と Ready for review への切り替え
 
@@ -211,12 +211,11 @@ manual-test に渡す情報:
 2. 証跡を添付して本文を反映する。`gh pr edit --help | grep -q -- '--attach'` が真（gh 2.99.0 以上）なら、本文で参照したスクリーンショットと同じパス文字列を `--attach` に渡す。gh が本文中の参照をアップロード先 URL に書き換える。録画は `--attach` だけ渡して本文で参照しない（末尾にプレイヤーとして付く）。10 MB を超える動画は添付できないので、`<details>` に「録画は容量超過のため添付なし」と書く。上限は 1 回 50 ファイル
 
    ```bash
-   MEDIA={scratchpad}/media
-   ATTACH=()
-   while IFS= read -r f; do ATTACH+=(--attach "$f"); done < <(find "$MEDIA" -name 'TC-*.png' | sort)
-   while IFS= read -r f; do ATTACH+=(--attach "$f"); done < <(find "$MEDIA" -name 'TC-*.webm' -size -10240k | sort)
-   gh pr edit <PR番号> --body-file {scratchpad}/pr-body.md "${ATTACH[@]}"
+   ls {scratchpad}/media
+   gh pr edit <PR番号> --body-file {scratchpad}/pr-body.md --attach {scratchpad}/media/TC-01.png --attach {scratchpad}/media/TC-02.png
    ```
+
+   パスは `ls` の結果からリテラルで並べ、数ファイルずつに分ける。2 回目以降は本文を取り直してから渡す。アップロードの失敗と再開は `../_shared/references/agent-browser.md` の「スクリーンショットと録画」に従う。全ファイルの参照が URL に書き換わるまでが添付
 
    `--attach` が無ければ添付せず `gh pr edit <PR番号> --body-file {scratchpad}/pr-body.md` だけ実行し、画像行の代わりに「gh が `--attach` 非対応のため証跡なし（gh 2.99.0 以上で添付可）」と書く
 3. `gh pr view <PR番号> --json body -q .body` で書き換わった URL を確認し、`.thread/{Issue番号}/manual-test/report.md` の証跡表をその URL に差し替える。そのあとメディアを削除する:
@@ -288,8 +287,8 @@ Phase 4 のスコープラウンド（無い場合は Phase 3）が APPROVED で
 rm -rf .thread/{Issue番号}/review/
 ```
 
-- **削除するのは `review/` ディレクトリだけ。** `plan.md` / `steps.md` / `testing.md` / `adr.md` / `progress.md` / `manual-test/` は残す。
-- **APPROVED に至らずに終わった場合は削除しない。** スコープの確認で退行あり、または検証サイクル3周到達で PR が Draft のまま残っている場合は、ユーザーが残った指摘を確認する必要があるため、レビューファイルと台帳をそのまま残す。
+- **削除するのは `review/` ディレクトリだけ。** `plan.md` / `steps.md` / `testing.md` / `adr.md` / `progress.md` は残す（`manual-test/` は管理外のままローカルに残る）。
+- **APPROVED に至らずに終わった場合は削除しない。** スコープラウンドが 2 回目も退行あり、または検証サイクル3周到達で PR が Draft のまま残っている場合は、ユーザーが残った指摘を確認する必要があるため、レビューファイルと台帳をそのまま残す。
 - 削除前に、defer で起票した Issue 番号がすべて返り値に載っていることを確認する（台帳が消えても追跡先が残るように）。
 - 削除前に台帳の `wont-fix` 行を確認し、「指摘は正しいが意図的に逸脱している」ものは現場の why not コメントに転記する（今回の変更を越えて効く逸脱だけ、昇格ゲートに照らして spec / docs に上げる。`../_shared/references/review-loop.md` の後片付けに従う）。
 - レビューディレクトリが VCS 管理下にある場合は、削除もコミットして push する（Phase 2 の `.gitignore` 追記があれば `review/` は管理外になる。この手順は追記前に作られたブランチ向け）。管理外（`.gitignore` 済み）ならファイルを消すだけでよい。
@@ -336,7 +335,7 @@ Issue #{Issue番号} の実装が完了しました！
 
 ## レビュー
 - フロー: {小規模 / フル}
-- 全量ラウンド: {1 / 2}回、スコープ: {なし / S1 / S1+S2 / S1+S2+確認}
+- 全量ラウンド: {1 / 2}回、スコープ: {なし / 退行なし / 退行 {数}件を修正して再確認}
 - 初回ブロッカー: {数}件
 - 修正済み: fix {数}件 / fix-test {数}件 / fix-editorial {数}件
 - 最終ステータス: APPROVED
@@ -345,12 +344,12 @@ Issue #{Issue番号} の実装が完了しました！
 
 ## 動作検証
 - 観測: {実施 / browser の基準なしのため省略}
-- 成果物: .thread/{Issue番号}/manual-test/
+- 成果物: .thread/{Issue番号}/manual-test/（ローカルのみ）
 - テストケース: {数}件（PASS: {数} / FAIL: {数}）
 - 検証サイクル: {数}周
 - 証跡: PR に添付（スクリーンショット {数} 枚 / 録画 {数} 本） / gh が --attach 非対応のため証跡なし
 - 起票したIssue: {Issue一覧、またはなし}
-- PR状態: Ready for review（スコープの確認で退行あり・検証3周到達時のみ Draft のまま）
+- PR状態: Ready for review（スコープラウンドが 2 回目も退行あり・検証3周到達時のみ Draft のまま）
 
 ## スコープ外Issue
 - {起票したIssue一覧、またはなし}
@@ -367,7 +366,7 @@ Issue #{Issue番号} の実装が完了しました！
 - 判断の昇格: {昇格先のファイル / なし（.thread に保持）}
 - CLAUDE.md・docs への提案: {該当箇所と提案内容 / なし}
 - コメント整理: {対象 {数} ファイル・削除 {数} 件をコミット / 変更なし}
-- 残した成果物: plan.md / steps.md / testing.md / adr.md / progress.md / manual-test/
+- 残した成果物: plan.md / steps.md / testing.md / adr.md / progress.md
 ```
 
 ## 原則
