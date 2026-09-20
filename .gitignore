@@ -35,6 +35,9 @@ config/claude/*
 !config/claude/archive-run.sh
 !config/claude/skills/
 
+# Claude: account skills synced into ~/.claude/skills, which links to agents/skills.
+agents/skills/synced/
+
 # Claude Code project-local state
 .claude/settings.local.json
 CLAUDE.local.md
