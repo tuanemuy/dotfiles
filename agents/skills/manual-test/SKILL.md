@@ -56,7 +56,7 @@ Phase 6: レポート＆クリーンアップ
 
 1. ユーザーが明示的に指定したファイル
 2. `.thread/{Issue番号}/testing.md` — issue-implement から呼ばれた場合
-3. `spec/manual-tests/` — implement / manual-test から呼ばれた場合
+3. `spec/manual-tests/` — 単体実行の場合
 4. プロジェクトルート直下や docs/ の testing 関連ファイル
 
 テストソースが見つからない場合はユーザーに確認する。
@@ -123,7 +123,6 @@ TEST_DATE=$(date +%Y-%m-%d)
 | 呼び出し元 | 成果物ディレクトリ |
 | --- | --- |
 | issue-implement | `.thread/{Issue番号}/manual-test/`（Issue 単位で1回なので日付サブディレクトリなし） |
-| implement | `.manual-test/{YYYY-MM-DD}/` |
 | 単体実行 | `.manual-test/{YYYY-MM-DD}/` |
 
 以降、この保存先を `{output_dir}` と表記する。
@@ -141,7 +140,7 @@ TEST_DATE=$(date +%Y-%m-%d)
 | 呼び出し元 | 添付先 | `{media_dir}` の後始末 |
 | --- | --- | --- |
 | issue-implement | FAIL 分は Phase 5 で Issue に、全 TC 分は呼び出し元が PR に | 呼び出し元が PR 添付後に削除する（manual-test は消さない） |
-| implement / 単体実行 | FAIL 分の Issue のみ | Phase 6 で削除する |
+| 単体実行 | FAIL 分の Issue のみ | Phase 6 で削除する |
 
 使い捨てのファイル（サーバーログ・pid・確認用スクリーンショット）は `{output_dir}` ではなく `{scratchpad}` に置く（定義は `../_shared/references/scratchpad.md`）。
 

@@ -19,7 +19,7 @@ PRチェックアウト＋対象確定 → 担当の判定（固定語彙） →
   → 「あるべき」を変えた判断の spec 反映を確認 → レビューディレクトリ（.thread/{PR番号}/review/）を削除
 ```
 
-レビューループの共通構造（コンテキストの原則・レビューの観点・出力フォーマット・指摘台帳・修正ループ）は `../_shared/references/review-loop.md` を参照。ラウンドの遷移と完了条件は Step 7 が定める。
+レビューループの共通構造（コンテキストの原則・出力フォーマット・指摘台帳・修正ループ）は `../_shared/references/review-loop.md`、レビューの観点は `../_shared/references/review-lenses.md` を参照。ラウンドの遷移と完了条件は Step 7 が定める。
 
 ## Step 1: レビュー対象の確定
 
@@ -60,7 +60,7 @@ git diff --no-renames origin/{ベースブランチ}...HEAD > {scratchpad}/diff/
 
 ### 観点 — 全レビュアーが共通で持つレンズ
 
-観点は担当に紐づかない。各レビュアーは担当範囲の中で `../_shared/references/review-loop.md` の「レビューの観点」を見る（Step 3 のプロンプトに含まれている）。振る舞いを構造より先に見る。
+観点は担当に紐づかない。各レビュアーは担当範囲の中で `../_shared/references/review-lenses.md` の観点を見る（Step 3 のプロンプトに含まれている）。振る舞いを構造より先に見る。
 
 担当はレビュアーの割り当ての単位であって、ファイルの分割ではない（`../_shared/references/review-loop.md` のコンテキストの原則）。ファイルの割り振りはしない。
 
