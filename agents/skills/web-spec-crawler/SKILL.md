@@ -22,7 +22,7 @@ user-invokable: true
 
 `agent-browser` CLI が必要。セットアップ・頻出コマンド・ターン数を抑える書き方は `../_shared/references/agent-browser.md` に集約してある。セッション管理・認証パターン・headed/headless の使い分け・レートリミット対策は `../web-spec-explorer/SKILL.md` を参照する。本スキルはその上に「網羅エンジン」を載せる。スクリーンショット等の使い捨てファイルの置き場所 `{scratchpad}` の定義は `../_shared/references/scratchpad.md`。
 
-委譲方式（サブエージェント / OSプロセス / 親内シミュレート）・並列化・モデル選択の原則は `../_shared/references/subagent-policy.md` に従う。scout と explorer は画面に出ているものを列挙して返すだけなので**探索区分**、auditor は explorer の報告の妥当性を判定するため**審査区分**とする。メインエージェントがオーケストレーションに徹する原則は `../_shared/references/implement-principles.md` の精神を踏襲する。
+委譲方式（サブエージェント / OSプロセス / 親内シミュレート）・並列化・モデル選択の原則は `../_shared/references/subagent-policy.md` に従う。scout と explorer は画面に出ているものを列挙して返すだけなので**探索区分**、auditor は explorer の報告の妥当性を判定するため**審査区分**とする。メインエージェントはオーケストレーションに徹し、ページの探索と裏取りはサブエージェントに委譲する。
 
 ## アーキテクチャ
 
