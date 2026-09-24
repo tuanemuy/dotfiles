@@ -48,7 +48,7 @@
 ## Step 2: HTMLドラフトの作成
 
 Phase 0 で選定した代表画面それぞれについて、各パターンでHTMLファイルを作成する。
-デザイン担当エージェント（**判断区分**、`../../_shared/references/subagent-policy.md`）に、パターン単位で作成を委譲する。
+デザイン担当エージェント（`../../_shared/references/subagent-policy.md`）に、パターン単位で作成を委譲する。
 
 出力先: `spec/design/drafts/draft-{番号}-{パターン名}-{画面名}.html`
 

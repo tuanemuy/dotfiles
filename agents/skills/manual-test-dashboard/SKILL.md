@@ -35,7 +35,7 @@ user-invokable: true
   └── サブエージェント: verify-{発見番号}（再現確認）× M
 ```
 
-メインエージェントはオーケストレーションに集中する。ブラウザ操作はサブエージェントに委譲する。探索実行・再現確認・シードデータ整備はいずれも**判断区分**（バグかどうかの見極めを伴う）、区分定義のための画面一覧収集は**探索区分**（`../_shared/references/subagent-policy.md`）。
+メインエージェントはオーケストレーションに集中する。ブラウザ操作はサブエージェントに委譲する。委譲方式は `../_shared/references/subagent-policy.md` に従う。
 
 ## Workflow
 
@@ -210,7 +210,7 @@ timeout 90 bash -c 'for i in $(seq 1 30); do curl -s -o /dev/null -w "%{http_cod
 
 ### シードデータ整備
 
-対象区分の探索に必要なデータ・アカウントをサブエージェント（**判断区分**）で整備する:
+対象区分の探索に必要なデータ・アカウントをサブエージェントで整備する:
 
 ```text
 あなたはテスト環境のセットアップを行うエンジニアです。
@@ -245,7 +245,7 @@ timeout 90 bash -c 'for i in $(seq 1 30); do curl -s -o /dev/null -w "%{http_cod
 
 ## Step 5: 区分の徹底探索
 
-区分に列挙されたチャーターごとにサブエージェント（**判断区分**）を起動する（委譲方式とモデル選択は `../_shared/references/subagent-policy.md`）。各チャーターの探索内容とプロンプトは `references/exploration-charters.md` に従う。
+区分に列挙されたチャーターごとにサブエージェントを起動する（委譲方式は `../_shared/references/subagent-policy.md`）。各チャーターの探索内容とプロンプトは `references/exploration-charters.md` に従う。
 
 ### 実行戦略: 原則として順次実行
 
@@ -277,7 +277,7 @@ timeout 90 bash -c 'for i in $(seq 1 30); do curl -s -o /dev/null -w "%{http_cod
 
 起票候補（Critical / Warning）は、起票前に**別セッションで再現確認する**。発見したサブエージェントの報告を鵜呑みにしない。
 
-1. 発見ごとに再現用サブエージェント（**判断区分**。セッション指定は `--session verify-{発見番号} --restore`）を起動し、**最小の再現手順**で同じ事象が起きるか確認する
+1. 発見ごとに再現用サブエージェント（セッション指定は `--session verify-{発見番号} --restore`）を起動し、**最小の再現手順**で同じ事象が起きるか確認する
 2. サーバーログ（`{scratchpad}/server.log`）に対応するエラー・スタックトレースがあれば根拠に加える
 3. 再現しないもの・判断が割れるものは Info に落とす。偽陽性の起票はローテーション全体の信頼を損なう
 

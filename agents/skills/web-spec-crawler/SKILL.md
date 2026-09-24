@@ -22,7 +22,7 @@ user-invokable: true
 
 `agent-browser` CLI が必要。セットアップ・頻出コマンド・ターン数を抑える書き方は `../_shared/references/agent-browser.md` に集約してある。セッション管理・認証パターン・headed/headless の使い分け・レートリミット対策は `../web-spec-explorer/SKILL.md` を参照する。本スキルはその上に「網羅エンジン」を載せる。スクリーンショット等の使い捨てファイルの置き場所 `{scratchpad}` の定義は `../_shared/references/scratchpad.md`。
 
-委譲方式（サブエージェント / OSプロセス / 親内シミュレート）・並列化・モデル選択の原則は `../_shared/references/subagent-policy.md` に従う。scout と explorer は画面に出ているものを列挙して返すだけなので**探索区分**、auditor は explorer の報告の妥当性を判定するため**審査区分**とする。メインエージェントはオーケストレーションに徹し、ページの探索と裏取りはサブエージェントに委譲する。
+委譲方式（サブエージェント / OSプロセス / 親内シミュレート）・並列化の原則は `../_shared/references/subagent-policy.md` に従う。メインエージェントはオーケストレーションに徹し、ページの探索と裏取りはサブエージェントに委譲する。
 
 ## アーキテクチャ
 
@@ -65,13 +65,13 @@ user-invokable: true
 
 ### Phase 2: 初期偵察（scout サブエージェント）
 
-1つのサブエージェント（**探索区分**）でサイト全体の入り口を把握し、台帳の初期 frontier を作る。ここはまだ網羅ではなく「種まき」。トップ・ナビ・主要セクションから到達できる URL を広く拾い、発見した URL を全て台帳に `discovered`（未調査）として登録する。
+1つのサブエージェントでサイト全体の入り口を把握し、台帳の初期 frontier を作る。ここはまだ網羅ではなく「種まき」。トップ・ナビ・主要セクションから到達できる URL を広く拾い、発見した URL を全て台帳に `discovered`（未調査）として登録する。
 
 scout への指示は web-spec-explorer の scout テンプレートを流用しつつ、**「発見した全リンク先 URL を漏れなく列挙して返す」**ことを強調する（網羅の起点なので取りこぼし厳禁）。
 
 ### Phase 3: クロールループ — explorer でドレイン
 
-台帳の `discovered` ページを explorer サブエージェント（**探索区分**）に割り当て、1ページずつ全要素を列挙させる。並列は最大3。`discovered` が4件以上あれば複数ラウンドに分ける。
+台帳の `discovered` ページを explorer サブエージェントに割り当て、1ページずつ全要素を列挙させる。並列は最大3。`discovered` が4件以上あれば複数ラウンドに分ける。
 
 explorer は1ページについて、snapshot 上の**全インタラクティブ要素**（ボタン・リンク・入力・セレクト・チェック・ラジオ・トグル・タブ・アコーディオン・メニュー・モーダルトリガー等）を1つ残らず列挙し、各要素が何をするか（遷移 / 状態変化 / 送信）を分類して返す。全要素列挙・全フォーム状態・全エラーケースの徹底手順とプロンプトテンプレートは `references/enumeration.md` に従う。
 
@@ -85,7 +85,7 @@ dedup（同一 URL テンプレート・同一状態シグネチャの再登録�
 
 ### Phase 4: 完全性ゲート — auditor で再確認
 
-explorer の「全部調べた」を信用しない。`explored` ページを auditor サブエージェント（**審査区分**）に渡し、**同じページを開き直して** snapshot 上の全要素が explorer の報告に含まれているか裏取りさせる。これは `../_shared/references/completeness-gate.md` の find → adversarially verify をページに適用したもの。
+explorer の「全部調べた」を信用しない。`explored` ページを auditor サブエージェントに渡し、**同じページを開き直して** snapshot 上の全要素が explorer の報告に含まれているか裏取りさせる。これは `../_shared/references/completeness-gate.md` の find → adversarially verify をページに適用したもの。
 
 - auditor が抜けを発見 → 該当要素・分岐を台帳に差し戻し（`discovered` / 未探索分岐に戻す）→ Phase 3 で再調査
 - 抜けゼロ → ページを `verified` に更新
