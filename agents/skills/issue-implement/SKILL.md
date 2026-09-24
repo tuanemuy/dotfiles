@@ -135,7 +135,7 @@ manual-test に渡す情報:
 
 - テストソース: `.thread/{Issue番号}/testing.md`
 - 成果物ディレクトリ: `.thread/{Issue番号}/manual-test/`（コミットしない。検証の記録として PR に残るのは本文の Verification）
-- 証跡ディレクトリ: `{scratchpad}/media/`（TC ごとに終了時スクリーンショットと録画。`{scratchpad}` の定義は `../_shared/references/scratchpad.md`）。**メディアはリポジトリにも `.thread/` にも置かない** — PR に添付して破棄する
+- 証跡ディレクトリ: `{scratchpad}/media/`（TC ごとに終了時スクリーンショット、FAIL の TC は録画も。`{scratchpad}` の定義は `../_shared/references/scratchpad.md`）。**メディアはリポジトリにも `.thread/` にも置かない** — PR に添付して破棄する
 - Issue番号: #{Issue番号}
 
 **実行を担うサブエージェントに `testing.md` のパスを渡さない。** 担当する確認項目の手順と期待結果だけを転記して渡す（全文は1項目あたり数万トークンの重複になる）。
@@ -197,7 +197,7 @@ manual-test に渡す情報:
 
    ### 証跡
 
-   録画は本文末尾に TC 順で並ぶ。
+   FAIL の TC の録画は本文末尾に TC 順で並ぶ。
 
    <details>
    <summary>TC-01 {内容} — PASS</summary>
