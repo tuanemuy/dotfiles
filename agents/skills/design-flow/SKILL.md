@@ -47,7 +47,7 @@ Skill ツールで `/agent-browser-cleanup` を呼び出す。別セッション
 
 design-flow の成果物は `spec/design/` 配下に出力し、完了時に `spec/index.md` を更新する。
 
-デザインが Figma にある場合は、`../figma-import/SKILL.md` が同じ形式の `spec/design/` を作る。取り込み後の画面追加は本スキルの Phase 3 から行う（`references/phase0-preparation.md` の「画面の追加」）。
+デザインが Figma にある場合は、`../figma-import/SKILL.md` が同じ形式の `spec/design/` を作る。Figma から書き出した画像・アイコンは `spec/design/assets/` に入り、HTML から `../assets/` で参照される。取り込み後の画面追加は本スキルの Phase 3 から行う（`references/phase0-preparation.md` の「画面の追加」）。
 
 ## アーキテクチャ
 
