@@ -11,12 +11,21 @@ Phase 0 ではユーザーへの質問を最小限にする。spec スキルの�
 | 成果物 | 判定 |
 |--------|------|
 | `spec/design/review/*.md` が存在 | Phase 4 進行中 → Phase 4 から再開 |
-| `spec/design/pages/*.html` が存在 | Phase 3 完了 → Phase 4 から開始 |
-| `spec/design/tokens.md` と `spec/design/index.md` が存在 | Phase 2 完了 → Phase 3 から開始 |
+| `spec/pages/index.md` の全画面に `spec/design/pages/*.html` がある | Phase 3 完了 → Phase 4 から開始 |
+| `spec/design/tokens.md` と `spec/design/index.md` が存在 | Phase 2 完了 → HTML の無い画面だけを対象に Phase 3 から開始 |
 | `spec/design/drafts/*.html` が存在 | Phase 1 完了 → ユーザーにパターンの選択状況を確認 |
 | 上記いずれもなし | Phase 0 から開始 |
 
 再開する場合は、既存の成果物の内容を確認してからユーザーに現在の状況を伝え、続行してよいか確認する。
+
+### 画面の追加
+
+HTML のある画面と無い画面が混在する場合は、画面の追加として扱う。
+
+- Phase 3 は HTML の無い画面だけを作る。共通要素（ヘッダー・ナビゲーション・フッターなど）は既存の HTML から取る
+- Phase 4 のレビューは追加した画面と、それらと既存画面との一貫性を対象にし、修正は追加した画面に限る。既存画面の問題は完了報告に残存課題として挙げる
+- `spec/design/index.md` に「取り込み元」（`../../figma-import/SKILL.md` の成果物）がある場合も同じ。取り込んだトークンと方針に沿って作る
+- Step 4 の代表画面の選定は行わない
 
 ## Step 2: spec 成果物の読み込み
 
