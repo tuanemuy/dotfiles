@@ -32,9 +32,9 @@ scout / explorer / flow の委譲方式は `../_shared/references/subagent-polic
 サブエージェント間でブラウザが衝突しないよう、必ず `--session` で分離する。あわせて **`--restore` を必ず付ける**。付けないとブラウザ再起動で Cookie が失われ、ログイン状態の調査が中断される（Issue #960。詳細は `../_shared/references/agent-browser.md`）:
 
 ```bash
-agent-browser --session scout --restore open https://example.com
-agent-browser --session explorer-settings --restore snapshot
-agent-browser --session flow-signup --restore click @e5
+agent-browser --namespace {ns} --session scout --restore open https://example.com
+agent-browser --namespace {ns} --session explorer-settings --restore snapshot
+agent-browser --namespace {ns} --session flow-signup --restore click @e5
 ```
 
 命名規則:
@@ -54,13 +54,13 @@ agent-browser --session flow-signup --restore click @e5
 headed に切り替えるときは、既存セッションとの衝突を防ぐため必ず専用セッションを使う:
 
 ```bash
-agent-browser --session headed-auth --restore --headed open https://example.com/login
+agent-browser --namespace {ns} --session headed-auth --restore --headed open https://example.com/login
 ```
 
 headedセッションはユーザー操作が終わったら速やかに閉じる:
 
 ```bash
-agent-browser --session headed-auth --restore close
+agent-browser --namespace {ns} --session headed-auth --restore close
 ```
 
 ## リソース保護
@@ -70,14 +70,14 @@ agent-browser --session headed-auth --restore close
 snapshot の出力はコンテキストに残り、以降の全ターンで再読み込みされる。既定で絞る:
 
 ```bash
-agent-browser --session scout --restore snapshot -i -c
+agent-browser --namespace {ns} --session scout --restore snapshot -i -c
 ```
 
 大きなページは分割して調査する。全体のsnapshotではなく、特定セクションにフォーカス:
 
 ```bash
-agent-browser --session explorer-settings --restore find role "navigation"
-agent-browser --session explorer-settings --restore snapshot --ref @e3 -i -c
+agent-browser --namespace {ns} --session explorer-settings --restore find role "navigation"
+agent-browser --namespace {ns} --session explorer-settings --restore snapshot --ref @e3 -i -c
 ```
 
 `--max-output` は最後の手段で、常用しない（`../_shared/references/agent-browser.md`）。
@@ -96,7 +96,7 @@ agent-browser --session explorer-settings --restore snapshot --ref @e3 -i -c
 - `--allowed-domains` で対象ドメインに限定し、外部リンクを踏まない
 
 ```bash
-agent-browser --session scout --restore --allowed-domains "example.com,*.example.com" open https://example.com
+agent-browser --namespace {ns} --session scout --restore --allowed-domains "example.com,*.example.com" open https://example.com
 ```
 
 ## 認証の取り扱い
@@ -113,7 +113,7 @@ agent-browser auth save myservice --url https://example.com/login \
 サブエージェントでの利用:
 
 ```bash
-agent-browser --session scout --restore auth login myservice
+agent-browser --namespace {ns} --session scout --restore auth login myservice
 ```
 
 ### パターン2: OAuth / SSO
@@ -127,11 +127,11 @@ agent-browser --session scout --restore auth login myservice
 
 ```bash
 # 1. ユーザーに手動認証してもらう
-agent-browser --session headed-auth --headed --profile {scratchpad}/browser-profile open https://example.com/login
+agent-browser --namespace {ns} --session headed-auth --headed --profile {scratchpad}/browser-profile open https://example.com/login
 # → ユーザーが認証操作を完了するのを待つ
 
 # 2. 以降のサブエージェントはプロファイルを使う
-agent-browser --session scout --profile {scratchpad}/browser-profile open https://example.com/dashboard
+agent-browser --namespace {ns} --session scout --profile {scratchpad}/browser-profile open https://example.com/dashboard
 ```
 
 `--profile` はプロファイルディレクトリ自体が Cookie を保持するため、このパターンでは `--restore` を併用しない。
@@ -158,9 +158,12 @@ agent-browser --session scout --profile {scratchpad}/browser-profile open https:
    - 認証の要否
    - 除外すべきページ（管理画面等）
 2. agent-browser の利用可能性を確認
-3. agent-browser プロセスのクリーンアップ
+3. この実行の namespace `{ns}` を決め、前回の取り残しを閉じる（`../_shared/references/agent-browser.md` の「実行ごとに namespace を分ける」）。以降の agent-browser コマンドとサブエージェントへの指示には、この `{ns}` を使う:
 
-   Skill ツールで `/agent-browser-cleanup` を呼び出す。別セッションで使用中でなければ残存プロセスをクリーンアップしてから調査を開始できる。
+   ```bash
+   agent-browser session id --scope worktree --prefix web-spec-explorer
+   agent-browser --namespace {ns} close --all 2>/dev/null || true
+   ```
 
 4. 認証が必要なら上記パターンに従ってセットアップ
 5. spec/ ディレクトリを作成
@@ -188,6 +191,7 @@ allowed-domains: {domains}
 agent-browserを使って以下のWebサービスの全体構造を偵察してほしい。
 
 対象URL: {url}
+namespace: {ns}
 セッション名: scout
 
 やること:
@@ -216,6 +220,7 @@ scoutの結果をもとにサイトをセクション分けし、各セクショ
 agent-browserを使って以下のセクションの詳細仕様を調査してほしい。
 
 対象ページ: {pages}
+namespace: {ns}
 セッション名: explorer-{section}
 
 各ページについて以下を調査:
@@ -249,6 +254,7 @@ agent-browserを使って以下のユーザーフローを実際に操作し、�
 
 フロー名: {flow_name}
 開始URL: {start_url}
+namespace: {ns}
 セッション名: flow-{flow_name}
 認証: {auth_info}
 allowed-domains: {domains}
@@ -298,53 +304,49 @@ allowed-domains: {domains}
 
 ### Phase 7: クリーンアップ
 
-すべての調査・レビューが完了したら、agent-browser の残存プロセスを片付ける。
+すべての調査・レビューが完了したら、各サブエージェントで使用したセッションを明示的に閉じ、取りこぼし対策にこの実行の namespace を一括で閉じる:
 
-1. 各サブエージェントで使用したセッションを明示的に閉じる（取りこぼし対策に `agent-browser close --all` も実行）:
-
-   ```bash
-   agent-browser close --all 2>/dev/null || true
-   ```
-
-2. Skill ツールで `/agent-browser-cleanup` を呼び出す。別セッションで使用中でなければ残存プロセスをすべて終了してクリーンな状態に戻す。
+```bash
+agent-browser --namespace {ns} close --all 2>/dev/null || true
+```
 
 ## agent-browser 頻出コマンドリファレンス
 
 ```bash
 # ナビゲーション
-agent-browser --session {s} --restore open {url}
-agent-browser --session {s} --restore back
-agent-browser --session {s} --restore reload
+agent-browser --namespace {ns} --session {s} --restore open {url}
+agent-browser --namespace {ns} --session {s} --restore back
+agent-browser --namespace {ns} --session {s} --restore reload
 
 # 調査
-agent-browser --session {s} --restore snapshot -i -c    # アクセシビリティツリー（refつき）
-agent-browser --session {s} --restore snapshot --ref @e3            # 特定要素のサブツリー
-agent-browser --session {s} --restore screenshot {scratchpad}/page.png      # スクリーンショット
-agent-browser --session {s} --restore get text --ref @e5            # 要素のテキスト取得
-agent-browser --session {s} --restore get url                       # 現在のURL
-agent-browser --session {s} --restore get title                     # ページタイトル
+agent-browser --namespace {ns} --session {s} --restore snapshot -i -c    # アクセシビリティツリー（refつき）
+agent-browser --namespace {ns} --session {s} --restore snapshot --ref @e3            # 特定要素のサブツリー
+agent-browser --namespace {ns} --session {s} --restore screenshot {scratchpad}/page.png      # スクリーンショット
+agent-browser --namespace {ns} --session {s} --restore get text --ref @e5            # 要素のテキスト取得
+agent-browser --namespace {ns} --session {s} --restore get url                       # 現在のURL
+agent-browser --namespace {ns} --session {s} --restore get title                     # ページタイトル
 
 # 操作
-agent-browser --session {s} --restore click @e2
-agent-browser --session {s} --restore fill @e3 "test@example.com"
-agent-browser --session {s} --restore select @e4 --value "option1"
-agent-browser --session {s} --restore check @e5
-agent-browser --session {s} --restore press Enter
-agent-browser --session {s} --restore scroll down 500
-agent-browser --session {s} --restore hover @e6
+agent-browser --namespace {ns} --session {s} --restore click @e2
+agent-browser --namespace {ns} --session {s} --restore fill @e3 "test@example.com"
+agent-browser --namespace {ns} --session {s} --restore select @e4 --value "option1"
+agent-browser --namespace {ns} --session {s} --restore check @e5
+agent-browser --namespace {ns} --session {s} --restore press Enter
+agent-browser --namespace {ns} --session {s} --restore scroll down 500
+agent-browser --namespace {ns} --session {s} --restore hover @e6
 
 # 要素の発見
-agent-browser --session {s} --restore find role "button"
-agent-browser --session {s} --restore find text "ログイン"
-agent-browser --session {s} --restore find placeholder "メールアドレス"
+agent-browser --namespace {ns} --session {s} --restore find role "button"
+agent-browser --namespace {ns} --session {s} --restore find text "ログイン"
+agent-browser --namespace {ns} --session {s} --restore find placeholder "メールアドレス"
 
 # 状態確認
-agent-browser --session {s} --restore is visible @e3
-agent-browser --session {s} --restore is enabled @e4
-agent-browser --session {s} --restore wait text "読み込み完了" --timeout 10000
+agent-browser --namespace {ns} --session {s} --restore is visible @e3
+agent-browser --namespace {ns} --session {s} --restore is enabled @e4
+agent-browser --namespace {ns} --session {s} --restore wait text "読み込み完了" --timeout 10000
 
 # セッション管理
-agent-browser --session {s} --restore close                         # セッション終了
+agent-browser --namespace {ns} --session {s} --restore close                         # セッション終了
 ```
 
 ref（@e1, @e2...）はsnapshotで取得できる。操作対象はrefで指定するのが基本。

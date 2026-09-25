@@ -87,18 +87,11 @@ gh pr edit --help 2>/dev/null | grep -q -- '--attach' && echo "attach: yes" || e
 
 ### agent-browser プロセスのクリーンアップ
 
-別セッションで agent-browser が使用中でなければ、残存プロセスをクリーンアップしてからテストを開始する。Skill ツールは使わず、以下の bash コマンドを直接実行する:
+この実行の namespace `{ns}` を決め、前回の取り残しを閉じてからテストを開始する（`../_shared/references/agent-browser.md` の「実行ごとに namespace を分ける」）。以降の agent-browser コマンドとサブエージェントへの指示には、この `{ns}` を使う:
 
 ```bash
-CURRENT_SID=$(ps -p $$ -o sid= | tr -d ' ')
-OTHER=$(ps -eo sid,comm | awk -v sid="$CURRENT_SID" '$2 ~ /agent-browser/ && $1+0 != sid+0')
-if [ -n "$OTHER" ]; then
-  echo "別セッションで agent-browser が使用中のため、プロセスはそのままにします"
-else
-  agent-browser close --all 2>/dev/null || true
-  pkill -f "agent-browser" 2>/dev/null || true
-  echo "agent-browser の残存プロセスをクリーンアップしました"
-fi
+agent-browser session id --scope worktree --prefix manual-test
+agent-browser --namespace {ns} close --all 2>/dev/null || true
 ```
 
 クリーンアップが完了したら、そのまま次のステップ（タイムアウト設定）に進むこと。ここで中断しない。
@@ -336,7 +329,7 @@ FAIL のテストケースがない場合はこの Phase をスキップして P
 
 #### Known Issue: agent-browser の `click @ref` が React の合成 onClick まで届かないことがある
 
-**症状**: `agent-browser --session ... click @eN` でボタンをクリックしても、React の `onClick` ハンドラが発火せず、サーバーに POST も飛ばない。Console エラーも出ず、サイレントに失敗する。同セッションでナビゲーションリンク等の他のクリックは正常動作する。
+**症状**: `agent-browser --namespace {ns} --session ... click @eN` でボタンをクリックしても、React の `onClick` ハンドラが発火せず、サーバーに POST も飛ばない。Console エラーも出ず、サイレントに失敗する。同セッションでナビゲーションリンク等の他のクリックは正常動作する。
 
 **観察された例**: `/billing/closing` の「請求書を作成」ボタン（Issue #601、PR #605）。React Router v7 + React 19 + `useFetcher` の programmatic `fetcher.submit(formData, { method: "post" })` パターン。
 
@@ -469,8 +462,8 @@ rm -rf {media_dir}
 サブエージェント間でブラウザが衝突しないよう、必ず `--session` で分離する。あわせて **`--restore` を必ず付ける**。付けないとブラウザ再起動で Cookie が失われ、検証中に突然ログイン画面へ戻される（Issue #960。詳細は `../_shared/references/agent-browser.md`）:
 
 ```bash
-agent-browser --session verify-tc-001 --restore open http://localhost:{port}
-agent-browser --session verify-tc-002 --restore open http://localhost:{port}/login
+agent-browser --namespace {ns} --session verify-tc-001 --restore open http://localhost:{port}
+agent-browser --namespace {ns} --session verify-tc-002 --restore open http://localhost:{port}/login
 ```
 
 命名規則:
@@ -480,7 +473,7 @@ agent-browser --session verify-tc-002 --restore open http://localhost:{port}/log
 テスト完了後は必ずセッションを閉じる:
 
 ```bash
-agent-browser --session verify-tc-001 --restore close
+agent-browser --namespace {ns} --session verify-tc-001 --restore close
 ```
 
 ## タイムアウト＆スタック対策
@@ -493,10 +486,10 @@ agent-browser の各コマンドは `AGENT_BROWSER_DEFAULT_TIMEOUT`（Phase 1 �
 
 ```bash
 # 特定テキストの出現を最大15秒待つ
-agent-browser --session {s} --restore wait --text "読み込み完了" --timeout 15000
+agent-browser --namespace {ns} --session {s} --restore wait --text "読み込み完了" --timeout 15000
 
 # ページの描画完了を待つ
-agent-browser --session {s} --restore wait --load networkidle
+agent-browser --namespace {ns} --session {s} --restore wait --load networkidle
 ```
 
 ### テストケース単位のタイムアウト
@@ -523,74 +516,72 @@ timeout 90 bash -c 'for i in $(seq 1 30); do curl -s -o /dev/null -w "%{http_cod
 テスト実行中にサブエージェントが応答しなくなった場合のフォールバック:
 
 1. メインエージェントはサブエージェントの完了を待つが、**5分**を目安に異常と判断する
-2. 応答がない場合は `agent-browser close --all` で全セッションを強制終了する
+2. 応答がない場合は `agent-browser --namespace {ns} close --all` でこの実行の全セッションを強制終了する
 3. そのテストケースを TIMEOUT として記録し、次のテストケースに進む
 
 ### Phase 6 での確実なクリーンアップ
 
-個別セッションの close に加え、最後に全セッションを一括クリーンアップする:
+個別セッションの close に加え、最後にこの実行の全セッションを一括クリーンアップする:
 
 ```bash
-# 全セッションを確実に閉じる
-agent-browser close --all 2>/dev/null
+# この実行のセッションを確実に閉じる
+agent-browser --namespace {ns} close --all 2>/dev/null
 
 # サーバー停止
 kill $(cat {scratchpad}/server.pid) 2>/dev/null
 rm {scratchpad}/server.pid {scratchpad}/server.log 2>/dev/null
 ```
 
-その後、Skill ツールで `/agent-browser-cleanup` を呼び出し、別セッションで使用中でなければ残存プロセスをすべて終了してクリーンな状態に戻す。
-
 ## agent-browser コマンドリファレンス
 
 ```bash
 # ナビゲーション
-agent-browser --session {s} --restore open {url}
-agent-browser --session {s} --restore back
-agent-browser --session {s} --restore reload
+agent-browser --namespace {ns} --session {s} --restore open {url}
+agent-browser --namespace {ns} --session {s} --restore back
+agent-browser --namespace {ns} --session {s} --restore reload
 
 # 調査
-agent-browser --session {s} --restore snapshot -i -c
-agent-browser --session {s} --restore snapshot --ref @e3
-agent-browser --session {s} --restore screenshot {media_dir}/TC-{番号}.png    # 証跡。画像として Read しない
-agent-browser --session {s} --restore record start {media_dir}/TC-{番号}.webm  # 録画開始（セッションを開いた直後）
-agent-browser --session {s} --restore record stop                                       # 録画停止・保存
-agent-browser --session {s} --restore get text --ref @e5
-agent-browser --session {s} --restore get url
-agent-browser --session {s} --restore get title
+agent-browser --namespace {ns} --session {s} --restore snapshot -i -c
+agent-browser --namespace {ns} --session {s} --restore snapshot --ref @e3
+agent-browser --namespace {ns} --session {s} --restore screenshot {media_dir}/TC-{番号}.png    # 証跡。画像として Read しない
+agent-browser --namespace {ns} --session {s} --restore record start {media_dir}/TC-{番号}.webm  # 録画開始（セッションを開いた直後）
+agent-browser --namespace {ns} --session {s} --restore record stop                                       # 録画停止・保存
+agent-browser --namespace {ns} --session {s} --restore get text --ref @e5
+agent-browser --namespace {ns} --session {s} --restore get url
+agent-browser --namespace {ns} --session {s} --restore get title
 
 # 操作
-agent-browser --session {s} --restore click @e2
-agent-browser --session {s} --restore fill @e3 "test@example.com"
-agent-browser --session {s} --restore select @e4 --value "option1"
-agent-browser --session {s} --restore check @e5
-agent-browser --session {s} --restore press Enter
-agent-browser --session {s} --restore scroll down 500
-agent-browser --session {s} --restore hover @e6
+agent-browser --namespace {ns} --session {s} --restore click @e2
+agent-browser --namespace {ns} --session {s} --restore fill @e3 "test@example.com"
+agent-browser --namespace {ns} --session {s} --restore select @e4 --value "option1"
+agent-browser --namespace {ns} --session {s} --restore check @e5
+agent-browser --namespace {ns} --session {s} --restore press Enter
+agent-browser --namespace {ns} --session {s} --restore scroll down 500
+agent-browser --namespace {ns} --session {s} --restore hover @e6
 
 # バッチ実行（複数コマンドを1回で実行、効率的）
-agent-browser --session {s} --restore batch "open {url}" "snapshot -i"
-agent-browser --session {s} --restore batch --bail "fill @e1 'test'" "click @e2" "snapshot -i"  # --bail: エラーで中断
+agent-browser --namespace {ns} --session {s} --restore batch "open {url}" "snapshot -i"
+agent-browser --namespace {ns} --session {s} --restore batch --bail "fill @e1 'test'" "click @e2" "snapshot -i"  # --bail: エラーで中断
 
 # 待機
-agent-browser --session {s} --restore wait 2000                              # ミリ秒待機
-agent-browser --session {s} --restore wait --text "読み込み完了" --timeout 15000  # テキスト出現待ち
-agent-browser --session {s} --restore wait --load networkidle                # ネットワーク安定待ち
-agent-browser --session {s} --restore wait --url "**/dashboard"              # URL パターン待ち
+agent-browser --namespace {ns} --session {s} --restore wait 2000                              # ミリ秒待機
+agent-browser --namespace {ns} --session {s} --restore wait --text "読み込み完了" --timeout 15000  # テキスト出現待ち
+agent-browser --namespace {ns} --session {s} --restore wait --load networkidle                # ネットワーク安定待ち
+agent-browser --namespace {ns} --session {s} --restore wait --url "**/dashboard"              # URL パターン待ち
 
 # 要素の発見
-agent-browser --session {s} --restore find role "button"
-agent-browser --session {s} --restore find text "ログイン"
-agent-browser --session {s} --restore find placeholder "メールアドレス"
+agent-browser --namespace {ns} --session {s} --restore find role "button"
+agent-browser --namespace {ns} --session {s} --restore find text "ログイン"
+agent-browser --namespace {ns} --session {s} --restore find placeholder "メールアドレス"
 
 # 状態確認
-agent-browser --session {s} --restore is visible @e3
-agent-browser --session {s} --restore is enabled @e4
+agent-browser --namespace {ns} --session {s} --restore is visible @e3
+agent-browser --namespace {ns} --session {s} --restore is enabled @e4
 
 # セッション管理
-agent-browser --session {s} --restore close
-agent-browser close --all          # 全セッション一括終了
-agent-browser session list         # アクティブセッション一覧
+agent-browser --namespace {ns} --session {s} --restore close
+agent-browser --namespace {ns} close --all          # この実行の全セッション一括終了
+agent-browser --namespace {ns} session list         # この実行のアクティブセッション一覧
 ```
 
 ref（@e1, @e2...）は snapshot で取得できる。操作対象は ref で指定するのが基本。
@@ -604,10 +595,10 @@ ref（@e1, @e2...）は snapshot で取得できる。操作対象は ref で指
 sleep 1
 
 # OK: ネットワークが落ち着くまで待つ
-agent-browser --session {s} --restore wait --load networkidle
+agent-browser --namespace {ns} --session {s} --restore wait --load networkidle
 
 # OK: 特定要素の出現を待つ
-agent-browser --session {s} --restore wait --text "ダッシュボード"
+agent-browser --namespace {ns} --session {s} --restore wait --text "ダッシュボード"
 ```
 
 ---

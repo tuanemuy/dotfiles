@@ -23,6 +23,7 @@ agent-browserを使って、指定ページの全UI操作要素と全分岐を�
 「主要なもの」ではなく、画面上の操作できる要素を1つ残らず洗い出すのが目的。
 
 対象ページ: {url}（テンプレート: {url_template}, 確認ロール: {role}）
+namespace: {ns}
 セッション名: explorer-{page_id}
 認証: {auth_info}
 allowed-domains: {domains}
@@ -85,6 +86,7 @@ explorer の「全部調べた」を信用しない。**同じページを開き
 調査した本人ではないので、忖度せず「列挙から漏れた操作要素・分岐」を探してください。
 
 対象ページ: {url}（確認ロール: {role}）
+namespace: {ns}
 セッション名: auditor-{page_id}
 認証: {auth_info}
 allowed-domains: {domains}

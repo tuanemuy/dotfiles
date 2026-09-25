@@ -30,7 +30,12 @@ spec スキルの成果物（シナリオ、ページ設計など）をもとに
 
 ### 開始前のプロセスクリーンアップ
 
-Skill ツールで `/agent-browser-cleanup` を呼び出す。別セッションで使用中でなければ残存プロセスをクリーンアップしてからデザイン作業を開始できる。
+この実行の namespace `{ns}` を決め、前回の取り残しを閉じてからデザイン作業を開始する（`../_shared/references/agent-browser.md` の「実行ごとに namespace を分ける」）。以降の agent-browser コマンドとサブエージェントへの指示には、この `{ns}` を使う:
+
+```bash
+agent-browser session id --scope worktree --prefix design-flow
+agent-browser --namespace {ns} close --all 2>/dev/null || true
+```
 
 ## なぜこの順序か
 
@@ -69,8 +74,8 @@ design-flow の成果物は `spec/design/` 配下に出力し、完了時に `sp
 agent-browser を使うのは Phase 3（デザイン作成）と Phase 4（レビュー）でスクリーンショットを撮るとき。操作時は `--session` でセッションを分離する:
 
 ```bash
-agent-browser --session design-page-dashboard open file:///path/to/spec/design/pages/dashboard.html
-agent-browser --session design-review screenshot {scratchpad}/design-screenshots/review/dashboard.png
+agent-browser --namespace {ns} --session design-page-dashboard open file:///path/to/spec/design/pages/dashboard.html
+agent-browser --namespace {ns} --session design-review screenshot {scratchpad}/design-screenshots/review/dashboard.png
 ```
 
 命名規則:
@@ -171,14 +176,11 @@ spec スキルの成果物（`spec/index.md`, `spec/pages/index.md`, `spec/scena
 
 すべてのフェーズが完了したら:
 
-1. agent-browser の残存プロセスを片付ける
-   - 各セッション（`design-page-{画面名}`, `design-review`）は使用後に個別に `close` するのが原則。最後に取りこぼし対策として一括で閉じる:
+1. agent-browser のセッションを片付ける。各セッション（`design-page-{画面名}`, `design-review`）は使用後に個別に `close` するのが原則。最後に取りこぼし対策として、この実行の namespace を一括で閉じる:
 
-     ```bash
-     agent-browser close --all 2>/dev/null || true
-     ```
-
-   - その後 Skill ツールで `/agent-browser-cleanup` を呼び出し、別セッションで使用中でなければ残存プロセスをクリーンな状態に戻す。
+   ```bash
+   agent-browser --namespace {ns} close --all 2>/dev/null || true
+   ```
 2. レビューが完了条件を満たしていれば `spec/design/review/` を削除する。最大ラウンド到達で収束しなかった場合は、ユーザーが残った問題を確認できるように残す
 3. `spec/index.md` にデザインフェーズの成果物と完了ステータスを追記する
 4. 成果物のサマリーを出す

@@ -28,22 +28,22 @@ Step 4: 修正後の全画面を再レビューする
 各画面を Phase 3 と同じ3ビューポートで撮る。
 
 ```bash
-agent-browser --session design-review open file:///absolute/path/to/spec/design/pages/{画面名}.html
+agent-browser --namespace {ns} --session design-review open file:///absolute/path/to/spec/design/pages/{画面名}.html
 
-agent-browser --session design-review viewport 375 667
-agent-browser --session design-review screenshot {scratchpad}/design-screenshots/review/{画面名}-mobile.png
+agent-browser --namespace {ns} --session design-review viewport 375 667
+agent-browser --namespace {ns} --session design-review screenshot {scratchpad}/design-screenshots/review/{画面名}-mobile.png
 
-agent-browser --session design-review viewport 768 1024
-agent-browser --session design-review screenshot {scratchpad}/design-screenshots/review/{画面名}-tablet.png
+agent-browser --namespace {ns} --session design-review viewport 768 1024
+agent-browser --namespace {ns} --session design-review screenshot {scratchpad}/design-screenshots/review/{画面名}-tablet.png
 
-agent-browser --session design-review viewport 1280 800
-agent-browser --session design-review screenshot {scratchpad}/design-screenshots/review/{画面名}-desktop.png
+agent-browser --namespace {ns} --session design-review viewport 1280 800
+agent-browser --namespace {ns} --session design-review screenshot {scratchpad}/design-screenshots/review/{画面名}-desktop.png
 ```
 
 撮影後にセッションを閉じる。
 
 ```bash
-agent-browser --session design-review close
+agent-browser --namespace {ns} --session design-review close
 ```
 
 メインエージェントは次だけを確認する。
