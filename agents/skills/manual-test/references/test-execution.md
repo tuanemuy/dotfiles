@@ -61,6 +61,7 @@ manual-test スキルが生成するドキュメントは、テーブル形式�
 - テストケース: {TC番号} {テスト名}
 - 種別: {正常系/異常系}
 - サーバーURL: http://localhost:{port}
+- namespace: {ns}
 - セッション名: verify-tc-{番号}
 - 証跡ディレクトリ: {media_dir}（作成済み）
 - 録画: {なし / あり}
@@ -87,16 +88,16 @@ manual-test スキルが生成するドキュメントは、テーブル形式�
 
 1. セッションを開始し、描画完了を待って最初の snapshot を取る
    ```bash
-   agent-browser --session verify-tc-{番号} --restore batch "open http://localhost:{port}{開始パス}" "wait --load networkidle" "snapshot -i -c"
+   agent-browser --namespace {ns} --session verify-tc-{番号} --restore batch "open http://localhost:{port}{開始パス}" "wait --load networkidle" "snapshot -i -c"
    ```
    録画ありのときは `open` の直後で録画を始める（ログインより前、セッションを開いた直後）:
    ```bash
-   agent-browser --session verify-tc-{番号} --restore batch "open http://localhost:{port}{開始パス}" "record start {media_dir}/TC-{番号}.webm" "wait --load networkidle" "snapshot -i -c"
+   agent-browser --namespace {ns} --session verify-tc-{番号} --restore batch "open http://localhost:{port}{開始パス}" "record start {media_dir}/TC-{番号}.webm" "wait --load networkidle" "snapshot -i -c"
    ```
 
 2. 各ステップを実行する。操作 → 待機 → 次の snapshot までを1コマンドにまとめる
    ```bash
-   agent-browser --session verify-tc-{番号} --restore batch "click @e6" "wait --load networkidle" "snapshot -i -c"
+   agent-browser --namespace {ns} --session verify-tc-{番号} --restore batch "click @e6" "wait --load networkidle" "snapshot -i -c"
    ```
    - 期待結果の検証: `find text "{期待するテキスト}"` / `get text --ref @eN` / `is visible @eN` / `get url` / `is enabled @eN` / `wait --text "{テキスト}" --timeout 15000`
    - ref は snapshot のたびに変わる。同じ snapshot で拾える操作はまとめて投げ切る
@@ -109,11 +110,11 @@ manual-test スキルが生成するドキュメントは、テーブル形式�
 
 4. テスト完了後、録画なしのときは終了時の画面を保存してセッションを閉じる
    ```bash
-   agent-browser --session verify-tc-{番号} --restore batch "screenshot {media_dir}/TC-{番号}.png" "close"
+   agent-browser --namespace {ns} --session verify-tc-{番号} --restore batch "screenshot {media_dir}/TC-{番号}.png" "close"
    ```
    録画ありのときは録画を止めてセッションを閉じる
    ```bash
-   agent-browser --session verify-tc-{番号} --restore batch "record stop" "close"
+   agent-browser --namespace {ns} --session verify-tc-{番号} --restore batch "record stop" "close"
    ```
    打ち切り（時間超過）で終える場合も同じ呼び出しで閉じる。
 
@@ -193,12 +194,12 @@ Conform は `shouldValidate: "onBlur"` を使うことが多い。`fill` 後に 
 
 ```bash
 # NG: fill して即 click（フォームの状態が追いつかない場合がある）
-agent-browser --session {s} --restore fill @e4 "admin"
-agent-browser --session {s} --restore fill @e6 "password"
-agent-browser --session {s} --restore click @e5
+agent-browser --namespace {ns} --session {s} --restore fill @e4 "admin"
+agent-browser --namespace {ns} --session {s} --restore fill @e6 "password"
+agent-browser --namespace {ns} --session {s} --restore click @e5
 
 # OK: fill → Tab で blur を発火 → 次のフィールド → click（batch で1コマンドにまとめる）
-agent-browser --session {s} --restore batch "fill @e4 admin" "press Tab" "fill @e6 password" "press Tab" "click @e5"
+agent-browser --namespace {ns} --session {s} --restore batch "fill @e4 admin" "press Tab" "fill @e6 password" "press Tab" "click @e5"
 ```
 
 batch のコマンドは空白で分割されるため、**入力値に空白を含む場合はその `fill` だけ単独で実行する**。
@@ -209,14 +210,14 @@ snapshot を取り直すと ref が変わるため、操作の途中で再取得
 
 ```bash
 # OK: snapshot → （batch で）fill → fill → click（全て同じ ref）
-agent-browser --session {s} --restore snapshot -i -c
-agent-browser --session {s} --restore batch "fill @e4 admin" "press Tab" "fill @e6 password" "click @e5"
+agent-browser --namespace {ns} --session {s} --restore snapshot -i -c
+agent-browser --namespace {ns} --session {s} --restore batch "fill @e4 admin" "press Tab" "fill @e6 password" "click @e5"
 
 # NG: fill の後に snapshot を挟む（ref が変わる）
-agent-browser --session {s} --restore snapshot -i -c
-agent-browser --session {s} --restore fill @e4 "admin"
-agent-browser --session {s} --restore snapshot -i -c  # ← ref 変更！
-agent-browser --session {s} --restore fill @e6 "password"  # ← 古い ref は無効
+agent-browser --namespace {ns} --session {s} --restore snapshot -i -c
+agent-browser --namespace {ns} --session {s} --restore fill @e4 "admin"
+agent-browser --namespace {ns} --session {s} --restore snapshot -i -c  # ← ref 変更！
+agent-browser --namespace {ns} --session {s} --restore fill @e6 "password"  # ← 古い ref は無効
 ```
 
 ### カスタム Select / Combobox の操作
@@ -225,9 +226,9 @@ Radix UI や shadcn/ui の Select は `<select>` ネイティブ要素ではな�
 
 ```bash
 # SelectTrigger（@eN）を開いて選択肢を検索するところまで1コマンドで
-agent-browser --session {s} --restore batch "click @eN" "wait 500" "find text 選択肢のテキスト"
+agent-browser --namespace {ns} --session {s} --restore batch "click @eN" "wait 500" "find text 選択肢のテキスト"
 # 返ってきた ref をクリック
-agent-browser --session {s} --restore click @eM
+agent-browser --namespace {ns} --session {s} --restore click @eM
 ```
 
 ### ダイアログ内フォームの操作
@@ -236,9 +237,9 @@ agent-browser --session {s} --restore click @eM
 
 ```bash
 # ダイアログ（@eN で開く）を開いて中の要素を取得するまで1コマンドで
-agent-browser --session {s} --restore batch "click @eN" "wait 500" "snapshot -i -c"
+agent-browser --namespace {ns} --session {s} --restore batch "click @eN" "wait 500" "snapshot -i -c"
 # ダイアログ内のフォームを操作（fill → Tab パターンで）
-agent-browser --session {s} --restore batch "fill @eM 値" "press Tab" ...
+agent-browser --namespace {ns} --session {s} --restore batch "fill @eM 値" "press Tab" ...
 ```
 
 ### ファイルアップロード
@@ -246,7 +247,7 @@ agent-browser --session {s} --restore batch "fill @eM 値" "press Tab" ...
 `<input type="file">` には `upload` コマンドを使う。カメラ撮影の代替手段として「ファイルから選択」ボタンがある場合に有効。
 
 ```bash
-agent-browser --session {s} --restore upload @eN /path/to/file.jpg
+agent-browser --namespace {ns} --session {s} --restore upload @eN /path/to/file.jpg
 ```
 
 ### Chrome 自動補完の干渉

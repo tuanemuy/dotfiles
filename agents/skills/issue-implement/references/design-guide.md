@@ -53,6 +53,8 @@ design-flow ではユーザーが選んだドラフトからトークンを起�
 
 design-flow の `../../design-flow/references/phase3-production.md` の手順に従い、Step 0 で特定した各画面の HTML デザインを作成する。レスポンシブ条件・ビューポート・トークン適用・自己チェックはすべてそちらを正とする。
 
+agent-browser を使う前に、この作業の namespace `{ns}` を `agent-browser session id --scope worktree --prefix issue-implement-design` で決め、以降のコマンドとサブエージェントへの指示に使う（`../../_shared/references/agent-browser.md` の「実行ごとに namespace を分ける」）。
+
 出力先: `spec/design/pages/{画面名}.html`
 
 issue-implement 固有の差分として、デザイン担当エージェントに渡すコンテキストへ次を加える:
@@ -75,13 +77,11 @@ design-flow の `../../design-flow/references/phase4-review.md` に従い、全�
 
 ## 完了後の片付けと引き渡し
 
-1. agent-browser の残存プロセスを片付ける。各セッションは使用後に `close` し、最後に取りこぼし対策で一括クローズ:
+1. agent-browser のセッションを片付ける。各セッションは使用後に `close` し、最後に取りこぼし対策でこの作業の namespace を一括クローズ:
 
    ```bash
-   agent-browser close --all 2>/dev/null || true
+   agent-browser --namespace {ns} close --all 2>/dev/null || true
    ```
-
-   その後 Skill ツールで `/agent-browser-cleanup` を呼び出す。
 
 2. レビューが完了条件を満たしていれば、レビュー記録を削除する:
 
