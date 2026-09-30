@@ -214,7 +214,7 @@ Implementation Ready を報告する前に行う。
 
 `spec/manual-tests/` と `spec/inventory/` は spec から導出する成果物で、7 条件の外にある。Implementation Ready になった後に同期し、同期の結果を完了報告に書く。
 
-- `spec/manual-tests/` の生成と更新は `../../spec-manual-test/SKILL.md` が行う
+- `spec/manual-tests/` は、存在するときだけ `../../spec-manual-test/SKILL.md` で更新する。対象は変えた spec に対応するシナリオとする。新しく作るのは `/spec-manual-test` を直接起動したときに限る
 - `spec/inventory/` は、存在するときだけ `spec-inventory.md` に従って追加・修正・削除を同期する。消えた要素の行が残ると、実装者が spec にない要素を実装する
 
 ### 委譲
