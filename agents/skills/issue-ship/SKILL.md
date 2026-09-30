@@ -170,6 +170,12 @@ Issue 単位の作業ログ。名前が決まっているのは次の 2 つ。
 
 `agent-browser` で行う。`../manual-test/SKILL.md` が使える。テキストのスナップショットには見切れ・重なり・余白が出ない。
 
+コマンドは `../_shared/references/agent-browser.md` に従う。manual-test を通さずに観測するときも同じ。
+
+- namespace は着手時に `agent-browser session id --scope worktree --prefix issue-ship` で 1 回だけ決め、自分とサブエージェントの全コマンドに付ける
+- `agent-browser --namespace {ns} close --all` を、最初の観測の前と、完了報告の前（Draft で止めるときも）に実行する
+- セッション名は用途ごとに使い回し、観測の周ごとに増やさない
+
 ### 証跡の添付
 
 `gh` 2.99.0 以上は `gh pr edit --body-file {本文} --attach {ファイル}` でローカルのメディアを PR に添付できる。`--attach` が無い `gh` では添付せず、その旨を PR に書く。

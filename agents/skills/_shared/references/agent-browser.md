@@ -148,6 +148,7 @@ agent-browser --namespace {ns} close --all   # 自分の namespace のセッシ�
 
 - 束ねる側が、作業全体の開始前（前回の取り残し）と終了時に 1 回ずつ実行する。委譲先の後片付けは自分のセッションの `close` だけ
 - namespace なしの `close --all` と `pkill -f agent-browser` は使わない。並列に動いている他の実行のブラウザまで止める
+- 閉じ忘れたセッションの daemon は、10 分操作が無いと自分で終了する（`~/.agent-browser/config.json` の `idleTimeout`）。終了後の再 `open` は `--restore` で Cookie を戻す
 
 ## Cookie を読む・書き換える
 
