@@ -174,18 +174,11 @@ agent-browser --version
 
 利用できない場合はユーザーにインストールを案内して中断する。
 
-別セッションで agent-browser が使用中でなければ、残存プロセスをクリーンアップする:
+この実行の namespace `{ns}` を決め、前回の取り残しを閉じる（`../_shared/references/agent-browser.md` の「実行ごとに namespace を分ける」）。以降の agent-browser コマンドとサブエージェントへの指示には、この `{ns}` を使う:
 
 ```bash
-CURRENT_SID=$(ps -p $$ -o sid= | tr -d ' ')
-OTHER=$(ps -eo sid,comm | awk -v sid="$CURRENT_SID" '$2 ~ /agent-browser/ && $1+0 != sid+0')
-if [ -n "$OTHER" ]; then
-  echo "別セッションで agent-browser が使用中のため、プロセスはそのままにします"
-else
-  agent-browser close --all 2>/dev/null || true
-  pkill -f "agent-browser" 2>/dev/null || true
-  echo "agent-browser の残存プロセスをクリーンアップしました"
-fi
+agent-browser session id --scope worktree --prefix manual-test-dashboard
+agent-browser --namespace {ns} close --all 2>/dev/null || true
 ```
 
 タイムアウトの環境変数を設定する:
@@ -356,7 +349,7 @@ gh issue edit <ダッシュボード番号> --body-file {scratchpad}/dashboard-b
 ### クリーンアップ
 
 ```bash
-agent-browser close --all 2>/dev/null
+agent-browser --namespace {ns} close --all 2>/dev/null
 
 kill $(cat {scratchpad}/server.pid) 2>/dev/null
 rm {scratchpad}/server.pid {scratchpad}/server.log 2>/dev/null
@@ -364,8 +357,6 @@ rm {scratchpad}/server.pid {scratchpad}/server.log 2>/dev/null
 git switch "$ORIG_BRANCH"
 git branch -D "manual-test-dashboard/$(date +%Y%m%d)"
 ```
-
-その後、Skill ツールで `/agent-browser-cleanup` を呼び出し、別セッションで使用中でなければ残存プロセスをすべて終了してクリーンな状態に戻す。
 
 ### 完了報告
 

@@ -288,7 +288,8 @@
     "command": "bash /Users/hikaru/.claude/statusline-command.sh"
   },
   "enabledPlugins": {
-    "document-skills@anthropic-agent-skills": true
+    "document-skills@anthropic-agent-skills": true,
+    "figma@claude-plugins-official": true
   },
   "extraKnownMarketplaces": {
     "anthropic-agent-skills": {

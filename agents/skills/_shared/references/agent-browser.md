@@ -15,7 +15,7 @@
 判断を挟まない連続操作は `batch` でまとめる:
 
 ```bash
-agent-browser --session s1 --restore batch "open http://localhost:5173/items" "wait --load networkidle" "snapshot -i -c"
+agent-browser --namespace {ns} --session s1 --restore batch "open http://localhost:5173/items" "wait --load networkidle" "snapshot -i -c"
 ```
 
 - `--bail` を付けると最初のエラーで停止する（既定は最後まで実行）
@@ -28,18 +28,33 @@ agent-browser --session s1 --restore batch "open http://localhost:5173/items" "w
 `snapshot` の出力はコンテキストに残り、以降の全ターンで再読み込みされる。既定で絞る:
 
 ```bash
-agent-browser --session s1 --restore snapshot -i -c        # 操作可能な要素のみ・空要素を除去
-agent-browser --session s1 --restore snapshot -s "main"    # 特定領域だけ
+agent-browser --namespace {ns} --session s1 --restore snapshot -i -c        # 操作可能な要素のみ・空要素を除去
+agent-browser --namespace {ns} --session s1 --restore snapshot -s "main"    # 特定領域だけ
 ```
 
 `--max-output <chars>` は最後の手段。大きい値（8000 など）を常用しない。
+
+## 実行ごとに namespace を分ける
+
+`--namespace` は daemon のソケットと `--restore` の保存先を分ける。namespace が違えば同じセッション名でも別のブラウザになり、`close --all` も自分の namespace のセッションしか閉じない。並列に動く別のスキル実行・別の worktree のブラウザに触れないよう、**全コマンドに `--namespace {ns}` を付ける**。
+
+ブラウザ作業全体を束ねる側（スキルのメイン）が開始時に 1 回だけ決める:
+
+```bash
+agent-browser session id --scope worktree --prefix {スキル名}   # 例: manual-test-f91e1e42b5dd
+```
+
+- 同じ worktree・同じスキルなら毎回同じ値になる。前回の実行が落ちて残したセッションも、次の開始時に片付く
+- worktree が違えば値も違うので、並列実装どうしは干渉しない。同じ worktree で同じスキルを並列に動かすときは `--prefix` に区別する語を足す
+- 出力された値をコマンドにそのまま書く。Bash の環境変数は呼び出しをまたいで残らないので、`AGENT_BROWSER_NAMESPACE` に頼らない
+- 委譲先には namespace とセッション名をセットで渡す
 
 ## セッションは `--restore` とセットで指定する
 
 ブラウザ本体は daemon が握っていて、ページのクラッシュ・アイドルタイムアウト・`close` で再起動する。このとき **`--restore` を付けていないセッションは Cookie と localStorage を捨てる**。ログイン状態で作業していると、操作の合間に突然ログイン画面へ戻される。
 
 ```bash
-agent-browser --session {s} --restore open http://localhost:5173
+agent-browser --namespace {ns} --session {s} --restore open http://localhost:5173
 ```
 
 - `--restore` は値を省略すると `--session` の名前を保存キーに使う
@@ -51,7 +66,7 @@ Issue #960 の実測: 同一セッションに httpOnly Cookie を入れて `clo
 
 ## 頻出コマンド
 
-セッション分離は `--session <name> --restore`。並行作業では必ず分ける。
+分離は `--namespace {ns} --session <name> --restore`。並行作業ではセッション名を必ず分ける。
 
 | 目的 | コマンド |
 | --- | --- |
@@ -81,15 +96,15 @@ Issue #960 の実測: 同一セッションに httpOnly Cookie を入れて `clo
 `click` でダウンロードのトリガーを押しても、ファイルはどこにも残らない（`~/Downloads` にも `AGENT_BROWSER_DOWNLOAD_PATH` にも現れない）。**`download <ref> <保存パス>` を使う。**
 
 ```bash
-agent-browser --session s1 --restore download e13 /path/to/out.pdf
+agent-browser --namespace {ns} --session s1 --restore download e13 /path/to/out.pdf
 ```
 
 保存パスを自分で決めるので、**画面から降ってきたファイル名は失われる。** 元の名前が必要なら、押す前に `<a download>` を差し込みで捕まえる:
 
 ```bash
-agent-browser --session s1 --restore eval "(()=>{if(!window.__dlPatched){window.__dlPatched=1;const o=HTMLAnchorElement.prototype.click;HTMLAnchorElement.prototype.click=function(){if(this.download)window.__dl.push(this.download);return o.apply(this,arguments)};}window.__dl=[];return 'ok'})()"
-agent-browser --session s1 --restore download e13 /tmp/dl.bin
-agent-browser --session s1 --restore eval "window.__dl[window.__dl.length-1]"   # → "settlement_statement_20260819_20260819003.pdf"
+agent-browser --namespace {ns} --session s1 --restore eval "(()=>{if(!window.__dlPatched){window.__dlPatched=1;const o=HTMLAnchorElement.prototype.click;HTMLAnchorElement.prototype.click=function(){if(this.download)window.__dl.push(this.download);return o.apply(this,arguments)};}window.__dl=[];return 'ok'})()"
+agent-browser --namespace {ns} --session s1 --restore download e13 /tmp/dl.bin
+agent-browser --namespace {ns} --session s1 --restore eval "window.__dl[window.__dl.length-1]"   # → "settlement_statement_20260819_20260819003.pdf"
 ```
 
 `--download-path <path>`（環境変数 `AGENT_BROWSER_DOWNLOAD_PATH`）もあるが、daemon が起動済みの状態で環境変数を足しても効かなかった。
@@ -109,8 +124,8 @@ headless の Chrome for Testing で `screenshot` と `record` は動く（agent-
 | 録画停止・保存 | `record stop` |
 
 ```bash
-agent-browser --session {s} --restore batch "open {url}" "record start {dir}/TC-01.webm" "wait --load networkidle" "snapshot -i -c"
-agent-browser --session {s} --restore batch "click @e2" "wait --load networkidle" "get url" "screenshot {dir}/TC-01.png" "record stop" "close"
+agent-browser --namespace {ns} --session {s} --restore batch "open {url}" "record start {dir}/TC-01.webm" "wait --load networkidle" "snapshot -i -c"
+agent-browser --namespace {ns} --session {s} --restore batch "click @e2" "wait --load networkidle" "get url" "screenshot {dir}/TC-01.png" "record stop" "close"
 ```
 
 - `record start` は新しいブラウザコンテキストを作る。**セッションを開いた直後、ログインより前に始める**と、切り替えの影響を受けない
@@ -127,16 +142,21 @@ agent-browser --version    # 利用可能か確認
 agent-browser install      # Chrome for Testing のセットアップ（初回のみ）
 ```
 
-`/agent-browser-cleanup` はマシン上の agent-browser プロセスを全部終了させる（他の委譲先のセッションも閉じる）。呼ぶのはブラウザ作業全体を束ねる側で、作業全体の開始前と終了時に 1 回ずつ。セッション名を渡されて作業する委譲先の後片付けは、自分のセッションの `close` だけ。
+```bash
+agent-browser --namespace {ns} close --all   # 自分の namespace のセッションだけ閉じる
+```
+
+- 束ねる側が、作業全体の開始前（前回の取り残し）と終了時に 1 回ずつ実行する。委譲先の後片付けは自分のセッションの `close` だけ
+- namespace なしの `close --all` と `pkill -f agent-browser` は使わない。並列に動いている他の実行のブラウザまで止める
 
 ## Cookie を読む・書き換える
 
 `document.cookie` は `HttpOnly` Cookie を返さないので、`eval` では読めない。専用サブコマンドを使う。
 
 ```bash
-agent-browser --session {s} --restore cookies get --json          # HttpOnly も含めて全 Cookie を取得
-agent-browser --session {s} --restore cookies set <name> <value>  # 現在のページ URL に対して設定
-agent-browser --session {s} --restore cookies clear               # 全消去
+agent-browser --namespace {ns} --session {s} --restore cookies get --json          # HttpOnly も含めて全 Cookie を取得
+agent-browser --namespace {ns} --session {s} --restore cookies set <name> <value>  # 現在のページ URL に対して設定
+agent-browser --namespace {ns} --session {s} --restore cookies clear               # 全消去
 ```
 
 `cookies set` のオプション: `--url` / `--domain` / `--path` / `--httpOnly` / `--secure` / `--sameSite <Strict|Lax|None>` / `--expires <Unix秒>`。`--url` / `--domain` / `--path` をすべて省略すると現在のページ URL に対して設定される。
@@ -148,10 +168,10 @@ agent-browser --session {s} --restore cookies clear               # 全消去
 DevTools の Network タブに相当する。`Set-Cookie` の生ヘッダーを読むときはこれ。
 
 ```bash
-agent-browser --session {s} --restore network requests --filter "callback" --json
-agent-browser --session {s} --restore network requests --type document,fetch --method POST
-agent-browser --session {s} --restore network request <requestId>   # ヘッダー・ボディまで含む詳細
-agent-browser --session {s} --restore network requests --clear      # 記録をクリア（計測区間を絞る）
+agent-browser --namespace {ns} --session {s} --restore network requests --filter "callback" --json
+agent-browser --namespace {ns} --session {s} --restore network requests --type document,fetch --method POST
+agent-browser --namespace {ns} --session {s} --restore network request <requestId>   # ヘッダー・ボディまで含む詳細
+agent-browser --namespace {ns} --session {s} --restore network requests --clear      # 記録をクリア（計測区間を絞る）
 ```
 
 `requests` は一覧（id・URL・status）を返し、`request <id>` が1件の全詳細を返す。**ヘッダーが要るときだけ `request <id>` を引く** — 一覧を `--json` で丸ごと出すとコンテキストを食う。
@@ -161,8 +181,8 @@ agent-browser --session {s} --restore network requests --clear      # 記録を�
 DevTools の Network タブは開けないので、`network route` で特定の通信だけを落とす。
 
 ```bash
-agent-browser --session {s} --restore network route "**/_serverFn/**" --abort   # 該当リクエストを中断
-agent-browser --session {s} --restore network unroute                            # 解除（URL を渡すと個別解除）
+agent-browser --namespace {ns} --session {s} --restore network route "**/_serverFn/**" --abort   # 該当リクエストを中断
+agent-browser --namespace {ns} --session {s} --restore network unroute                            # 解除（URL を渡すと個別解除）
 ```
 
 `--body <json>` を付ければ任意のレスポンスを返せる。オフライン全体をエミュレートするより、**失敗させたい経路だけ `--abort` する**ほうが観測が絞れる。

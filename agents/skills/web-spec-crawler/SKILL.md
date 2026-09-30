@@ -58,7 +58,7 @@ user-invokable: true
 メインエージェントが行う:
 
 1. agent-browser の利用可能性を確認（`../web-spec-explorer/SKILL.md` 参照）
-2. `/agent-browser-cleanup` を Skill ツールで呼び、残存プロセスをクリーンアップ
+2. この実行の namespace `{ns}` を `agent-browser session id --scope worktree --prefix web-spec-crawler` で決め、`agent-browser --namespace {ns} close --all` で前回の取り残しを閉じる（`../_shared/references/agent-browser.md` の「実行ごとに namespace を分ける」）。以降の agent-browser コマンドとサブエージェントへの指示には、この `{ns}` を使う
 3. 認証が必要なら web-spec-explorer の認証パターンに従ってセットアップ（認証情報は spec/ に書かない）
 4. `spec/` と `spec/_coverage/` ディレクトリを作成
 5. カバレッジ台帳を初期化する（`references/coverage-ledger.md` のフォーマット）
@@ -105,13 +105,11 @@ frontier ドレイン完了後、全結果を spec/ に構造化する。網羅�
 ### Phase 7: レビューとクリーンアップ
 
 1. spec/ とカバレッジサマリをユーザーに提示し、抜け・認識違い・追加調査箇所のフィードバックを受ける。フィードバックがあれば該当ページ・分岐を台帳に差し戻し（`discovered` へ）、Phase 3-5 を部分再実行する。
-2. 全完了後、agent-browser の残存プロセスを片付ける:
+2. 全完了後、この実行の namespace のセッションを片付ける:
 
    ```bash
-   agent-browser close --all 2>/dev/null || true
+   agent-browser --namespace {ns} close --all 2>/dev/null || true
    ```
-
-   続けて Skill ツールで `/agent-browser-cleanup` を呼ぶ。
 
 ## メインエージェントの原則
 

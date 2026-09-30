@@ -15,7 +15,7 @@ Phase 0 で整理した画面一覧の各画面について、デザイン担当
 - **ユーザーシナリオ**: `spec/scenario/` からこの画面に関連するシナリオの要約
 - **デザイントークン**: `spec/design/tokens.md` の内容（CSS カスタムプロパティの命名規則を含む）
 - **デザイン方針**: `spec/design/index.md` の内容
-- **デザイン原則**: SKILL.md のデザイン原則（全文をそのまま伝える）
+- **デザイン原則**: SKILL.md のデザイン原則（全文をそのまま伝える）。`spec/design/index.md` に「取り込み元」があれば渡さない。様式は Figma から取り込んだデザイン方針に従う
 - **出力先パス**: 上記の出力先
 - **作成条件**: 下記の条件をすべて伝える
 
@@ -83,18 +83,18 @@ HTMLの `<style>` セクションで CSS カスタムプロパティとしてト
 - デスクトップ: 1280×800（`xl` ジャストヒット。`lg` 表示も含む）
 
 ```bash
-agent-browser --session design-page-{画面名} open file:///absolute/path/to/spec/design/pages/{画面名}.html
+agent-browser --namespace {ns} --session design-page-{画面名} open file:///absolute/path/to/spec/design/pages/{画面名}.html
 
-agent-browser --session design-page-{画面名} viewport 375 667
-agent-browser --session design-page-{画面名} screenshot {scratchpad}/design-screenshots/pages/{画面名}-mobile.png
+agent-browser --namespace {ns} --session design-page-{画面名} viewport 375 667
+agent-browser --namespace {ns} --session design-page-{画面名} screenshot {scratchpad}/design-screenshots/pages/{画面名}-mobile.png
 
-agent-browser --session design-page-{画面名} viewport 768 1024
-agent-browser --session design-page-{画面名} screenshot {scratchpad}/design-screenshots/pages/{画面名}-tablet.png
+agent-browser --namespace {ns} --session design-page-{画面名} viewport 768 1024
+agent-browser --namespace {ns} --session design-page-{画面名} screenshot {scratchpad}/design-screenshots/pages/{画面名}-tablet.png
 
-agent-browser --session design-page-{画面名} viewport 1280 800
-agent-browser --session design-page-{画面名} screenshot {scratchpad}/design-screenshots/pages/{画面名}-desktop.png
+agent-browser --namespace {ns} --session design-page-{画面名} viewport 1280 800
+agent-browser --namespace {ns} --session design-page-{画面名} screenshot {scratchpad}/design-screenshots/pages/{画面名}-desktop.png
 
-agent-browser --session design-page-{画面名} close
+agent-browser --namespace {ns} --session design-page-{画面名} close
 ```
 
 `2xl` (1536px) を本格的に活用するデザインの場合は、`1536×960` のワイドビューポートも追加で取得する。
