@@ -42,6 +42,9 @@
     shell = pkgs.zsh;
   };
 
+  # home-manager's .zshrc already runs compinit; skip the duplicate in /etc/zshrc
+  programs.zsh.enableGlobalCompInit = false;
+
   environment.variables = {
     EDITOR = "nvim";
     VISUAL = "nvim";

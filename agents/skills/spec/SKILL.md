@@ -31,7 +31,7 @@ user-invokable: true
 
 ## 派生物
 
-Implementation Ready になった後、`../spec-manual-test/SKILL.md` で `spec/manual-tests/` を生成する。前提は scenario と pages が範囲にあること。
+`spec/manual-tests/` は生成しない。実装中の動作確認は spec-implement の Verifier と issue-implement の testing.md が担う。手順書が要るときは、実装後に `/spec-manual-test` を起動する。
 
 ## 完了報告
 
@@ -47,7 +47,7 @@ spec: {Implementation Ready / 停止（理由）}
 - 設計: {想定した次の要求と、その改訂の広がりを一行で}
 - 主要な設計判断: {採用案と、検討した代替案・トレードオフ}
 - 独立した読み: 台帳 {指摘 {数}件を反映 / 指摘なし}、spec {読み {数}回。回ごとの範囲（全量 / 増分）と 7 条件への反例の数、直した内容を一行で。最後の回は反例ゼロ}。7 条件の外で見送った指摘: {内容 / なし}
-- 派生物: manual-tests {生成済み / 対象外（理由）}、inventory {同期済み / なし}
+- 派生物: inventory {同期済み / なし}
 - 残存課題: {内容 / なし}
 ```
 
