@@ -93,7 +93,7 @@ Issue #960 の実測: 同一セッションに httpOnly Cookie を入れて `clo
 
 ## ファイルをダウンロードする
 
-`click` でダウンロードのトリガーを押しても、ファイルはどこにも残らない（`~/Downloads` にも `AGENT_BROWSER_DOWNLOAD_PATH` にも現れない）。**`download <ref> <保存パス>` を使う。**
+`click` でダウンロードのトリガーを押すと、URL を指すリンクのファイルは daemon のダウンロード先に、画面から降ってきた名前で保存される。ダウンロード先の既定は `~/Downloads`。保存先を指定するには **`download <ref> <保存パス>` を使う。**
 
 ```bash
 agent-browser --namespace {ns} --session s1 --restore download e13 /path/to/out.pdf
@@ -107,7 +107,7 @@ agent-browser --namespace {ns} --session s1 --restore download e13 /tmp/dl.bin
 agent-browser --namespace {ns} --session s1 --restore eval "window.__dl[window.__dl.length-1]"   # → "settlement_statement_20260819_20260819003.pdf"
 ```
 
-`--download-path <path>`（環境変数 `AGENT_BROWSER_DOWNLOAD_PATH`）もあるが、daemon が起動済みの状態で環境変数を足しても効かなかった。
+`--download-path <path>`（環境変数 `AGENT_BROWSER_DOWNLOAD_PATH`）は daemon の起動時にだけ読まれ、`click` のダウンロード先を変える。起動済みの daemon に後から付けても効かない。
 
 ## 作業ファイルの置き場所
 
@@ -149,6 +149,22 @@ agent-browser --namespace {ns} close --all   # 自分の namespace のセッシ�
 - 束ねる側が、作業全体の開始前（前回の取り残し）と終了時に 1 回ずつ実行する。委譲先の後片付けは自分のセッションの `close` だけ
 - namespace なしの `close --all` と `pkill -f agent-browser` は使わない。並列に動いている他の実行のブラウザまで止める
 - 閉じ忘れたセッションの daemon は、10 分操作が無いと自分で終了する（`~/.agent-browser/config.json` の `idleTimeout`）。終了後の再 `open` は `--restore` で Cookie を戻す
+
+## 保存済みの認証情報でログインする
+
+`auth` はログイン画面の URL・ユーザー名・パスワードをプロファイル（`~/.agent-browser/auth/<name>.json`）として保存し、フォームを埋めてログインする。パスワードはコンテキストに出ない。
+
+```bash
+agent-browser auth list                                                          # プロファイルの名前・ユーザー名・URL（パスワードは出ない）
+agent-browser auth show <name>                                                   # 1 件の URL などのメタデータ（パスワードは出ない。ユーザー名は出る）
+agent-browser --namespace {ns} --session {s} --restore auth login <name>         # URL へ移り、フォームを待って入力・送信する
+echo "pass" | agent-browser auth save <name> --url <login-url> --username <user> --password-stdin
+```
+
+- 本番と検証環境のプロファイルが並ぶことがある。`auth list` の URL で対象を確かめてから使う
+- `--url <url>` でログイン URL を上書き、`--no-navigate` で今のページのまま（origin は照合される）ログインする
+- フォームのセレクタが標準と違うときは `--username-selector`・`--password-selector`・`--submit-selector` を渡す
+- `auth save` / `auth delete` はユーザーの資格情報を書き換えるので、ユーザーに頼まれない限り実行しない
 
 ## Cookie を読む・書き換える
 
