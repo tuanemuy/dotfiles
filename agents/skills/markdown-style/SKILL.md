@@ -1,6 +1,6 @@
 ---
 name: markdown-style
-description: Markdownドキュメントをシンプルかつ正しく構造化するためのスタイルガイド。冗長な記述・強調の見出し代用・余計な区切り線・不自然な改行などを排除し、見出し・空行・リスト・コード・リンクの記法を整える。ユーザーが「Markdownを整えて」「docをきれいにして」「README整形して」「マークダウンのスタイル直して」「ドキュメントをシンプルにして」「format markdown」「tidy markdown」などと言ったとき、またはMarkdownファイル（README・docs・設計メモ・仕様書など）、IssueやPR、そのコメントを書く場面で積極的にトリガーする。コード内コメントの整理はcomment-cleanup、日本語記事の文章推敲はnote-reviewを使う。
+description: Markdownドキュメントをシンプルかつ正しく構造化するためのスタイルガイド。冗長な記述・強調の見出し代用・余計な区切り線・不自然な改行などを排除し、見出し・空行・リスト・コード・リンクの記法を整える。ユーザーが「Markdownを整えて」「docをきれいにして」「README整形して」「マークダウンのスタイル直して」「ドキュメントをシンプルにして」「format markdown」「tidy markdown」などと言ったとき、またはMarkdownファイル（README・docs・設計メモ・仕様書など）、IssueやPR、そのコメントを書く場面や直す場面で積極的にトリガーする。経緯や弁明を削るのはdoc-style、コード内コメントの整理はcomment-cleanup、日本語記事の文章推敲はnote-reviewを使う。
 user-invokable: true
 args:
   - name: target

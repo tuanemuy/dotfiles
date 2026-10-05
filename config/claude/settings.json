@@ -315,5 +315,6 @@
   "skipDangerousModePermissionPrompt": true,
   "theme": "dark-ansi",
   "editorMode": "vim",
+  "switchModelsOnFlag": false,
   "agentPushNotifEnabled": true
 }

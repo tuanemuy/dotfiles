@@ -1,4 +1,4 @@
-model = "gpt-6-astra"
+model = "gpt-6.1-sol"
 model_reasoning_effort = "high"
 approvals_reviewer = "user"
 
@@ -6,6 +6,7 @@ approvals_reviewer = "user"
 theme = "gruvbox-light"
 # Match the Claude statusline: metrics first (context, 5h, weekly), model last.
 status_line = ["context-used", "five-hour-limit", "weekly-limit", "model-with-reasoning"]
+screen_reader_detection_done = true
 
 [notice]
 hide_full_access_warning = true
