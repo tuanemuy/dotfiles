@@ -150,12 +150,16 @@ Issue の起票は外向きの操作なので、起票前に一度だけスラ�
 - [ ] ADP-user-001 UserRepository.save（実装） — spec/domains/user.md#ポート
 - [ ] UC-user-001 registerUser — spec/usecases/user.md#登録
 - [ ] PAGE-signup-001 サインアップページ — spec/pages/signup.md
-- [ ] TC-port-user-001 UserRepository 適合テスト — spec/testcases/ports/user-repository.md
-- [ ] TC-user-001 登録の正常系 — spec/testcases/user.md#TC-user-001
+- [ ] TC-ports-userRepository-01 UserRepository.save の正常系 — spec/testcases/ports/userRepository.md
+- [ ] TC-user-registerUser-01 登録の正常系 — spec/testcases/user/registerUser.md
 
 ## 完了条件
 
 実装チェックリストの全行が実装されていること（スタブ・仮実装・部分実装は不可）。実装をレビューで確認できた行にのみチェックを付ける。見送る行はチェックせず、理由をこの Issue のコメントに残す。
+
+## 申し送り
+
+{spec/handoff.md の項目のうち、このスライスのチェックリストの行に効くものを、問いと効く箇所ごと転記する。なければ節ごと省く}
 
 ## 依存
 
