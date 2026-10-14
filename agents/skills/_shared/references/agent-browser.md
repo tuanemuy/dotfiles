@@ -84,7 +84,9 @@ Issue #960 の実測: 同一セッションに httpOnly Cookie を入れて `clo
 | ファイル選択 | `upload <sel\|@ref> <パス...>`（`input[type=file]` にファイルを渡す。`fill` では `files` が空のままで反映されない） |
 | 終了 | `close` / `close --all` |
 | ビューポート変更 | `set viewport <w> <h>`（既定は 1280x633。ポップオーバーが画面外にはみ出すときに使う） |
+| 端末の通信断・復旧 | `set offline on` / `set offline off`（現在と以後のタブへ適用する） |
 | タブ管理 | `tab new` / `tab list` / `tab <n>`（切替） / `tab close`。同一セッション内で Cookie を共有した複数タブを扱える（別セッションは Cookie を共有しないため、同一ブラウザーの「別タブ」を再現するにはこちらを使う） |
+| 通信の遮断 | `network route "<url glob>" --abort` / `network unroute "<url glob>"`（アクティブなタブのページに効く。例: `**/zoom` で特定 API だけを失敗させる） |
 | 座標クリック | `mouse move <x> <y>` → `mouse down` → `mouse up`（`click`/`find` で拾えない要素の最後の手段） |
 
 `batch` に渡すコマンドは**空白で分割される**。`click table thead th:nth-child(4)` は先頭の `table` だけがセレクタとして解釈され、意図しない要素をクリックする。空白を含む CSS セレクタは避け、`th:nth-child(4)` のように単一トークンで指定する。
@@ -120,7 +122,7 @@ headless の Chrome for Testing で `screenshot` と `record` は動く（agent-
 | 目的 | コマンド |
 | --- | --- |
 | 画面を保存 | `screenshot <path.png>`（`--full` でページ全体） |
-| 録画開始 | `record start <path.webm>`（現在のページから開始。Cookie・localStorage は引き継ぐ） |
+| 録画開始 | `record start <path.webm> [--fps <1〜60>]`（現在のページから開始） |
 | 録画停止・保存 | `record stop` |
 
 ```bash
@@ -128,7 +130,7 @@ agent-browser --namespace {ns} --session {s} --restore batch "open {url}" "recor
 agent-browser --namespace {ns} --session {s} --restore batch "click @e2" "wait --load networkidle" "get url" "screenshot {dir}/TC-01.png" "record stop" "close"
 ```
 
-- `record start` は新しいブラウザコンテキストを作る。**セッションを開いた直後、ログインより前に始める**と、切り替えの影響を受けない
+- `record --help` で確認した現行 CLI の `record start` は現在のページをそのまま録画し、新しい context / tab を作らない。URL を指定した場合だけ遷移する。長い待機は `--fps 10` などで容量を抑える（既定30fps）
 - 撮ったファイルを `Read` で画像として読み込まない。画像は以降の全ターンで context に残る。判断は snapshot（テキスト）で行い、メディアは人が後から見る証跡として残す
 - 証跡は `gh pr edit` / `gh issue create` の `--attach <file>` で GitHub にアップロードする（gh 2.99.0 以上）。本文中の `![alt](<file>)` はアップロード先の URL に書き換わる。参照されていない添付は本文末尾に付く。動画はプレイヤーとして表示される
 - アップロードはファイル単位で一過性の `HTTP 500`（`Error saving asset` など）を返すことがある。gh は失敗したファイルで止まり、それより前のファイルだけが本文に反映される（先頭で失敗すると `the pull request was not changed`）。同じファイルをもう一度渡せば通る。1 回に載せるのは数ファイルにとどめ、失敗したら `gh pr view --json body -q .body` で本文を取り直し、参照がローカルパスのまま残っているファイルから続ける。出力を `tail` で切ると失敗行が隠れる
@@ -210,3 +212,7 @@ agent-browser --namespace {ns} --session {s} --restore network unroute          
 - `eval` で `value` を直接代入したり `document.execCommand('insertText')` を呼んでも **React の state は更新されない**（DOM の値だけが変わる）。判定に使ってはいけない。
 - `type <sel> <text>` はセレクタ引数が必須。`type "<text>"` は `✓ Done` を返すが値が入らない。
 - **`<input type="date">` には `fill` も `type` も入らない。** `snapshot -i -c` に出る年 / 月 / 日の `spinbutton` の ref をクリックし、`press 2` `press 0` … と数字キーを1つずつ送る。送出が速いと桁を取りこぼすので、値を `eval` で確認してから次へ進む。
+
+## ブラウザの起動引数
+
+`--args "<flag>"` と `AGENT_BROWSER_ARGS` は、その namespace の daemon が初めて Chrome を起動するときだけ効く。2026-10-08 の実測では、新しい namespace でも `--use-fake-device-for-media-stream` が Chrome のコマンドラインに現れず、`enumerateDevices` に `videoinput` が出なかった。カメラ入力が要る検証は、ページの `navigator.mediaDevices.getUserMedia` を canvas の `captureStream()` を返す関数に `eval` で差し替えてから、ページの起動操作（再試行など）を行う。
