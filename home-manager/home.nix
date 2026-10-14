@@ -32,6 +32,7 @@ in
       uv
     ]
     ++ [
+      (pkgs.callPackage ./packages/git-wt.nix { })
       (pkgs.callPackage ./packages/rinkaku.nix { })
       unstable.gh
     ]
