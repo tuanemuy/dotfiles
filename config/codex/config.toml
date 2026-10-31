@@ -1,6 +1,8 @@
 model = "gpt-6-astra"
-model_reasoning_effort = "medium"
+model_reasoning_effort = "xhigh"
 approvals_reviewer = "user"
+
+service_tier = "default"
 
 [tui]
 theme = "gruvbox-light"
@@ -13,3 +15,6 @@ hide_full_access_warning = true
 
 [features]
 hooks = true
+
+[apps.connector_68df038e0ba48191908c8434991bbac2.tools."figma.use_figma"]
+approval_mode = "approve"
