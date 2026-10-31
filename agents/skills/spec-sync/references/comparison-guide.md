@@ -89,7 +89,7 @@ spec/usecases/ は DTO の全フィールド・処理手順・技術的なエラ
 
 ### フロントエンド層
 
-**読むもの:** `spec/pages/{ページ名}.md`。`spec/design/` にデザイン成果物（HTML、デザイントークン）があれば併せて読む
+**読むもの:** `spec/pages/{ページ名}.md`。`spec/design/` にデザイン成果物（HTML、デザイントークン、`index.md` の対応表の Figma のフレーム）があれば併せて読む
 
 **照合観点:**
 
