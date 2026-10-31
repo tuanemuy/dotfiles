@@ -87,6 +87,8 @@ Issue #960 の実測: 同一セッションに httpOnly Cookie を入れて `clo
 | 端末の通信断・復旧 | `set offline on` / `set offline off`（現在と以後のタブへ適用する） |
 | タブ管理 | `tab new` / `tab list` / `tab <n>`（切替） / `tab close`。同一セッション内で Cookie を共有した複数タブを扱える（別セッションは Cookie を共有しないため、同一ブラウザーの「別タブ」を再現するにはこちらを使う） |
 | 通信の遮断 | `network route "<url glob>" --abort` / `network unroute "<url glob>"`（アクティブなタブのページに効く。例: `**/zoom` で特定 API だけを失敗させる） |
+| Web Storage | `storage local` / `storage session`（一覧）、`storage local set <key> <value>`（書き込み）。`eval` を拒否される環境でも localStorage・sessionStorage を読み書きできる |
+| 値・位置 | `get value <sel>`（入力欄の値）、`get box <sel>`（x・y・幅・高さ。見切れ・はみ出しの数値の根拠）、`scrollintoview <sel>`（固定の要素に覆われてクリックできないとき） |
 | 座標クリック | `mouse move <x> <y>` → `mouse down` → `mouse up`（`click`/`find` で拾えない要素の最後の手段） |
 
 `batch` に渡すコマンドは**空白で分割される**。`click table thead th:nth-child(4)` は先頭の `table` だけがセレクタとして解釈され、意図しない要素をクリックする。空白を含む CSS セレクタは避け、`th:nth-child(4)` のように単一トークンで指定する。
@@ -216,3 +218,11 @@ agent-browser --namespace {ns} --session {s} --restore network unroute          
 ## ブラウザの起動引数
 
 `--args "<flag>"` と `AGENT_BROWSER_ARGS` は、その namespace の daemon が初めて Chrome を起動するときだけ効く。2026-10-08 の実測では、新しい namespace でも `--use-fake-device-for-media-stream` が Chrome のコマンドラインに現れず、`enumerateDevices` に `videoinput` が出なかった。カメラ入力が要る検証は、ページの `navigator.mediaDevices.getUserMedia` を canvas の `captureStream()` を返す関数に `eval` で差し替えてから、ページの起動操作（再試行など）を行う。
+
+## 印刷結果を見る・ページ読み込み前にスクリプトを差し込む
+
+| 目的 | コマンド |
+| --- | --- |
+| 印刷レイアウトを PDF に保存 | `pdf <path.pdf>`（現在のタブの最上位文書を Chromium の印刷レイアウトで出力する。headless では `print()` のダイアログは出ないので、印刷結果はこれで見る。中身は `pdftotext` / `pdfinfo` / `pdfimages -list` で確かめる） |
+| 読み込み前のスクリプト | `--init-script <path.js>`（そのセッションのブラウザー起動時だけ効く。`target=_blank` で開いた新しいタブには効かないので、計測したいページは同じタブで `open` する。`window.print` を包んで呼び出し回数を数える、などに使う） |
+| 要素数 | `get count <sel>` |
