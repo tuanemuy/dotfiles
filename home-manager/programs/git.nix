@@ -21,6 +21,10 @@
     };
     filter."codex-config" = {
       clean = "${gitDirectory}/dotfiles/tools/git-filters/codex-config-clean.sh";
+      # required = true makes git abort when a filter it needs is undefined, so
+      # the checkout side needs an explicit identity filter. The committed file
+      # is already the portable subset; Codex writes its local state back in.
+      smudge = "cat";
       required = true;
     };
     # git-wt puts worktrees where `claude --worktree` does and prepares them the same way:
