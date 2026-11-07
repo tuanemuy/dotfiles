@@ -90,6 +90,11 @@
         export CURRENT_THEME CURRENT_THEME_NAME
         if [ "$CURRENT_THEME" = "light" ]; then export BAT_THEME="gruvbox-light"; else export BAT_THEME="gruvbox-dark"; fi
       }
+      eval "$(git wt --init zsh)"
+      # Without a name, a throwaway one is generated, as `claude --worktree` does.
+      function wtn() {
+        git wt "''${1:-$(date +%m%d)-$(openssl rand -hex 2)}"
+      }
       function wtclean() {
         $GIT_DIRECTORY/dotfiles/tools/worktree-status/run.sh "$@"
       }

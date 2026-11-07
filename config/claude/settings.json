@@ -289,13 +289,20 @@
   },
   "enabledPlugins": {
     "document-skills@anthropic-agent-skills": true,
-    "figma@claude-plugins-official": true
+    "figma@claude-plugins-official": true,
+    "logo-design@logo-design-skill": true
   },
   "extraKnownMarketplaces": {
     "anthropic-agent-skills": {
       "source": {
         "source": "github",
         "repo": "anthropics/skills"
+      }
+    },
+    "logo-design-skill": {
+      "source": {
+        "source": "github",
+        "repo": "kaankiziltug/logo-design-skill"
       }
     }
   },
@@ -304,7 +311,7 @@
   "effortLevel": "high",
   "modelSettings": {
     "claude-fable-5-1": {
-      "effortLevel": "high"
+      "effortLevel": "xhigh"
     },
     "claude-opus-5-5": {
       "effortLevel": "high"

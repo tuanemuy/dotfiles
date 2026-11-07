@@ -86,6 +86,7 @@ agent-browser --namespace {ns} --session design-review close
 - spec/design/tokens.md
 - spec/design/pages/ 配下の全HTML
 - {scratchpad}/design-screenshots/review/ 配下の全スクリーンショット
+- spec/design/index.md に「取り込み元」があれば、Phase 3 で保存した対応表のフレームのスクリーンショット（{scratchpad}/figma/{nodeId}.png）。追加した画面との一貫性を比べる相手として使う
 
 コードとスクリーンショットの両方を確認してください。
 

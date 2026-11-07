@@ -52,7 +52,7 @@ agent-browser --namespace {ns} close --all 2>/dev/null || true
 
 design-flow の成果物は `spec/design/` 配下に出力し、完了時に `spec/index.md` を更新する。
 
-デザインが Figma にある場合は、`../figma-import/SKILL.md` が同じ形式の `spec/design/` を作る。Figma から書き出した画像・アイコンは `spec/design/assets/` に入り、HTML から `../assets/` で参照される。取り込み後の画面追加は本スキルの Phase 3 から行う（`references/phase0-preparation.md` の「画面の追加」）。
+デザインが Figma にある場合は、`../figma-import/SKILL.md` がトークン・方針と、画面と Figma のフレームの対応表を `spec/design/` に作る。対応表にフレームのある画面は HTML を作らず、実装が Figma を直接読む。フレームの無い画面は本スキルの Phase 3 から追加できる（`references/phase0-preparation.md` の「画面の追加」）。
 
 ## アーキテクチャ
 

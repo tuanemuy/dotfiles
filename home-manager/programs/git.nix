@@ -23,6 +23,19 @@
       clean = "${gitDirectory}/dotfiles/tools/git-filters/codex-config-clean.sh";
       required = true;
     };
+    # git-wt puts worktrees where `claude --worktree` does and prepares them the same way:
+    # copies the files .worktreeinclude lists and runs the SessionStart setup hook.
+    wt = {
+      basedir = ".claude/worktrees";
+      copy = [
+        ".env"
+        ".env.*"
+        ".envrc"
+        ".dev.vars"
+      ];
+      # The setup hook reads the working directory from the JSON Claude Code pipes in.
+      hook = [ ''printf '{"cwd":"%s"}' "$PWD" | bash ~/.claude/worktree-setup.sh'' ];
+    };
   };
   ignores = [
     # General

@@ -34,7 +34,6 @@ description: はてなブックマークIT人気エントリー、Hacker News、
 - <https://b.hatena.ne.jp/hotentry/it/%E3%81%AF%E3%81%A6%E3%81%AA%E3%83%96%E3%83%AD%E3%82%B0%EF%BC%88%E3%83%86%E3%82%AF%E3%83%8E%E3%83%AD%E3%82%B8%E3%83%BC%EF%BC%89>
 - <https://b.hatena.ne.jp/hotentry/it/%E3%82%BB%E3%82%AD%E3%83%A5%E3%83%AA%E3%83%86%E3%82%A3%E6%8A%80%E8%A1%93>
 - <https://b.hatena.ne.jp/hotentry/it/%E3%82%A8%E3%83%B3%E3%82%B8%E3%83%8B%E3%82%A2>
-- <https://b.hatena.ne.jp/hotentry/it/%E3%83%87%E3%82%B6%E3%82%A4%E3%83%B3>
 
 - 各エントリーの**タイトル、元記事URL、ブックマーク数**を必ず取得すること
 - はてブのエントリーページURLではなく、リンク先の元記事URLを抽出
@@ -50,26 +49,32 @@ description: はてなブックマークIT人気エントリー、Hacker News、
 #### Reddit
 
 - **重要**: WebFetchツールはreddit.comをブロックするため、**Bashツールでcurlコマンドを使用**すること
-- 各サブレッドから `/hot.json?t=day&limit=10` で上位10件を取得
-- **old.reddit.com**を使用（www.reddit.comではない）
+- JSON API（`/hot.json`）はログインなしではログイン画面へのリダイレクトか 403 になるため使わない
+- 各サブレッドの hot 上位10件を `https://www.reddit.com/svc/shreddit/community-more-posts/hot/?name={サブレッド名}` から取得する。返ってくる HTML の `<shreddit-post>` 要素の属性に、タイトル・投票数・コメント数・パスが入っている
 - User-Agentヘッダーを設定: `"User-Agent: neta-trend-collector/1.0 (trend analysis tool)"`
-- 各記事の**タイトル、Redditコメントページの完全URL、投票数（ups）、コメント数**を取得
+- サブレッドは1〜2秒の間隔を空けて順に取得する。429 が返ったら数秒待って取り直す
+- 各記事の**タイトル、Redditコメントページの完全URL、投票数（score）、コメント数**を取得
 - **タイトルは日本語に翻訳して出力**
 
 ##### 取得例（Bashツールで実行）:
 
 ```bash
 curl -s -H "User-Agent: neta-trend-collector/1.0 (trend analysis tool)" \
-  "https://old.reddit.com/r/programming/hot.json?t=day&limit=10" | \
-  jq -r '.data.children[] | "\(.data.title)|\(.data.ups)|\(.data.num_comments)|https://www.reddit.com\(.data.permalink)"'
+  "https://www.reddit.com/svc/shreddit/community-more-posts/hot/?name=programming" | \
+  python3 -c "
+import sys, re, html
+for attrs in re.findall(r'<shreddit-post\s([^>]*)>', sys.stdin.read())[:10]:
+    a = {k: html.unescape(v) for k, v in re.findall(r'([a-z-]+)=\"([^\"]*)\"', attrs)}
+    print(f\"{a['post-title']}|{a['score']}|{a['comment-count']}|https://www.reddit.com{a['permalink']}\")
+"
 ```
 
-##### データ構造:
+##### `<shreddit-post>` の属性:
 
-- `data.children[].data.title`: タイトル
-- `data.children[].data.ups`: 投票数
-- `data.children[].data.num_comments`: コメント数
-- `data.children[].data.permalink`: パス（`https://www.reddit.com` + permalink で完全URL）
+- `post-title`: タイトル
+- `score`: 投票数
+- `comment-count`: コメント数
+- `permalink`: パス（`https://www.reddit.com` + permalink で完全URL）
 
 ##### 対象サブレッド:
 
@@ -100,26 +105,22 @@ curl -s -H "User-Agent: neta-trend-collector/1.0 (trend analysis tool)" \
 
 ##### フォールバック: RSSフィード
 
-JSON APIがブロックされた場合（`"Your request has been blocked"` レスポンス）、**RSSフィードにフォールバック**する。
+上の取得が取り直しても失敗したサブレッドだけ、**RSSフィードにフォールバック**する。
 
 ```bash
-curl -s -H "User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36" \
+curl -s -H "User-Agent: neta-trend-collector/1.0 (trend analysis tool)" \
   "https://www.reddit.com/r/programming/hot/.rss" | \
   python3 -c "
 import sys, xml.etree.ElementTree as ET
-data = sys.stdin.read()
-root = ET.fromstring(data)
+root = ET.fromstring(sys.stdin.read())
 ns = {'atom': 'http://www.w3.org/2005/Atom'}
 for entry in root.findall('atom:entry', ns)[:10]:
-    title = entry.find('atom:title', ns).text if entry.find('atom:title', ns) is not None else ''
-    link = entry.find('atom:link', ns).get('href', '') if entry.find('atom:link', ns) is not None else ''
-    print(f'{title}|{link}')
+    print(f\"{entry.find('atom:title', ns).text}|{entry.find('atom:link', ns).get('href')}\")
 "
 ```
 
-- RSSフィードでは**投票数・コメント数は取得不可**（注記として出力に記載する）
-- `www.reddit.com`のRSSを使用（`old.reddit.com`ではない）
-- User-Agentはブラウザ風に設定
+- RSSフィードには投票数・コメント数が無い。そのサブレッドの記事は投票数・コメント数を「-」とし、出力に注記する
+- `www.reddit.com`のRSSを使用（`old.reddit.com`はログイン画面へリダイレクトされる）
 
 #### GitHub Trending
 
@@ -173,7 +174,7 @@ WebFetchツールで以下の4ページを取得：
 - AI系：OpenAI、ローカルLLM、Claude Code関連
 - OSS/個人開発系：OSSプロジェクト、個人開発、Web開発
 - デザイン/UI・UX系：UIデザイントレンド、UXリサーチ手法、デザインシステム、アクセシビリティ
-- 投票数（ups）とコメント数でコミュニティの反応を評価
+- 投票数とコメント数でコミュニティの反応を評価
 - 議論が活発なトピック（コメント数が多い）を優先
 
 #### GitHub Trending
@@ -186,7 +187,7 @@ WebFetchツールで以下の4ページを取得：
 
 ### 3. 出力
 
-結果を `feed/yyyyMMdd$md` に保存。
+結果を `feed/yyyyMMdd.md` に保存。
 
 以下のフォーマットで出力：
 
@@ -260,10 +261,10 @@ WebFetchツールで以下の4ページを取得：
 - **Hacker Newsのタイトルは日本語に翻訳**
 - **RedditはRedditコメントページの完全URL（`https://www.reddit.com/r/subreddit/comments/...`形式）を使用**
 - **Redditのタイトルは日本語に翻訳**
-- Reddit JSON APIがブロックされた場合はRSSフィードにフォールバック（投票数・コメント数は取得不可になる旨を注記）
+- RedditはRSSフィードにフォールバックしたサブレッドだけ投票数・コメント数を「-」にし、その旨を注記
 - **GitHub Trendingは4ページ（Overall、TypeScript、Rust、JavaScript）を並列取得**
 - **GitHub Trendingのリポジトリ名は`https://github.com/owner/repo`形式のリンクを付与**
-- 投票数（ups）/コメント数/スター数が高い記事・リポジトリを優先
+- 投票数/コメント数/スター数が高い記事・リポジトリを優先
 - ポイント数/ブックマーク数が高い記事は特に注目
 - 出力ファイルのyyyyMMddは実行日の日付を使用
 - 出力のセクション順序: **GitHub Trending → はてブIT → Hacker News → Reddit**
