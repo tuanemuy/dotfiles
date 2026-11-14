@@ -1,7 +1,6 @@
 ---
 name: spec-sync
 description: "spec/ の設計ドキュメントと実装コードを照合し、設計判断による乖離は spec に反映、実装の誤り・漏れは Issue として起票して「ドキュメントの正確性」を同期するスキル。起動条件: `/spec-sync` の実行、スキル名の明示的な指定、他スキルからの委譲のみ。Issue 対応・PRレビュー・リファクタリングの後で乖離が疑われる状況では自動起動しない。コードの完全性は implement-audit、構造的健全性は architecture-audit、区分ローテーションの定期同期は spec-sync-dashboard、全体の一括同期は本スキル。"
-user-invokable: true
 ---
 
 # Spec Sync — 設計ドキュメントと実装の同期

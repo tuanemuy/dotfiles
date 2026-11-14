@@ -1,7 +1,6 @@
 ---
 name: spec-sync-dashboard
 description: "プロジェクトを区分に分割し、GitHub Issue のダッシュボードで管理して、実行1回につき1区分だけ spec と実装を照合・同期するスキル。1実行1区分で完結するため cron・スケジュール実行にも適する。起動条件: `/spec-sync-dashboard` の実行、スキル名の明示的な指定、スケジュール実行からの呼び出しのみ。spec と実装のズレが話題になっただけでは自動起動しない。蓄積した乖離の一括同期は spec-sync、区分ローテーションの定期同期は本スキル。"
-user-invokable: true
 ---
 
 # Spec Sync Dashboard — 区分ローテーションによる定期 spec 同期

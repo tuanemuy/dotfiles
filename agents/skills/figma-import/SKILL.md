@@ -1,7 +1,6 @@
 ---
 name: figma-import
 description: "Figma のデザインから、デザイントークン・デザイン方針と、画面と Figma のフレームの対応表を spec/design/ に取り込むスキル。画面の HTML は作らず、実装（spec-implement）が対応表のフレームを直接読んで写す。手順を定めず、完了の定義・独立した読み・不変条件・予算だけを定め、段取りはエージェントが決める。起動条件: `/figma-import` の実行、スキル名の明示的な指定のみ。Figma の URL を渡された、Figma の話題が出た、という状況だけでは自動起動しない。Figma の無いデザインは design-flow を使う。"
-user-invokable: true
 ---
 
 # Figma Import

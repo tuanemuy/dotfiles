@@ -1,7 +1,6 @@
 ---
 name: pr-review
 description: "Structured multi-layer PR review with iterative improvement loop. Invoke ONLY when explicitly requested: the `/pr-review` command, the skill named directly, or delegation from another skill. Do NOT trigger from a PR number, a GitHub PR URL, or casual phrasing such as 「PRチェックして」「このPR大丈夫？」「レビューして」 — handle those as an ordinary request instead."
-user-invokable: true
 ---
 
 # PR Review Skill

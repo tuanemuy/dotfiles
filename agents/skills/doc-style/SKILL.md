@@ -1,7 +1,6 @@
 ---
 name: doc-style
 description: 仕様書・設計メモ・READMEや、CLAUDE.md・SKILL.mdのような指示の文書から、経緯・弁明・言い直し・ぼかしを取り除き、対象の今の姿が読者に伝わる文章にする。記法の整形はmarkdown-style、記事の推敲はnote-reviewが担う。ユーザーが「読みやすくして」「簡潔にして」「経緯を消して」「冗長な説明を削って」「make it terse」などと言ったとき、または仕様書・設計メモ・README・CLAUDE.md・SKILL.mdを書く場面で積極的にトリガーする。
-user-invokable: true
 args:
   - name: target
     description: 直すファイルやディレクトリ（任意。省略時はgit diffの変更分、または会話中で書いているドキュメントを直す）
