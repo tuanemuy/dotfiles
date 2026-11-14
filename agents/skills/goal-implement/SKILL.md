@@ -1,7 +1,7 @@
 ---
 name: goal-implement
 description: "要件とプロジェクトテンプレート・既存コードから、設計・実装・検証を Manager Loop で最後まで進める。goal に全体の完成条件を持たせ、別エージェントへ一フェーズずつ委譲する。設計書の事前作成や他の設計・実装スキルの呼び出しは不要。"
-user-invokable: true
+disable-model-invocation: true
 ---
 
 # Goal Implement
