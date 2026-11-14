@@ -1,6 +1,7 @@
 ---
 name: issue-ship
-description: "Issue を受け、Production Ready な変更を Ready for review の PR として届けるスキル。手順を定めず、Production Ready の定義・独立した読み・不変条件・環境の事実・予算だけを定め、段取りはエージェントが決める。ユーザーが「issue-ship で #123」「#45 を ship して」のようにスキル名を明示したときだけトリガーする。名指しのない Issue 実装依頼は issue-implement を使う。"
+description: "Issue を受け、Production Ready な変更を Ready for review の PR として届けるスキル。手順を定めず、Production Ready の定義・独立した読み・不変条件・環境の事実・予算だけを定め、段取りはエージェントが決める。"
+user-invokable: true
 ---
 
 Issue を受け、Production Ready な変更を Ready for review の PR として届ける。段取り（計画の深さ・委譲の切り方・確かめ方と、確かめる回数）は Issue の規模とリスクに合わせて自分で決める。このスキルが定めるのは、完了の定義・独立した読み・不変条件・環境の事実・予算の 5 つ。
