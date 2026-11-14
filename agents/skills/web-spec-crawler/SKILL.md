@@ -1,7 +1,6 @@
 ---
 name: web-spec-crawler
 description: "agent-browserでWebサービスを実際に操作しながら、全到達可能ページと各ページの全UI操作分岐を漏れなく洗い出し、spec/ にMarkdownで構造化出力するスキル。カバレッジ台帳が空になるまでループして抜け漏れを潰す。起動条件: `/web-spec-crawler` の実行、スキル名の明示的な指定、他スキルからの委譲のみ。URL を渡された、「網羅して」と言われた、という状況だけでは自動起動しない。重要箇所に集中する軽量な調査は web-spec-explorer を使う。"
-user-invokable: true
 ---
 
 # Web Spec Crawler

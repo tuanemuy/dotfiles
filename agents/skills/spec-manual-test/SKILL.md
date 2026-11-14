@@ -1,7 +1,6 @@
 ---
 name: spec-manual-test
 description: "spec/ の設計ドキュメントから、画面を操作して実行するマニュアルテストの手順書をシナリオ単位で作るスキル。手順を定めず、完了の定義・独立した読み・不変条件・予算だけを定め、段取りはエージェントが決める。部分生成・途中再開にも対応する。起動条件: `/spec-manual-test` の実行、スキル名の明示的な指定、spec-revise からの委譲のみ。「テスト手順書作って」のような一般的な依頼や、spec/ があるという状況だけでは自動起動しない。手順書の自動実行は manual-test を使う。"
-user-invokable: true
 ---
 
 # Spec Manual Test
