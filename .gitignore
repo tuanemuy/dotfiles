@@ -42,3 +42,8 @@ agents/skills/synced/
 .claude/settings.local.json
 CLAUDE.local.md
 .claude/worktrees/
+
+# OmniWM: keep the managed settings and drop the recovery and migration copies
+# the app writes next to it (settings.toml.corrupt, settings.toml.pre-v5).
+config/omniwm/*
+!config/omniwm/settings.toml
