@@ -18,3 +18,10 @@ hooks = true
 
 [apps.connector_68df038e0ba48191908c8434991bbac2.tools."figma.use_figma"]
 approval_mode = "approve"
+
+[shell_environment_policy]
+inherit = "core"
+
+[shell_environment_policy.set]
+CLAUDE_AFK_TIMEOUT_MS = "2147483647"
+CLAUDE_CODE_USER_DIALOG_TIMEOUT_MS = "0"
