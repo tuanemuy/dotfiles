@@ -13,16 +13,27 @@ let
   unstable = import inputs.nixpkgs-unstable {
     inherit (pkgs.stdenv.hostPlatform) system;
   };
+  # nixpkgs packages 0.7.6, which has neither the keyboard Prefix mode nor the
+  # v5 settings schema. The package only unpacks the signed release zip, so
+  # overriding the version costs a few seconds of local unpacking and no
+  # compilation; the Developer ID signature is the upstream one either way.
+  omniwm = unstable.omniwm.overrideAttrs (_: rec {
+    version = "0.8.0";
+    src = unstable.fetchurl {
+      url = "https://github.com/OmniNull/OmniWM/releases/download/v${version}/OmniWM-v${version}.zip";
+      hash = "sha256-b3+z4hHeOoPncrExgAaAyz0g1MY4gRofAhIP0iXwPMc=";
+    };
+  });
 in
 lib.mkIf pkgs.stdenv.hostPlatform.isDarwin {
-  home.packages = [ unstable.omniwm ];
+  home.packages = [ omniwm ];
 
   # Stands in for aerospace's start-at-login. KeepAlive stays off so quitting
   # OmniWM from its own menu keeps it quit until the next login.
   launchd.agents.omniwm = {
     enable = true;
     config = {
-      Program = "${unstable.omniwm}/Applications/OmniWM.app/Contents/MacOS/OmniWM";
+      Program = "${omniwm}/Applications/OmniWM.app/Contents/MacOS/OmniWM";
       RunAtLoad = true;
       KeepAlive = false;
     };
