@@ -43,6 +43,7 @@ in
   imports = [
     ./llm-agents.nix
     ./containers.nix
+    ./omniwm.nix
   ];
 
   home.file = {
@@ -69,7 +70,6 @@ in
       mkOutOfStoreSymlink "${gitDirectory}/dotfiles/config/codex/config.toml";
     ".claude/skills".source = mkOutOfStoreSymlink "${gitDirectory}/dotfiles/agents/skills";
     ".agents/skills".source = mkOutOfStoreSymlink "${gitDirectory}/dotfiles/agents/skills";
-    ".aerospace.toml".source = mkOutOfStoreSymlink "${gitDirectory}/dotfiles/config/aerospace.toml";
     ".agent-browser/config.json".source =
       mkOutOfStoreSymlink "${gitDirectory}/dotfiles/config/agent-browser.json";
   };
