@@ -52,5 +52,3 @@ spec: {Implementation Ready / 停止（理由）}
 - 派生物: inventory {同期済み / なし}
 - 残存課題: {内容 / なし}
 ```
-
-実装は、一括なら spec-implement、縦スライスに分けるなら spec-to-issues で起票する。

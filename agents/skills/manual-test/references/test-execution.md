@@ -6,7 +6,7 @@
 
 ### testing.md の場合
 
-testing.md は、通常以下のような構造:
+testing.md が次の構造なら、確認項目を 1 つずつテストケースにする:
 
 ```markdown
 ## 確認項目
