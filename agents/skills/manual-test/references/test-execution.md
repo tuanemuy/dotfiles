@@ -6,7 +6,7 @@
 
 ### testing.md の場合
 
-issue-implement が生成する testing.md は、通常以下のような構造:
+呼び出し元が置く testing.md は、通常以下のような構造:
 
 ```markdown
 ## 確認項目

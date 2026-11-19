@@ -31,7 +31,7 @@ user-invokable: true
 
 ## 派生物
 
-`spec/manual-tests/` は生成しない。実装中の動作確認は spec-implement の Verifier と issue-implement の testing.md が担う。手順書が要るときは、実装後に `/spec-manual-test` を起動する。
+`spec/manual-tests/` は生成しない。実装中の動作確認は spec-implement の Verifier と issue-ship の観測が担う。手順書が要るときは、実装後に `/spec-manual-test` を起動する。
 
 ## 完了報告
 
@@ -53,4 +53,4 @@ spec: {Implementation Ready / 停止（理由）}
 - 残存課題: {内容 / なし}
 ```
 
-実装は、一括なら spec-implement、縦スライスに分けるなら spec-to-issues で起票して issue-implement で進める。
+実装は、一括なら spec-implement、縦スライスに分けるなら spec-to-issues で起票して issue-ship で進める。
