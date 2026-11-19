@@ -2,11 +2,7 @@
 
 ## テストソースの解析
 
-テストソースの形式に応じてテストケースを抽出する。
-
-### spec/manual-tests/ の場合
-
-spec-manual-test スキルが生成するドキュメントは、テーブル形式のテストケース:
+テストソース（`spec/manual-tests/`）は、spec-manual-test スキルが生成するテーブル形式のテストケース:
 
 ```markdown
 ## TC-{連番}: {テスト名}
