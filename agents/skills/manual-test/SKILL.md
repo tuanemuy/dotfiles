@@ -1,12 +1,12 @@
 ---
 name: manual-test
-description: "testing.md や spec/manual-tests/ のテスト手順書を agent-browser で自動実行し、実装の動作をブラウザ上で検証するスキル。失敗時は原因分析して GitHub Issue を起票する。起動条件: `/manual-test` の実行、スキル名の明示的な指定、他スキルからの委譲のみ。「動作確認して」程度の依頼や、testing.md が存在するという状況だけでは自動起動しない。手順書のない探索的テストは manual-test-dashboard を使う。"
+description: "spec/manual-tests/ のテスト手順書を agent-browser で自動実行し、実装の動作をブラウザ上で検証するスキル。失敗時は原因分析して GitHub Issue を起票する。起動条件: `/manual-test` の実行、スキル名の明示的な指定、他スキルからの委譲のみ。「動作確認して」程度の依頼や、手順書が存在するという状況だけでは自動起動しない。手順書のない探索的テストは manual-test-dashboard を使う。"
 user-invokable: true
 ---
 
 # Browser Verify — agent-browser によるテスト手順の自動実行＋修正ループ
 
-testing.md や spec/manual-tests/ に書かれたテスト手順を、agent-browser で実際のブラウザ上で自動実行する。テスト結果はレポートとして記録し、失敗したテストは原因分析→修正→再テストのループで解消する。
+spec/manual-tests/ に書かれたテスト手順を、agent-browser で実際のブラウザ上で自動実行する。テスト結果はレポートとして記録し、失敗したテストは原因分析→修正→再テストのループで解消する。
 
 ## 前提条件
 
@@ -326,7 +326,7 @@ FAIL のテストケースがない場合はこの Phase をスキップして P
 
 **ワークアラウンド**: agent-browser 上で再現したい場合、`button.click()` を `eval` 経由で直接呼ぶと発火することがある。ただし synthetic event と trusted event の差があるため、それで通っても実装の動作保証にはならない。**切り分けには実ブラウザを使う**。
 
-**Issue 起票の判断**: 偽陽性と確定したらコード側の Issue は起票しない（または既存 Issue を close）。テスト手順書側（testing.md）に「実ブラウザでの確認を必須」と注記しておくと再発防止に効く。
+**Issue 起票の判断**: 偽陽性と確定したらコード側の Issue は起票しない（または既存 Issue を close）。テスト手順書に「実ブラウザでの確認を必須」と注記しておくと再発防止に効く。
 
 ### Issue起票
 
@@ -373,7 +373,7 @@ gh issue create --title "{タイトル}" --body "$(cat <<'EOF'
 
 ## 関連ファイル
 
-- テストソース: {testing.md or manual-tests のパス}
+- テストソース: {手順書のパス}
 - テスト結果: {output_dir}/results/TC-{番号}.md
 - 検証レポート: {output_dir}/report.md
 

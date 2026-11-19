@@ -1,6 +1,6 @@
 ---
 name: manual-test-dashboard
-description: "プロジェクトを区分に分割し、GitHub Issue のダッシュボードで管理して、実行1回につき1区分だけを agent-browser で探索的テストするスキル。1実行1区分で完結するため cron・スケジュール実行にも適する。起動条件: `/manual-test-dashboard` の実行、スキル名の明示的な指定、スケジュール実行からの呼び出しのみ。テストや品質の話題では自動起動しない。手順書（testing.md / spec/manual-tests/）の実行は manual-test、手順書のない探索は本スキル。"
+description: "プロジェクトを区分に分割し、GitHub Issue のダッシュボードで管理して、実行1回につき1区分だけを agent-browser で探索的テストするスキル。1実行1区分で完結するため cron・スケジュール実行にも適する。起動条件: `/manual-test-dashboard` の実行、スキル名の明示的な指定、スケジュール実行からの呼び出しのみ。テストや品質の話題では自動起動しない。手順書（spec/manual-tests/）の実行は manual-test、手順書のない探索は本スキル。"
 user-invokable: true
 ---
 
@@ -16,7 +16,7 @@ user-invokable: true
 
 | スキル | やること | 入力 |
 |--------|---------|------|
-| manual-test | 手順書の忠実な実行（スクリプトテスト） | testing.md / spec/manual-tests/ |
+| manual-test | 手順書の忠実な実行（スクリプトテスト） | spec/manual-tests/ |
 | review-dashboard | コードの定期レビュー（静的） | ソースコード |
 | **manual-test-dashboard** | 手順書のない探索でバグを発見（動的） | **動いているアプリ + 探索チャーター** |
 
@@ -344,7 +344,7 @@ gh issue edit <ダッシュボード番号> --body-file {scratchpad}/dashboard-b
 
 ### レポート生成
 
-探索の全体像を `{output_dir}/report.md` にまとめる: 対象区分、実行チャーターと探索した画面・操作の一覧、発見（重要度別）、起票した Issue、Info として残した気づき、恒常的にチェックすべきと感じた操作（testing.md / spec/manual-tests/ への追加候補として提案）。
+探索の全体像を `{output_dir}/report.md` にまとめる: 対象区分、実行チャーターと探索した画面・操作の一覧、発見（重要度別）、起票した Issue、Info として残した気づき、恒常的にチェックすべきと感じた操作（spec/manual-tests/ への追加候補として提案）。
 
 ### クリーンアップ
 
