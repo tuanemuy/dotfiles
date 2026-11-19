@@ -1,6 +1,6 @@
 ---
 name: manual-test
-description: "testing.md や spec/manual-tests/ のテスト手順書を agent-browser で自動実行し、実装の動作をブラウザ上で検証するスキル。失敗時は原因分析して GitHub Issue を起票する。起動条件: `/manual-test` の実行、スキル名の明示的な指定、他スキル（spec-implement など）からの委譲のみ。「動作確認して」程度の依頼や、testing.md が存在するという状況だけでは自動起動しない。手順書のない探索的テストは manual-test-dashboard を使う。"
+description: "testing.md や spec/manual-tests/ のテスト手順書を agent-browser で自動実行し、実装の動作をブラウザ上で検証するスキル。失敗時は原因分析して GitHub Issue を起票する。起動条件: `/manual-test` の実行、スキル名の明示的な指定、他スキルからの委譲のみ。「動作確認して」程度の依頼や、testing.md が存在するという状況だけでは自動起動しない。手順書のない探索的テストは manual-test-dashboard を使う。"
 user-invokable: true
 ---
 
@@ -54,10 +54,9 @@ Phase 6: レポート＆クリーンアップ
 
 以下の優先順で検索し、テストケースのソースを決定する:
 
-1. ユーザーが明示的に指定したファイル
-2. `.thread/{Issue番号}/testing.md` — 他スキルから呼ばれ、呼び出し元が置いた場合
-3. `spec/manual-tests/` — 単体実行の場合
-4. プロジェクトルート直下や docs/ の testing 関連ファイル
+1. 明示的に指定されたファイル
+2. `spec/manual-tests/`
+3. プロジェクトルート直下や docs/ の testing 関連ファイル
 
 テストソースが見つからない場合はユーザーに確認する。
 
@@ -75,7 +74,7 @@ agent-browser --version
 
 ### gh の添付対応確認
 
-証跡（スクリーンショット・録画）を Issue・PR に埋め込むには `gh` 2.99.0 以上の `--attach` が要る。有無を控え、Phase 5 の起票と呼び出し元の PR 更新で使う:
+証跡（スクリーンショット・録画）を Issue・PR に埋め込むには `gh` 2.99.0 以上の `--attach` が要る。有無を控え、Phase 5 の起票で使う:
 
 ```bash
 gh pr edit --help 2>/dev/null | grep -q -- '--attach' && echo "attach: yes" || echo "attach: no（gh 2.99.0 以上で対応）"
@@ -107,20 +106,15 @@ export AGENT_BROWSER_IDLE_TIMEOUT_MS=120000  # daemon無操作: 2分で自動終
 
 ### 成果物ディレクトリの決定
 
-**呼び出し元が成果物ディレクトリを指定していればそれをそのまま使う。** 指定がない単体実行のときだけ既定値を使い、実行日を `YYYY-MM-DD` 形式のサブディレクトリにして複数回の実行結果を混在させない:
+**成果物ディレクトリの指定があればそれをそのまま使う。** 指定がなければ `.manual-test/{YYYY-MM-DD}/` を使い、実行日のサブディレクトリにして複数回の実行結果を混在させない:
 
 ```bash
 TEST_DATE=$(date +%Y-%m-%d)
 ```
 
-| 呼び出し元 | 成果物ディレクトリ |
-| --- | --- |
-| 他スキルからの委譲 | `.thread/{Issue番号}/manual-test/`（Issue 単位で1回なので日付サブディレクトリなし） |
-| 単体実行 | `.manual-test/{YYYY-MM-DD}/` |
-
 以降、この保存先を `{output_dir}` と表記する。
 
-証跡メディア（テストケースごとのスクリーンショットと、FAIL のテストケースの録画）は**リポジトリにも成果物ディレクトリにも残さない**。`{scratchpad}/media/`（`{scratchpad}` の定義は `../_shared/references/scratchpad.md`）に置き、Issue・PR に添付したら破棄する。呼び出し元が証跡ディレクトリを指定していればそれを使う。以降この保存先を `{media_dir}` と表記する。添付側がファイルを拾えるよう、ファイル名は次に固定する:
+証跡メディア（テストケースごとのスクリーンショットと、FAIL のテストケースの録画）は**リポジトリにも成果物ディレクトリにも残さない**。`{scratchpad}/media/`（`{scratchpad}` の定義は `../_shared/references/scratchpad.md`）に置き、Issue・PR に添付したら破棄する。証跡ディレクトリの指定があればそれを使う。以降この保存先を `{media_dir}` と表記する。添付側がファイルを拾えるよう、ファイル名は次に固定する:
 
 | ファイル | 内容 |
 | --- | --- |
@@ -128,12 +122,7 @@ TEST_DATE=$(date +%Y-%m-%d)
 | `TC-{番号}-step{N}.png` | 期待結果と食い違ったステップの画面 |
 | `TC-{番号}.webm` | FAIL の録画付き再実行の、セッション開始から終了までの録画 |
 
-添付先と後始末は呼び出し元で分かれる:
-
-| 呼び出し元 | 添付先 | `{media_dir}` の後始末 |
-| --- | --- | --- |
-| 他スキルからの委譲 | FAIL 分は Phase 5 で Issue に、全 TC 分は呼び出し元が PR に | 呼び出し元が PR 添付後に削除する（manual-test は消さない） |
-| 単体実行 | FAIL 分の Issue のみ | Phase 6 で削除する |
+FAIL 分は Phase 5 で Issue に添付し、`{media_dir}` は Phase 6 で削除する。証跡ディレクトリの指定があったときは、指定した側が使うので削除しない。
 
 使い捨てのファイル（サーバーログ・pid・確認用スクリーンショット）は `{output_dir}` ではなく `{scratchpad}` に置く（定義は `../_shared/references/scratchpad.md`）。
 
@@ -422,7 +411,7 @@ EOF
 
 「タイムアウト＆スタック対策」セクションの Phase 6 クリーンアップ手順に従う。
 
-証跡メディアは添付が済んだら破棄する。呼び出し元が証跡ディレクトリを指定していた場合は、PR に添付する呼び出し元が消すので削除しない:
+証跡メディアは添付が済んだら破棄する。証跡ディレクトリの指定があった場合は、指定した側が使うので削除しない:
 
 ```bash
 rm -rf {media_dir}

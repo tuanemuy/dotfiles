@@ -6,7 +6,7 @@
 
 ### testing.md の場合
 
-呼び出し元が置く testing.md は、通常以下のような構造:
+testing.md は、通常以下のような構造:
 
 ```markdown
 ## 確認項目
