@@ -50,7 +50,7 @@
     (pkgs.lib.mkAfter ''
       export LANG=ja_JP.UTF-8
       export GIT_DIRECTORY=${gitDirectory}
-      export PATH=$PATH:$(npm prefix --location=global)/bin:$HOME/.local/bin
+      export PATH=$PATH:$HOME/.npm_global/bin:$HOME/.local/bin
       export PATH="$PATH:/Applications/WezTerm.app/Contents/MacOS"
       export PATH="$PATH:/Applications/Ghostty.app/Contents/MacOS"
       bindkey '^y' autosuggest-accept
