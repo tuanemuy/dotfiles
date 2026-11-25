@@ -20,6 +20,7 @@ in
   home.packages =
     with pkgs;
     [
+      bitwarden-cli
       deno
       eza
       fd
@@ -46,6 +47,9 @@ in
   ];
 
   home.file = {
+    ".npmrc".text = ''
+      prefix=~/.npm_global
+    '';
     ".config/nvim".source = mkOutOfStoreSymlink "${gitDirectory}/dotfiles/config/nvim";
     ".config/starship.toml".source =
       mkOutOfStoreSymlink "${gitDirectory}/dotfiles/config/starship.toml";
