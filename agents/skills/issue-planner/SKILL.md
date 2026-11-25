@@ -1,7 +1,6 @@
 ---
 name: issue-planner
 description: "Issueの対応計画（方針・受け入れ基準・設計の置き場所）を立て、方針レビュー1周で確かめて `.thread/{Issue番号}/plan.md` に出力するスキル。起動条件: `/issue-planner` の実行、スキル名の明示的な指定、他スキルからの委譲のみ。Issue の方針相談や「どう対応する？」という質問では自動起動せず、通常どおり答える。実装まで明示的に求められている場合は issue-implement を使う。"
-user-invokable: true
 ---
 
 # Issue Planner
