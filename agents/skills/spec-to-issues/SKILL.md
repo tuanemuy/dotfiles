@@ -1,7 +1,6 @@
 ---
 name: spec-to-issues
 description: "spec/ の設計をシナリオ単位の縦スライスに分割し、各スライスを実装チェックリスト（spec 要素台帳由来）付きの GitHub Issue として起票するスキル。walking skeleton を先頭に依存順で並べる。起動条件: `/spec-to-issues` の実行、スキル名の明示的な指定、他スキルからの委譲のみ。「Issue 化して」「分割して」のような一般的な依頼では自動起動しない。"
-user-invokable: true
 ---
 
 # Spec to Issues — 縦スライス Issue 化

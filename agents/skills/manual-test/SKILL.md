@@ -1,7 +1,6 @@
 ---
 name: manual-test
 description: "spec/manual-tests/ のテスト手順書を agent-browser で自動実行し、実装の動作をブラウザ上で検証するスキル。失敗時は原因分析して GitHub Issue を起票する。起動条件: `/manual-test` の実行、スキル名の明示的な指定、他スキルからの委譲のみ。「動作確認して」程度の依頼や、手順書が存在するという状況だけでは自動起動しない。手順書のない探索的テストは manual-test-dashboard を使う。"
-user-invokable: true
 ---
 
 # Browser Verify — agent-browser によるテスト手順の自動実行
