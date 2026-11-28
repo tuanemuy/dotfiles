@@ -7,6 +7,7 @@
     copilot-cli
     gemini-cli
     opencode
+    openspec
     pi
   ];
 }

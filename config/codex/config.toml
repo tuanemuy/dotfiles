@@ -1,5 +1,5 @@
-model = "gpt-6-astra"
-model_reasoning_effort = "xhigh"
+model = "gpt-6.2-astra"
+model_reasoning_effort = "high"
 approvals_reviewer = "user"
 
 service_tier = "default"
