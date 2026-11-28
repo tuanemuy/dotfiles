@@ -101,6 +101,9 @@
       function clrc() {
         CLRC_NAME=clrc $GIT_DIRECTORY/dotfiles/tools/remote-control/run.sh "$@"
       }
+      function shiploop() {
+        $GIT_DIRECTORY/dotfiles/tools/issue-ship-loop/run.sh "$@"
+      }
       function chth() {
         $GIT_DIRECTORY/dotfiles/tools/change-theme/run.sh $1 >/dev/null || return
         load-theme-state
