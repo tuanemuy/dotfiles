@@ -1,4 +1,7 @@
 { inputs, pkgs, ... }:
+let
+  biome = inputs.nixpkgs-unstable.legacyPackages.${pkgs.stdenv.hostPlatform.system}.biome;
+in
 {
   enable = true;
   package = pkgs.neovim-unwrapped;
@@ -6,9 +9,9 @@
   # No plugin uses the Python 3 or Ruby provider.
   withPython3 = false;
   withRuby = false;
+  extraWrapperArgs = [ "--prefix" "PATH" ":" "${biome}/bin" ];
   extraPackages = with pkgs; [
     tree-sitter
-    biome
     prettierd
     markdownlint-cli2
     nil
