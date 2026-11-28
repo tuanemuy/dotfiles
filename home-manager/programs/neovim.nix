@@ -1,11 +1,14 @@
 { inputs, pkgs, ... }:
+let
+  biome = inputs.nixpkgs-unstable.legacyPackages.${pkgs.stdenv.hostPlatform.system}.biome;
+in
 {
   enable = true;
   package = pkgs.neovim-unwrapped;
   sideloadInitLua = true;
+  extraWrapperArgs = [ "--prefix" "PATH" ":" "${biome}/bin" ];
   extraPackages = with pkgs; [
     tree-sitter
-    biome
     prettierd
     markdownlint-cli2
     nil
