@@ -14,7 +14,7 @@
     set -g extended-keys-format csi-u
     set-option -g status-interval 3
     set-option -g status-position top
-    set-option -ga terminal-overrides ",xterm-256color:Tc"
+    set-option -sa terminal-features ",*:RGB"
     bind c new-window -c '#{pane_current_path}'
     bind v split-window -h -c '#{pane_current_path}'
     bind s split-window -v -c '#{pane_current_path}'
