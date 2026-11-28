@@ -45,7 +45,7 @@ return {
 				html = { "prettierd" },
 				css = { "biome" },
 				scss = { "biome" },
-				markdown = { "markdownlint_cli2" },
+				markdown = { "biome" },
 				rust = { "rustfmt", lsp_format = "fallback" },
 				python = { "ruff_format" },
 				nix = { "nixfmt" },

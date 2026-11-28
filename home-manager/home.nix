@@ -8,6 +8,11 @@
 }:
 let
   mkOutOfStoreSymlink = config.lib.file.mkOutOfStoreSymlink;
+  biomeConfigHome =
+    if pkgs.stdenv.hostPlatform.isDarwin then
+      "${config.home.homeDirectory}/Library/Application Support"
+    else
+      config.xdg.configHome;
   # Uploading attachments to PRs and issues requires gh 2.99.0 or later.
   unstable = import inputs.nixpkgs-unstable {
     inherit (pkgs.stdenv.hostPlatform) system;
@@ -57,7 +62,11 @@ in
       mkOutOfStoreSymlink "${gitDirectory}/dotfiles/config/ghostty.config";
     ".config/.markdownlint-cli2.jsonc".source =
       mkOutOfStoreSymlink "${gitDirectory}/dotfiles/config/markdownlint-cli2.jsonc";
-    "biome.json".source = mkOutOfStoreSymlink "${gitDirectory}/dotfiles/biome.json";
+    # Biome resolves VCS settings relative to the configuration directory.
+    "${biomeConfigHome}/biome/biome.json".text = builtins.toJSON (
+      builtins.removeAttrs (builtins.fromJSON (builtins.readFile ../biome.json)) [ "vcs" ]
+      // { "$schema" = unstable.biome.jsonschema; }
+    );
     ".claude/settings.json".source =
       mkOutOfStoreSymlink "${gitDirectory}/dotfiles/config/claude/settings.json";
     ".claude/statusline-command.sh".source =
