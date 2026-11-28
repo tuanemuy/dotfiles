@@ -18,9 +18,9 @@
       nix-update = "nix run ${flakeDir}#update";
       nix-up = "nix run ${flakeDir}#up && exec zsh";
       nix-clean = "nix run ${flakeDir}#clean";
-      ls = "eza --icons";
-      ll = "eza -lhmU --icons --git";
-      lt = "eza --icons --tree -L";
+      ls = "eza --icons=auto";
+      ll = "eza -lhmU --icons=auto --git";
+      lt = "eza --icons=auto --tree -L";
       dark = "chth dark";
       light = "chth light";
       # direnv が dotenv したプロジェクトの ANTHROPIC_API_KEY を拾うと、
