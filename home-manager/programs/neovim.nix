@@ -2,6 +2,7 @@
 {
   enable = true;
   package = pkgs.neovim-unwrapped;
+  sideloadInitLua = true;
   extraPackages = with pkgs; [
     tree-sitter
     biome

@@ -17,7 +17,8 @@
       nix-switch = "nix run ${flakeDir}#switch && exec zsh";
       nix-update = "nix run ${flakeDir}#update";
       nix-up = "nix run ${flakeDir}#up && exec zsh";
-      nix-clean = "nix run ${flakeDir}#clean";
+      # nix run 経由だと GC の前に nixpkgs の取得とビルドが走り、ディスクが満杯だと動かない。
+      nix-clean = "${pkgs.lib.optionalString pkgs.stdenv.isDarwin "sudo "}nix-collect-garbage -d && nix-store --optimise";
       ls = "eza --icons";
       ll = "eza -lhmU --icons --git";
       lt = "eza --icons --tree -L";

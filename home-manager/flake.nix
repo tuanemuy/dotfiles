@@ -2,18 +2,15 @@
   description = "Home Manager configuration of hikaru";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-25.11";
-    nixpkgs-darwin.url = "github:nixos/nixpkgs/nixpkgs-25.11-darwin";
-    # Used for colima alone. 25.11 ships lima 1.2.2, which nixpkgs marks
-    # insecure (EOL), and colima pulls it in through lima-full, so the stable
-    # colima refuses to evaluate at all.
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-26.05";
+    nixpkgs-darwin.url = "github:nixos/nixpkgs/nixpkgs-26.05-darwin";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     home-manager = {
-      url = "github:nix-community/home-manager/release-25.11";
+      url = "github:nix-community/home-manager/release-26.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nix-darwin = {
-      url = "github:nix-darwin/nix-darwin/nix-darwin-25.11";
+      url = "github:nix-darwin/nix-darwin/nix-darwin-26.05";
       inputs.nixpkgs.follows = "nixpkgs-darwin";
     };
     neovim-overlay = {
@@ -37,7 +34,7 @@
       hostname = "h-mbp-regain";
       homeDirectory = "/home/${username}";
       darwinHomeDirectory = "/Users/${username}";
-      stableVersion = "25.11";
+      stableVersion = "26.05";
       stableCheckScript = ''
         CURRENT="${stableVersion}"
         YEAR=''${CURRENT%.*}
@@ -67,6 +64,7 @@
           (
             { lib, inputs, ... }:
             {
+              nixpkgs.config.allowUnfreePredicate = pkg: lib.getName pkg == "zsh-abbr";
               home = {
                 inherit username;
                 homeDirectory = lib.mkForce homeDirectory;
@@ -150,23 +148,6 @@
                 ${update}
                 ${switch}
               '';
-              clean =
-                if isDarwin then
-                  ''
-                    echo "🧹 Cleaning up old generations..."
-                    sudo nix-collect-garbage -d
-                    echo "✨ Optimizing nix store..."
-                    nix-store --optimise
-                    echo "✅ Done! Your nix store is now squeaky clean."
-                  ''
-                else
-                  ''
-                    echo "🧹 Cleaning up old generations..."
-                    nix-collect-garbage -d
-                    echo "✨ Optimizing nix store..."
-                    nix-store --optimise
-                    echo "✅ Done! Your nix store is now squeaky clean."
-                  '';
             };
         in
         {
@@ -178,7 +159,6 @@
               switch = mkApp "aarch64-darwin" "switch" s.switch;
               update = mkApp "aarch64-darwin" "update" s.update;
               up = mkApp "aarch64-darwin" "up-sw" s.up;
-              clean = mkApp "aarch64-darwin" "clean" s.clean;
               default = self.apps."aarch64-darwin".switch;
             };
 
@@ -190,7 +170,6 @@
               switch = mkApp "x86_64-linux" "switch" s.switch;
               update = mkApp "x86_64-linux" "update" s.update;
               up = mkApp "x86_64-linux" "up-sw" s.up;
-              clean = mkApp "x86_64-linux" "clean" s.clean;
               default = self.apps."x86_64-linux".switch;
             };
         };
