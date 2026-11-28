@@ -8,8 +8,7 @@
 }:
 let
   mkOutOfStoreSymlink = config.lib.file.mkOutOfStoreSymlink;
-  # Stable 25.11 pins gh 2.93.0. The `--attach` flag that uploads images and
-  # videos to PRs and issues needs gh 2.99.0, so gh alone tracks unstable.
+  # Uploading attachments to PRs and issues requires gh 2.99.0 or later.
   unstable = import inputs.nixpkgs-unstable {
     inherit (pkgs.stdenv.hostPlatform) system;
   };
