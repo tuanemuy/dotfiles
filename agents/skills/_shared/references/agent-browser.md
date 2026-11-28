@@ -86,7 +86,8 @@ Issue #960 の実測: 同一セッションに httpOnly Cookie を入れて `clo
 | ビューポート変更 | `set viewport <w> <h>`（既定は 1280x633。ポップオーバーが画面外にはみ出すときに使う） |
 | 端末の通信断・復旧 | `set offline on` / `set offline off`（現在と以後のタブへ適用する） |
 | タブ管理 | `tab new` / `tab list` / `tab <n>`（切替） / `tab close`。同一セッション内で Cookie を共有した複数タブを扱える（別セッションは Cookie を共有しないため、同一ブラウザーの「別タブ」を再現するにはこちらを使う） |
-| 通信の遮断 | `network route "<url glob>" --abort` / `network unroute "<url glob>"`（アクティブなタブのページに効く。例: `**/zoom` で特定 API だけを失敗させる） |
+| 応答の差し替え | `network route "<url glob>" --body "<json>" --allow-origin <origin>`（別オリジンの API を差し替えるときは `--allow-origin` で CORS を許す。`--body` はリテラルの文字列だけなので、ファイルの中身を渡すときはスクリプトに書いて実行する） |
+| 通信の遮断 | `network route "<url glob>" --abort` / `network unroute "<url glob>"`（アクティブなタブのページに効く。例: `**/zoom` で特定 API だけを失敗させる）。`--resource-type script` を付けるとスクリプトだけを止め、サーバー描画のままハイドレーションしない画面を作れる（再読み込み・フォームのドキュメント遷移でも効き続ける） |
 | Web Storage | `storage local` / `storage session`（一覧）、`storage local set <key> <value>`（書き込み）。`eval` を拒否される環境でも localStorage・sessionStorage を読み書きできる |
 | 値・位置 | `get value <sel>`（入力欄の値）、`get box <sel>`（x・y・幅・高さ。見切れ・はみ出しの数値の根拠）、`scrollintoview <sel>`（固定の要素に覆われてクリックできないとき） |
 | 座標クリック | `mouse move <x> <y>` → `mouse down` → `mouse up`（`click`/`find` で拾えない要素の最後の手段） |
